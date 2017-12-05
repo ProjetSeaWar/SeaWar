@@ -15,4 +15,4 @@ cache:
 before_install:
 - chmod +x gradlew
 
-script: ./gradlew build
+script: ./gradlew build && ./gradlew check
