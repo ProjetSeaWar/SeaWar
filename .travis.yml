@@ -15,4 +15,5 @@ cache:
 before_install:
 - chmod +x gradlew
 
-script: ./gradlew build && ./gradlew check
+# Needed to prevent tests caching
+script: ./gradlew clean && ./gradlew check

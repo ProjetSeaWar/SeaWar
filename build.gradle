@@ -52,6 +52,13 @@ project(":core") {
 
     sourceSets.test.java.srcDirs = ["/test"]
 
+    test {
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat "full"
+        }
+    }
+
     dependencies {
         compile "junit:junit:4.12"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
