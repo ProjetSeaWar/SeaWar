@@ -10,7 +10,7 @@ import fr.lesprogbretons.seawar.asset.Assets;
 /**
  * Ici ça sera l'écran du jeu
  */
-public class SeaWarGameScreen extends ScreenAdapter {
+public class SeaWarMenuScreen extends ScreenAdapter {
     private final SeaWar game = (SeaWar) Gdx.app.getApplicationListener();
     private final Assets assets = game.getAssets();
     private final Batch batch = game.getBatch();
@@ -27,8 +27,14 @@ public class SeaWarGameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         super.render(delta);
+
+        //Pluisieurs updates nécéssaires ici
+        //Mise à jour de la caméa
+        //TODO Changer la manière d'implémenter le viewport
+
         batch.begin();
         batch.draw(splash, 0, 0);
+//        game.getFont().draw(batch, "Coucou", 100, 150);
         batch.end();
     }
 

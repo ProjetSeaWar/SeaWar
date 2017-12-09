@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Assets {
     private AssetManager assetManager = new AssetManager();
+
     private static TextureParameter param = new TextureParameter();
 
     public static final AssetDescriptor<Texture> splash =

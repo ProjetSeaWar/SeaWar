@@ -41,7 +41,8 @@ public class SeaWarLoadingScreen extends ScreenAdapter {
 
         if (assets.getManager().update()) {
             // Comment this out if you just want to see the progress bar. As this can be quite quick on desktop.
-            game.setScreen(new SeaWarGameScreen());
+//            game.setScreen(new SeaWarMenuScreen());
+            dispose();
         }
     }
 
