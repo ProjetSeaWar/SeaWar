@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		config.height = 360;
 		config.x = 100;
 		config.y = 100;
-		config.resizable = false;
+		config.resizable = true;
 		new LwjglApplication(new SeaWar(), config);
 	}
 }
