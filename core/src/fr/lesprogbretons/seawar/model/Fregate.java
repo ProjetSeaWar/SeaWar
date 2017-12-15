@@ -1,6 +1,7 @@
-package fr.lesprogbretons.seawar;
+package fr.lesprogbretons.seawar.model;
 
 public class Fregate extends Boat{
+
     public Fregate(){
         super();
         move = 7;

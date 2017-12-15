@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar;
+package fr.lesprogbretons.seawar.model;
 
 public class Amiral extends Boat{
 
