@@ -119,8 +119,17 @@ public class Boat {
         // TODO : Débuter le tour d'un autre bateau
     }
 
-    public static void main(){
+    public static void main(String[] args){
+        Fregate fregate = new Fregate();
+        Amiral amiral = new Amiral();
 
+        System.out.println("Fregate a " +  fregate.hp + " hp.");
+        System.out.println("Amiral a "+amiral.hp+ " hp.");
+
+        fregate.shootMainCanon(amiral);
+        System.out.println("Fregate attaque amiral avec son canon principal");
+        System.out.println("Amiral : - " + fregate.dmgMainCanon + " hp.");
+        System.out.println("Amiral a " + amiral.hp +" hp.");
     }
 
 }
