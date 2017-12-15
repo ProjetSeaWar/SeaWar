@@ -1,14 +1,19 @@
 package fr.lesprogbretons.seawar;
 
 public class Boat {
+
     protected boolean alive = true;
+
     protected int move;
+    protected int moveAvalaible;                        // Déplacement encore disponible pendant le tour
+
     protected int hp;
     protected int dmgMainCanon;
-    protected int reloadMainCanon;
     protected int dmgSecCanon;
-    protected int reloadSecCanon;
     protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
+
+    protected int reloadMainCanon;
+    protected int reloadSecCanon;
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
@@ -52,6 +57,26 @@ public class Boat {
         } else {
             // TODO : Message indiquant que le canon secondaire est en cooldown
         }
+    }
+
+    public void newTurn(){
+        if(alive = false){
+            this.endTurn();
+        }
+
+        moveAvalaible = move;
+
+        if(mainCD > 0){
+            mainCD --;
+        }
+
+        if(secCD > 0){
+            secCD --;
+        }
+    }
+
+    private void endTurn() {
+        // TODO : Débuter le tour d'un autre bateau
     }
 
 }
