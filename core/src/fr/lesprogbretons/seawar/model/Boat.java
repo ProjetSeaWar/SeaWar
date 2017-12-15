@@ -17,6 +17,46 @@ public class Boat {
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
+
+    ////////////////// GETTER POUR PERMETTRE DE VOIR LES STATS EN JEU ////////////////////////////////////
+    public int getMove() {
+        return move;
+    }
+
+    public int getMoveAvalaible() {
+        return moveAvalaible;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getDmgMainCanon() {
+        return dmgMainCanon;
+    }
+
+    public int getDmgSecCanon() {
+        return dmgSecCanon;
+    }
+
+    public int getReloadMainCanon() {
+        return reloadMainCanon;
+    }
+
+    public int getReloadSecCanon() {
+        return reloadSecCanon;
+    }
+
+    public int getMainCD() {
+        return mainCD;
+    }
+
+    public int getSecCD() {
+        return secCD;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public void loseHP(int dmg) {
 
         if (shootTaken == 1) {                          // Si le bateau a deja pris des degats pendant le tour
@@ -77,6 +117,10 @@ public class Boat {
 
     private void endTurn() {
         // TODO : Débuter le tour d'un autre bateau
+    }
+
+    public static void main(){
+
     }
 
 }
