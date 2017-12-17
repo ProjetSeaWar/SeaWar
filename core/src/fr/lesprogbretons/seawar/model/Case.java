@@ -1,10 +1,14 @@
 package fr.lesprogbretons.seawar.model;
 
-public abstract class Case {//TODO FAIRE LE CONSTRUCTEUR DE CASE
+public abstract class Case {
 
     private int x;
     private int y;
 
+    public Case(int xe, int ye){
+        x=xe;
+        y=ye;
+    }
     public int getX() {
         return x;
     }
