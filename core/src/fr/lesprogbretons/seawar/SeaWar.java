@@ -1,80 +1,118 @@
 package fr.lesprogbretons.seawar;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import fr.lesprogbretons.seawar.asset.Assets;
+import com.badlogic.gdx.utils.Logger;
+import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.screen.SeaWarLoadingScreen;
 
 /**
- * Classe qui s'occupe de dire quel est l'affichage nécessaire
- * et de mettre à jour le modèle
+ * Classe principale du programme qui permet un accès aux classes
+ * <p>
+ * Architecture générale permise par PixelScientists
  */
-public class SeaWar extends Game {
-    static final int WORLD_WIDTH = 800;
-    static final int WORLD_HEIGHT = 480;
+public class SeaWar implements ApplicationListener {
 
-    private final Assets assets = new Assets();
+    public static final int WORLD_WIDTH = 800;
+    public static final int WORLD_HEIGHT = 480;
 
-    private ShapeRenderer shapeRenderer;
-    private SpriteBatch batch;
-    private BitmapFont font;
+    /**
+     * {@link Logger} utilisé pour logger dans tout le jeu
+     */
+    public static final Logger logger = new Logger("SeaWar");
 
-    private Viewport viewport;
+    /**
+     * {@link Game} est publique et permet de changer les {@link Screen}
+     */
+    public static final Game game = new Game() {
+        @Override
+        public void create() {
+            setScreen(new SeaWarLoadingScreen());
+        }
+    };
+
+    /**
+     * La classe {@link Assets} qui est la seule responsable des ressources
+     */
+    public static final Assets assets = new Assets();
+
+    /**
+     * Le {@link SpriteBatch} qui permet de rendre les textures du jeu
+     */
+    public static SpriteBatch spriteBatch;
+
+    /**
+     * Le {@link ShapeRenderer} qui permet de rendre les formes géométriques du jeu
+     */
+    public static ShapeRenderer shapeRenderer;
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT);
-        shapeRenderer = new ShapeRenderer();
-        font = new BitmapFont();
-        setScreen(new SeaWarLoadingScreen());
+        try {
+            logger.setLevel(Logger.DEBUG);
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            Texture.setAssetManager(assets.getManager());
+            spriteBatch = new SpriteBatch();
+            shapeRenderer = new ShapeRenderer();
+            game.create();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
     }
 
     @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
-        batch.setProjectionMatrix(viewport.getCamera().combined);
-        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
+    public void resume() {
+        try {
+            game.resume();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
     }
 
     @Override
     public void render() {
-        clearScreen();
-        super.render();
+        try {
+            game.render();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
     }
 
-    public Batch getBatch() {
-        return batch;
+    @Override
+    public void resize(int width, int height) {
+        try {
+            game.resize(width, height);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
     }
 
-    public ShapeRenderer getShapeRenderer() {
-        return shapeRenderer;
-    }
-
-    public BitmapFont getFont() {
-        return font;
-    }
-
-    public Assets getAssets() {
-        return assets;
-    }
-
-    private void clearScreen() {
-        Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    @Override
+    public void pause() {
+        try {
+            game.pause();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
     }
 
     @Override
     public void dispose() {
-        super.dispose();
+        game.dispose();
         assets.dispose();
+
+        if (spriteBatch != null) {
+            spriteBatch.dispose();
+        }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
     }
 }
