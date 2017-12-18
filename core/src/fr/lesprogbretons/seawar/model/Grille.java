@@ -59,7 +59,7 @@ public class Grille {
         x=c.getX();
         y=c.getY();
         if (y%2==0){
-            cas=getCase((x+1),y);
+            cas=getCase(x,(y+1));
         }
         else {
             cas = getCase((x+1), (y + 1));
@@ -73,7 +73,7 @@ public class Grille {
         x=c.getX();
         y=c.getY();
         if (y%2==0){
-            cas=getCase((x+1),(y-1));
+            cas=getCase((x-1),(y+1));
         }
         else {
             cas = getCase(x,(y+1) );
@@ -112,14 +112,15 @@ public class Grille {
     public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
         if(!(tab.contains(c))) {
             tab.add(c);
-            if (range != 0) {
-                getCasesDisponibles(getCaseBas(c), (range - 1), tab);
-                getCasesDisponibles(getCaseDroiteb(c), (range - 1), tab);
-                getCasesDisponibles(getCaseDroiteh(c), (range - 1), tab);
-                getCasesDisponibles(getCaseGaucheb(c), (range - 1), tab);
-                getCasesDisponibles(getCaseGaucheh(c), (range - 1), tab);
-                getCasesDisponibles(getCaseHaut(c), (range - 1), tab);
-            }
+        }
+
+        if (range != 0) {
+            getCasesDisponibles(getCaseBas(c), (range - 1), tab);
+            getCasesDisponibles(getCaseDroiteb(c), (range - 1), tab);
+            getCasesDisponibles(getCaseDroiteh(c), (range - 1), tab);
+            getCasesDisponibles(getCaseGaucheb(c), (range - 1), tab);
+            getCasesDisponibles(getCaseGaucheh(c), (range - 1), tab);
+            getCasesDisponibles(getCaseHaut(c), (range - 1), tab);
         }
     }
 
@@ -135,20 +136,20 @@ public class Grille {
         Grille grille = new Grille();
         //System.out.println(grille);
         Case a = grille.getCase(4, 6);
-      System.out.println(a);
+      /*System.out.println(a);
         System.out.println(grille.getCaseBas(a));
         System.out.println(grille.getCaseGaucheb(a));
         System.out.println(grille.getCaseGaucheh(a));
         System.out.println(grille.getCaseHaut(a));
         System.out.println(grille.getCaseDroiteh(a));
-        System.out.println(grille.getCaseDroiteb(a));
+        System.out.println(grille.getCaseDroiteb(a));*/
 
         ArrayList<Case> tab = new ArrayList<>();
 
         grille.getCasesDisponibles(a, 2, tab);
 
-        for(int i=0; i<12;i++){
-            //System.out.println(tab.get(i));
+        for(int i=0; i<19;i++){
+            System.out.println(tab.get(i));
         }
 
     }
