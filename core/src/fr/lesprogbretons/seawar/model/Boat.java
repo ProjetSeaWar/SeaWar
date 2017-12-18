@@ -6,6 +6,7 @@ public class Boat {
 
     protected int move;
     protected int moveAvalaible;                        // Déplacement encore disponible pendant le tour
+    protected Case position;
 
     protected int hp;
     protected int dmgMainCanon;
@@ -53,6 +54,10 @@ public class Boat {
 
     public int getSecCD() {
         return secCD;
+    }
+
+    public Case getPosition(){
+        return position;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -113,6 +118,8 @@ public class Boat {
         if(secCD > 0){
             secCD --;
         }
+
+        shootTaken = 0;
     }
 
     private void endTurn() {
