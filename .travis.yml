@@ -18,4 +18,5 @@ before_install:
 # Needed to prevent tests caching
 script:
   - ./gradlew clean
-  - ./gradlew check
+  - ./gradlew build
+  - ./gradlew test
