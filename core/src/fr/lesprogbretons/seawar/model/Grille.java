@@ -17,16 +17,18 @@ public class Grille {
     public Grille(int largeur,int hauteur){
         tableau = new Case[largeur][hauteur];
     }
+
     public Case getCase(int largeur, int hauteur){
         return tableau[largeur][hauteur];
     }
+
     public Case getCaseHaut(Case c){
         int x;
         int y;
         Case cas;
         x=c.getX();
         y=c.getY();
-        cas=getCase(x,(y+1));
+        cas=getCase((x+1),y);
         return cas;
     }
     public Case getCaseBas(Case c){
@@ -35,7 +37,7 @@ public class Grille {
         Case cas;
         x=c.getX();
         y=c.getY();
-        cas=getCase(x,(y-1));
+        cas=getCase((x-1),y);
         return cas;
     }
     public Case getCaseDroiteh(Case c){
@@ -95,18 +97,19 @@ public class Grille {
         return cas;
     }
 
+    /* TODO : toString de la grille
     @Override
     public String toString() {
         return "Grille{" +
-                "tableau=" + Arrays.toString(tableau) +
+                "tableau=" +
                 '}';
-    }
+    }*/
 
     public static void main(String[] args){
         Grille grille =new Grille();
-        System.out.println(grille.toString());
+        System.out.println(grille);
         Case a=grille.getCase(4,5);
-        System.out.println(a.toString());
+        System.out.println(a);
         System.out.println(grille.getCaseBas(a));
         System.out.println(grille.getCaseGaucheb(a));
         System.out.println(grille.getCaseGaucheh(a));
