@@ -14,6 +14,9 @@ public class Assets {
     public static final AssetDescriptor<Texture> menu =
             new AssetDescriptor<>("menuShip.jpg", Texture.class, param);
 
+    public static final AssetDescriptor<Texture> hexes =
+            new AssetDescriptor<>("hexes2.png", Texture.class, param);
+
     public static final AssetDescriptor<Skin> menuSkin =
             new AssetDescriptor<>("skin/uiskin.json", Skin.class);
 
@@ -21,6 +24,7 @@ public class Assets {
         param.genMipMaps = true; // enabling mipmaps
 
         assetManager.load(menu);
+        assetManager.load(hexes);
         assetManager.load(menuSkin);
     }
 

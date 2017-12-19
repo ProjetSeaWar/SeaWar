@@ -14,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import fr.lesprogbretons.seawar.utils.Utils;
 import fr.lesprogbretons.seawar.assets.Assets;
 
 import static fr.lesprogbretons.seawar.SeaWar.assets;
+import static fr.lesprogbretons.seawar.SeaWar.game;
 import static fr.lesprogbretons.seawar.SeaWar.spriteBatch;
 
 /**
@@ -59,7 +61,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO Set Screen Game
+                game.setScreen(new SeaWarCarteScreen());
             }
         });
 

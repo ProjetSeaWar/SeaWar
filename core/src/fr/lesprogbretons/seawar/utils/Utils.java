@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar.screen;
+package fr.lesprogbretons.seawar.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
