@@ -1,6 +1,7 @@
 package fr.lesprogbretons.seawar.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,16 +29,19 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
  */
 public class SeaWarCarteScreen extends ScreenAdapter {
 
-    TiledMap map;
+    private TiledMap map;
+    private TiledMapTileLayer layer;
+    private TiledMapTile[] tiles;
+    private TiledMapTile[] tilesSelected;
 
-    //TODO Faire autrement
-    TiledMapTileLayer layer;
-    TiledMapTile[] tiles;
+    private OrthographicCamera camera;
+    private OrthoCamController cameraController;
+    private HexagonalTiledMapRenderer renderer;
+    private Texture hexture;
+    private Texture hextureSel;
 
-    OrthographicCamera camera;
-    OrthoCamController cameraController;
-    HexagonalTiledMapRenderer renderer;
-    Texture hexture;
+
+    private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
 
     @Override
     public void show() {
@@ -53,25 +57,33 @@ public class SeaWarCarteScreen extends ScreenAdapter {
         camera.update();
 
         cameraController = new OrthoCamController(camera);
-        Gdx.input.setInputProcessor(cameraController);
 
         hexture = (Texture) SeaWar.assets.get(Assets.hexes);
-        TextureRegion[][] hexes = TextureRegion.split(hexture, 115, 100);
+        hextureSel = (Texture) SeaWar.assets.get(Assets.hexes2);
+
+        TextureRegion[][] hexes = TextureRegion.split(hexture, 112, 97);
+        TextureRegion[][] hexes2 = TextureRegion.split(hextureSel, 112, 97);
 
         map = new TiledMap();
         MapLayers layers = map.getLayers();
 
-        tiles = new TiledMapTile[4];
+
+        tiles = new TiledMapTile[3];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexes[0][0]));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexes[0][1]));
         tiles[2] = new StaticTiledMapTile(new TextureRegion(hexes[1][0]));
-        tiles[3] = new StaticTiledMapTile(new TextureRegion(hexes[1][1]));
+
+        tilesSelected = new TiledMapTile[3];
+        tilesSelected[0] = new StaticTiledMapTile(new TextureRegion(hexes2[0][0]));
+        tilesSelected[1] = new StaticTiledMapTile(new TextureRegion(hexes2[0][1]));
+        tilesSelected[2] = new StaticTiledMapTile(new TextureRegion(hexes2[1][0]));
+
 
         for (int l = 0; l < 1; l++) {
             layer = new TiledMapTileLayer(13, 11, 112, 97);
             for (int y = 0; y < 11; y++) {
                 for (int x = 0; x < 13; x++) {
-                    int id = (int) (Math.random() * 2) + 1;
+                    int id = (int) (Math.random() * 3);
                     Cell cell = new Cell();
                     cell.setTile(tiles[id]);
                     layer.setCell(x, y, cell);
@@ -81,6 +93,11 @@ public class SeaWarCarteScreen extends ScreenAdapter {
         }
 
         renderer = new HexagonalTiledMapRenderer(map);
+
+        //For moving cam and getting cells
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(cameraController);
+        Gdx.input.setInputProcessor(multiplexer);
 
         logger.debug(camera.position.x + ";" + camera.position.y);
     }
@@ -101,26 +118,86 @@ public class SeaWarCarteScreen extends ScreenAdapter {
         renderer.render();
 
         if (cameraController.click) {
-            //Format colone/ligne
-            int x = (int) (cameraController.touchX / layer.getTileWidth());
-            int y = (int) (cameraController.touchY / layer.getTileHeight());
-            logger.debug("x : " + x + " y : " + y);
-//            for (int i = 0; i < 13; i++) {
-//                for (int j = 0; j < 11; j++) {
-//                    layer.getCell(i,j).setTile(tiles[i%3]);
-//                }
-//            }
-            layer.getCell(x, y).setTile(tiles[0]);
-
+            TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
+            if (!coords.equals(selectedTile)) {
+                invertSelection(selectedTile, tilesSelected, tiles);
+                if (coords.row >= 0 && coords.row <= 11 && coords.column >= 0 && coords.column <= 12) {
+                    invertSelection(coords, tiles, tilesSelected);
+                    selectedTile = coords;
+                }
+            }
         }
-
-
     }
 
     @Override
     public void dispose() {
         renderer.dispose();
         hexture.dispose();
+        hextureSel.dispose();
         map.dispose();
+    }
+
+    private void invertSelection(TiledCoordinates coords, TiledMapTile[] tiledSet, TiledMapTile[] tilesToSet) {
+        Cell c = layer.getCell(coords.column, coords.row);
+        if (c.getTile() == tiledSet[0]) c.setTile(tilesToSet[0]);
+        else if (c.getTile() == tiledSet[1]) c.setTile(tilesToSet[1]);
+        else if (c.getTile() == tiledSet[2]) c.setTile(tilesToSet[2]);
+    }
+
+    private TiledCoordinates getSelectedHexagon(float x, float y) {
+
+        float hexWidth = 112f;
+        float hexQuarterWidth = hexWidth / 4f;
+        float hexHeight = 97f;
+        float hexHalfHeight = hexHeight / 2f;
+        float hexThreeQuartersWidth = hexWidth * 0.75f;
+
+
+        float m = hexQuarterWidth / hexHalfHeight;
+        // Find the row and column of the box that the point falls in.
+        int column = (int) (x / hexThreeQuartersWidth);
+        int row;
+
+        boolean columnIsOdd = column % 2 == 0;
+
+        // Is the column an odd number?
+        if (columnIsOdd)// yes: Offset x to match the indent of the row
+            row = (int) ((y - hexHalfHeight) / hexHeight);
+        else// No: Calculate normally
+            row = (int) (y / hexHeight);
+        // Work out the position of the point relative to the box it is in
+        double relX = x - (column * hexThreeQuartersWidth);
+        double relY;
+
+        if (columnIsOdd)
+            relY = (y - (row * hexHeight)) - hexHalfHeight;
+        else
+            relY = y - (row * hexHeight);
+
+        // Work out if the point is above either of the hexagon's top edges
+        if (relX < (-m * relY) + hexQuarterWidth) // LEFT edge
+        {
+            column--;
+            if (!columnIsOdd)
+                row--;
+        } else if (relX < (m * relY) - hexQuarterWidth) // RIGHT edge
+        {
+            column--;
+            if (columnIsOdd)
+                row++;
+        }
+
+        logger.debug("col : " + column + " row : " + row);
+        return new TiledCoordinates(column, row);
+    }
+}
+
+class TiledCoordinates {
+    public int column;
+    public int row;
+
+    TiledCoordinates(int column, int row) {
+        this.column = column;
+        this.row = row;
     }
 }

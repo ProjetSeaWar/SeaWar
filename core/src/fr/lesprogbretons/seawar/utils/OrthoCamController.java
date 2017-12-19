@@ -10,6 +10,7 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
 public class OrthoCamController extends InputAdapter {
 
     private final OrthographicCamera camera;
+
     private final Vector3 curr = new Vector3();
     private final Vector3 last = new Vector3(-1, -1, -1);
     private final Vector3 delta = new Vector3();

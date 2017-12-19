@@ -15,6 +15,9 @@ public class Assets {
             new AssetDescriptor<>("menuShip.jpg", Texture.class, param);
 
     public static final AssetDescriptor<Texture> hexes =
+            new AssetDescriptor<>("hexes.png", Texture.class, param);
+
+    public static final AssetDescriptor<Texture> hexes2 =
             new AssetDescriptor<>("hexes2.png", Texture.class, param);
 
     public static final AssetDescriptor<Skin> menuSkin =
@@ -25,6 +28,7 @@ public class Assets {
 
         assetManager.load(menu);
         assetManager.load(hexes);
+        assetManager.load(hexes2);
         assetManager.load(menuSkin);
     }
 
