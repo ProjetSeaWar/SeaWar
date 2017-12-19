@@ -20,7 +20,9 @@ import static fr.lesprogbretons.seawar.SeaWar.assets;
 import static fr.lesprogbretons.seawar.SeaWar.spriteBatch;
 
 /**
- *
+ * Classe qui permet d'afficher un menu
+ * <p>
+ * Inspiré par PixelScientists
  */
 public class SeaWarMenuScreen extends ScreenAdapter {
 
@@ -31,8 +33,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
     private Sprite menu;
 
     private Label label;
-
-    //Temporary renderer tools
 
     @Override
     public void show() {
@@ -76,13 +76,13 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
         label = new Label("fps:" + Gdx.graphics.getFramesPerSecond(), skin, "default");
 
-        table.add(playButton).width(playButton.getWidth())
-                .height(playButton.getHeight()).padLeft(25);
-        table.add(label).width(200).padLeft(125);
-        table.add(quitButton).width(quitButton.getWidth())
-                .height(quitButton.getHeight()).padLeft(125);
+        table.add(label).width(200).padLeft(10);
         table.row();
-
+        table.add(playButton).width(playButton.getWidth())
+                .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+        table.add(quitButton).width(quitButton.getWidth())
+                .height(quitButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+        table.row();
         table.left().bottom();
 
     }
