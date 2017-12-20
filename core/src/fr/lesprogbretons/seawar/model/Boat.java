@@ -18,6 +18,8 @@ public class Boat {
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
+    public Boat(){
+    }
 
     public Boat(Case position){
         this.position = position;
