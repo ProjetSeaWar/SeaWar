@@ -19,6 +19,10 @@ public class Boat {
     protected int secCD = 0;
 
 
+    public Boat(Case position){
+        this.position = position;
+    }
+
     ////////////////// GETTER POUR PERMETTRE DE VOIR LES STATS EN JEU ////////////////////////////////////
     public int getMove() {
         return move;
@@ -124,6 +128,10 @@ public class Boat {
 
     private void endTurn() {
         // TODO : Débuter le tour d'un autre bateau
+    }
+
+    public void moveBoat(Case destination){
+        this.position = destination;
     }
 
     public static void main(String[] args){

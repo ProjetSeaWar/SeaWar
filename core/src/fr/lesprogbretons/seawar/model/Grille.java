@@ -135,7 +135,7 @@ public class Grille {
     public static void main(String[] args) {
         Grille grille = new Grille();
         //System.out.println(grille);
-        Case a = grille.getCase(4, 6);
+        Case a = grille.getCase(0, 0);
       /*System.out.println(a);
         System.out.println(grille.getCaseBas(a));
         System.out.println(grille.getCaseGaucheb(a));
