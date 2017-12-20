@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Grille {
-
-    private Case tableau[][];
-    private int hauteur;
-    private int largeur;
+    protected ArrayList<Boat> bateaux1;
+    protected ArrayList<Boat> bateaux2;
+    protected Case tableau[][];
+    protected int hauteur;
+    protected int largeur;
 
     public Grille(int hauteur,int largeur){
         this.hauteur = hauteur;

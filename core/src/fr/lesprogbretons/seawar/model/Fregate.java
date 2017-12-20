@@ -11,4 +11,13 @@ public class Fregate extends Boat{
         dmgSecCanon = 10;
         reloadSecCanon = 0;
     }
+    public Fregate(Case c){
+        super(c);
+        move = 7;
+        hp = 50;
+        dmgMainCanon = 30;
+        reloadMainCanon = 1;
+        dmgSecCanon = 10;
+        reloadSecCanon = 0;
+    }
 }
