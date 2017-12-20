@@ -28,7 +28,7 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
  * Inspiré par PixelScientist et Libgdx
  * </p>
  */
-public class SeaWarCarteScreen extends ScreenAdapter {
+public class SeaWarMapScreen extends ScreenAdapter {
 
     private TiledMap map;
     private TiledMapTileLayer layer;

@@ -1,5 +1,6 @@
 package fr.lesprogbretons.seawar.utils;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -49,9 +50,13 @@ public class OrthoCamController extends InputAdapter {
                 camera.unproject(delta.set(last.x, last.y, 0));
                 delta.sub(curr);
                 camera.position.add(delta.x, delta.y, 0);
+            } else {
+                dragged = false;
             }
             last.set(x, y, 0);
         }
+
+
         if (camera.position.x < downBound) camera.position.x = downBound;
         if (camera.position.x > upBound) camera.position.x = upBound;
         if (camera.position.y < downBound) camera.position.y = downBound;
@@ -131,12 +136,13 @@ public class OrthoCamController extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-        Vector3 position = camera.unproject(clickCoordinates);
+        if (button == Input.Buttons.LEFT) {
+            Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
+            Vector3 position = camera.unproject(clickCoordinates);
 
-        touchX = position.x;
-        touchY = position.y;
-
+            touchX = position.x;
+            touchY = position.y;
+        }
         return false;
     }
 

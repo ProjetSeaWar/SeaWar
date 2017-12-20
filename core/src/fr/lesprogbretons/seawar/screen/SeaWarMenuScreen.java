@@ -61,7 +61,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarCarteScreen());
+                game.setScreen(new SeaWarMapScreen());
             }
         });
 
