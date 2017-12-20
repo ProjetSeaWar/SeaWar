@@ -5,7 +5,7 @@ public class Boat {
     protected boolean alive = true;
 
     protected int move;
-    protected int moveAvalaible;                        // Déplacement encore disponible pendant le tour
+    protected int moveAvailable;                        // Déplacement encore disponible pendant le tour
     protected Case position;
 
     protected int hp;
@@ -30,8 +30,8 @@ public class Boat {
         return move;
     }
 
-    public int getMoveAvalaible() {
-        return moveAvalaible;
+    public int getMoveAvailable() {
+        return moveAvailable;
     }
 
     public int getHp() {
@@ -115,7 +115,7 @@ public class Boat {
             this.endTurn();
         }
 
-        moveAvalaible = move;
+        moveAvailable = move;
 
         if(mainCD > 0){
             mainCD --;
