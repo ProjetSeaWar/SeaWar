@@ -9,25 +9,17 @@ public class Grille {
     private int hauteur;
     private int largeur;
 
-    public Grille(){
-        largeur = 13;
-        hauteur = 11;
-
-        int i,j;
+    public Grille(int hauteur,int largeur){
+        this.hauteur = hauteur;
+        this.largeur = largeur;
 
         tableau=new Case[hauteur][largeur];
 
-        for(i=0;i<11;i++){
-            for(j=0;j<13;j++){
+        for(int i=0;i<hauteur;i++){
+            for(int j=0;j<largeur;j++){
                 tableau[i][j]=new CaseEau(i,j);
             }
         }
-
-        tableau[5][6]=new CaseTerre((5),(6));
-    }
-
-    public Grille(int hauteur,int largeur){
-        tableau = new Case[hauteur][largeur];
     }
 
     public Case getCase(int hauteur,int largeur){
@@ -153,7 +145,7 @@ public class Grille {
     }*/
 
     public static void main(String[] args) {
-        Grille grille = new Grille();
+        Grille grille = new DefaultMap();
         //System.out.println(grille);
 
         Case a = grille.getCase(0, 12);
