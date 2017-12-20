@@ -109,39 +109,43 @@ public class Grille {
         return cas;
     }
 
-    public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
+    public void getCasesDisponible(Case c, int range, ArrayList<Case> tab){
         if(!(tab.contains(c))) {
             tab.add(c);
         }
 
         if (range != 0) {
             if(c.getX()>0) {
-                getCasesDisponibles(getCaseBas(c), (range - 1), tab);
+                getCasesDisponible(getCaseBas(c), (range - 1), tab);
             }
             if(c.getY()<largeur-1) {
                 if((c.getY()%2==0 && c.getX()>0)|| c.getY()%2==1) {
-                    getCasesDisponibles(getCaseDroiteb(c), (range - 1), tab);
+                    getCasesDisponible(getCaseDroiteb(c), (range - 1), tab);
                 }
             }
             if(c.getY()<largeur-1) {
                 if ((c.getY() % 2 == 1 && c.getX() < hauteur-1)|| c.getY()%2==0) {
-                    getCasesDisponibles(getCaseDroiteh(c), (range - 1), tab);
+                    getCasesDisponible(getCaseDroiteh(c), (range - 1), tab);
                 }
             }
             if(c.getY()>0) {
                 if ((c.getY() % 2 == 0 && c.getX() > 0)|| c.getY()%2==1) {
-                    getCasesDisponibles(getCaseGaucheb(c), (range - 1), tab);
+                    getCasesDisponible(getCaseGaucheb(c), (range - 1), tab);
                 }
             }
             if(c.getY()>0) {
                 if ((c.getY() % 2 == 1 && c.getX() <hauteur-1) || c.getY()%2==0 ) {
-                    getCasesDisponibles(getCaseGaucheh(c), (range - 1), tab);
+                    getCasesDisponible(getCaseGaucheh(c), (range - 1), tab);
                 }
             }
             if(c.getX()<hauteur-1) {
-                getCasesDisponibles(getCaseHaut(c), (range - 1), tab);
+                getCasesDisponible(getCaseHaut(c), (range - 1), tab);
             }
         }
+    }
+    public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
+        getCasesDisponible(c,range,tab);
+        tab.remove(0);
     }
 
     /* TODO : toString de la grille
@@ -156,7 +160,7 @@ public class Grille {
         Grille grille = new Grille();
         //System.out.println(grille);
 
-        Case a = grille.getCase(0, 12);
+        Case a = grille.getCase(4, 5);
 
 
       /*System.out.println(a);
@@ -171,7 +175,7 @@ public class Grille {
 
         grille.getCasesDisponibles(a, 1, tab);
 
-        for(int i=0; i<3;i++){
+        for(int i=0; i<6;i++){
             System.out.println(tab.get(i));
         }
 
