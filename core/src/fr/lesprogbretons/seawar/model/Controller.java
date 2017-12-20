@@ -24,7 +24,7 @@ public class Controller {
     }
 
     public static void main(String[] args){
-        Grille map = new Grille();
+        Grille map = new DefaultMap();
 
         Boat amiral = new Amiral();
 
