@@ -9,6 +9,7 @@ public abstract class Case {
         x=xe;
         y=ye;
     }
+
     public int getX() {
         return x;
     }
