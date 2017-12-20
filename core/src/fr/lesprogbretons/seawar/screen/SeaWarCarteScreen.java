@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.utils.OrthoCamController;
+import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
@@ -53,7 +54,7 @@ public class SeaWarCarteScreen extends ScreenAdapter {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (w / h) * 800, 800);
-        camera.position.set(1200, 1200, 0);
+        camera.position.set(616f, 630.5f, 0f);
         camera.update();
 
         cameraController = new OrthoCamController(camera);
@@ -94,12 +95,9 @@ public class SeaWarCarteScreen extends ScreenAdapter {
 
         renderer = new HexagonalTiledMapRenderer(map);
 
-        //For moving cam and getting cells
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(cameraController);
         Gdx.input.setInputProcessor(multiplexer);
-
-        logger.debug(camera.position.x + ";" + camera.position.y);
     }
 
     @Override
@@ -110,22 +108,24 @@ public class SeaWarCarteScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        //TODO
         Utils.clearScreen();
-        cameraController.updateZoom(delta);
+        //Update view if needed
+        cameraController.changeView(delta);
         camera.update();
         renderer.setView(camera);
         renderer.render();
 
-        if (cameraController.click) {
+        if (cameraController.clicked) {
             TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
-            if (!coords.equals(selectedTile)) {
-                invertSelection(selectedTile, tilesSelected, tiles);
-                if (coords.row >= 0 && coords.row <= 11 && coords.column >= 0 && coords.column <= 12) {
-                    invertSelection(coords, tiles, tilesSelected);
-                    selectedTile = coords;
+            if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
+                if (!coords.equals(selectedTile)) {
+                    invertSelection(selectedTile, tilesSelected, tiles);
                 }
+                invertSelection(coords, tiles, tilesSelected);
+                selectedTile = coords;
             }
+            //Le click est consomé
+            cameraController.clicked = false;
         }
     }
 
@@ -189,15 +189,5 @@ public class SeaWarCarteScreen extends ScreenAdapter {
 
         logger.debug("col : " + column + " row : " + row);
         return new TiledCoordinates(column, row);
-    }
-}
-
-class TiledCoordinates {
-    public int column;
-    public int row;
-
-    TiledCoordinates(int column, int row) {
-        this.column = column;
-        this.row = row;
     }
 }

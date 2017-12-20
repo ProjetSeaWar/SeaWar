@@ -1,8 +1,8 @@
 package fr.lesprogbretons.seawar.utils;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
@@ -14,26 +14,36 @@ public class OrthoCamController extends InputAdapter {
     private final Vector3 curr = new Vector3();
     private final Vector3 last = new Vector3(-1, -1, -1);
     private final Vector3 delta = new Vector3();
-    private final Vector3 finalPosNoZoom = new Vector3(565, 565, 0);
 
-    private boolean toggleZoom = false;
-    private float minZoom = 1.5f;
-    private float maxZoom = 1.0f;
+    private final Vector2 finalPos = new Vector2(560, 560);
+    private final float downBound = 400;
+    private final float upBound = 715;
+
+    private boolean fullSize = false;
+    private boolean zooming = false;
+    private boolean displacement = false;
+    private float minZoom = 1.4f;
+    private float maxZoom = 1f;
+    private float targetZoom = minZoom;
     private float displacementSpeed = 20f;
 
-    public boolean click;
+    public boolean clicked;
+    private boolean dragged;
     public float touchX;
     public float touchY;
 
 
     public OrthoCamController(OrthographicCamera camera) {
         this.camera = camera;
+        camera.zoom = targetZoom;
+        camera.position.set(finalPos, 0);
     }
 
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
-        click = false;
-        if (camera.zoom != 1.5f) {
+        //On ne veut pas cliquer lors du déplacement de la map
+        dragged = true;
+        if (camera.zoom != minZoom && !zooming && !displacement) {
             camera.unproject(curr.set(x, y, 0));
             if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
                 camera.unproject(delta.set(last.x, last.y, 0));
@@ -42,50 +52,81 @@ public class OrthoCamController extends InputAdapter {
             }
             last.set(x, y, 0);
         }
-        logger.debug(camera.position.x + ":" + camera.position.y);
+        if (camera.position.x < downBound) camera.position.x = downBound;
+        if (camera.position.x > upBound) camera.position.x = upBound;
+        if (camera.position.y < downBound) camera.position.y = downBound;
+        if (camera.position.y > upBound) camera.position.y = upBound;
+
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        //TODO Delete
-        camera.zoom += 0.1f * amount;
-        if (camera.zoom > minZoom) {
-            camera.zoom = minZoom;
-        } else if (camera.zoom < maxZoom) camera.zoom = maxZoom;
+        zooming = true;
+        if (amount == 1) {
+            fullSize = true;
+            targetZoom = minZoom;
+            displacement = true;
+        } else if (amount == -1) {
+            fullSize = false;
+            targetZoom = maxZoom;
+        }
+
+        if (camera.zoom == targetZoom) {
+            zooming = false;
+        }
+        logger.debug("Actuel : " + camera.position.x + ":" + camera.position.y);
         return false;
     }
 
-    public void updateZoom(float delta) {
-        if (toggleZoom) {
-            camera.zoom += delta * displacementSpeed * 0.08f;
-            if (camera.zoom > minZoom) {
-                camera.zoom = minZoom;
-                logger.debug("Done zoom");
-            }
-
-            if (camera.position.x < finalPosNoZoom.x - displacementSpeed) {
-                camera.position.x += displacementSpeed;
-            } else if (camera.position.x > finalPosNoZoom.x + displacementSpeed) {
-                camera.position.x -= displacementSpeed;
+    public void changeView(float delta) {
+        //Manage zoom
+        if (camera.zoom != targetZoom) {
+            float zoom = delta * displacementSpeed * 0.08f;
+            if (fullSize) {
+                if (camera.zoom > targetZoom) {
+                    camera.zoom = targetZoom;
+                    logger.debug("Done zoom to min");
+                    zoom = 0;
+                    zooming = false;
+                }
             } else {
-                camera.position.x = finalPosNoZoom.x;
-                logger.debug("Done x");
+                zoom = -zoom;
+                if (camera.zoom < targetZoom) {
+                    camera.zoom = targetZoom;
+                    logger.debug("Done zoom to max");
+                    zoom = 0;
+                    zooming = false;
+                }
             }
-
-            if (camera.position.y < finalPosNoZoom.y - displacementSpeed) {
-                camera.position.y += displacementSpeed;
-            } else if (camera.position.y > finalPosNoZoom.y + displacementSpeed) {
-                camera.position.y -= displacementSpeed;
-            } else {
-                camera.position.y = finalPosNoZoom.y;
-                logger.debug("Done y");
-            }
-
-            if (camera.zoom == minZoom && camera.position.x == 565 && camera.position.y == 565) toggleZoom = false;
+            camera.zoom += zoom;
         }
 
+        if (displacement) {
+            float dist = displacementSpeed;
+            float distX = 0, distY = 0;
+            if (camera.position.x > (finalPos.x + dist)) {
+                distX = -dist;
+            } else if (camera.position.x < (finalPos.x - dist)) {
+                distX = dist;
+            } else {
+                camera.position.x = finalPos.x;
+            }
 
+            if (camera.position.y > (finalPos.y + dist)) {
+                distY = -dist;
+            } else if (camera.position.y < (finalPos.y - dist)) {
+                distY = dist;
+            } else {
+                camera.position.y = finalPos.y;
+            }
+            camera.translate(distX, distY);
+
+            if (camera.position.x == finalPos.x && camera.position.y == finalPos.y) {
+                displacement = false;
+                logger.debug("Done displacement");
+            }
+        }
     }
 
     @Override
@@ -96,26 +137,14 @@ public class OrthoCamController extends InputAdapter {
         touchX = position.x;
         touchY = position.y;
 
-        click = true;
-
         return false;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
         last.set(-1, -1, -1);
-        click = false;
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.Z:
-                toggleZoom = true;
-                logger.debug("Actuel : " + camera.position.x + ":" + camera.position.y);
-                break;
-        }
+        if (!dragged) clicked = true;
+        dragged = false;
         return false;
     }
 }
