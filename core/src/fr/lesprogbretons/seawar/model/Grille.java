@@ -10,12 +10,12 @@ public class Grille {
     private int largeur;
 
     public Grille(){
-        largeur = 11;
-        hauteur = 13;
+        largeur = 13;
+        hauteur = 11;
 
         int i,j;
 
-        tableau=new Case[largeur][hauteur];
+        tableau=new Case[hauteur][largeur];
 
         for(i=0;i<11;i++){
             for(j=0;j<13;j++){
@@ -26,12 +26,12 @@ public class Grille {
         tableau[5][6]=new CaseTerre((5),(6));
     }
 
-    public Grille(int largeur,int hauteur){
-        tableau = new Case[largeur][hauteur];
+    public Grille(int hauteur,int largeur){
+        tableau = new Case[hauteur][largeur];
     }
 
-    public Case getCase(int largeur, int hauteur){
-        return tableau[largeur][hauteur];
+    public Case getCase(int hauteur,int largeur){
+        return tableau[hauteur][largeur];
     }
 
     public Case getCaseHaut(Case c){
@@ -115,12 +115,32 @@ public class Grille {
         }
 
         if (range != 0) {
-            getCasesDisponibles(getCaseBas(c), (range - 1), tab);
-            getCasesDisponibles(getCaseDroiteb(c), (range - 1), tab);
-            getCasesDisponibles(getCaseDroiteh(c), (range - 1), tab);
-            getCasesDisponibles(getCaseGaucheb(c), (range - 1), tab);
-            getCasesDisponibles(getCaseGaucheh(c), (range - 1), tab);
-            getCasesDisponibles(getCaseHaut(c), (range - 1), tab);
+            if(c.getX()>0) {
+                getCasesDisponibles(getCaseBas(c), (range - 1), tab);
+            }
+            if(c.getY()<largeur-1) {
+                if((c.getY()%2==0 && c.getX()>0)|| c.getY()%2==1) {
+                    getCasesDisponibles(getCaseDroiteb(c), (range - 1), tab);
+                }
+            }
+            if(c.getY()<largeur-1) {
+                if ((c.getY() % 2 == 1 && c.getX() < hauteur-1)|| c.getY()%2==0) {
+                    getCasesDisponibles(getCaseDroiteh(c), (range - 1), tab);
+                }
+            }
+            if(c.getY()>0) {
+                if ((c.getY() % 2 == 0 && c.getX() > 0)|| c.getY()%2==1) {
+                    getCasesDisponibles(getCaseGaucheb(c), (range - 1), tab);
+                }
+            }
+            if(c.getY()>0) {
+                if ((c.getY() % 2 == 1 && c.getX() <hauteur-1) || c.getY()%2==0 ) {
+                    getCasesDisponibles(getCaseGaucheh(c), (range - 1), tab);
+                }
+            }
+            if(c.getX()<hauteur-1) {
+                getCasesDisponibles(getCaseHaut(c), (range - 1), tab);
+            }
         }
     }
 
@@ -135,7 +155,10 @@ public class Grille {
     public static void main(String[] args) {
         Grille grille = new Grille();
         //System.out.println(grille);
-        Case a = grille.getCase(0, 0);
+
+        Case a = grille.getCase(0, 12);
+
+
       /*System.out.println(a);
         System.out.println(grille.getCaseBas(a));
         System.out.println(grille.getCaseGaucheb(a));
@@ -146,9 +169,9 @@ public class Grille {
 
         ArrayList<Case> tab = new ArrayList<>();
 
-        grille.getCasesDisponibles(a, 2, tab);
+        grille.getCasesDisponibles(a, 1, tab);
 
-        for(int i=0; i<19;i++){
+        for(int i=0; i<3;i++){
             System.out.println(tab.get(i));
         }
 
