@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.dialog.SeaWarOptionDialog;
 
 import static fr.lesprogbretons.seawar.SeaWar.assets;
 import static fr.lesprogbretons.seawar.SeaWar.spriteBatch;
@@ -62,6 +63,16 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 //TODO Set Screen Game
             }
         });
+        
+        TextButton optionButton = new TextButton("Options", skin, "default");
+        optionButton.setWidth(150);
+        optionButton.setHeight(50);
+        optionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO Set Screen Option
+            }
+        });
 
         TextButton quitButton = new TextButton("Quitter", skin, "default");
         quitButton.setWidth(150);
@@ -76,15 +87,19 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
         label = new Label("fps:" + Gdx.graphics.getFramesPerSecond(), skin, "default");
 
-        table.add(label).width(200).padLeft(10);
+        table.add(label).width(150).padLeft(10);
         table.row();
         table.add(playButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+        table.add(optionButton).width(optionButton.getWidth())
+        		.height(optionButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(quitButton).width(quitButton.getWidth())
                 .height(quitButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.row();
         table.left().bottom();
 
+        SeaWarOptionDialog test = new SeaWarOptionDialog(skin, stage);
+        test.show(stage);
     }
 
     @Override
