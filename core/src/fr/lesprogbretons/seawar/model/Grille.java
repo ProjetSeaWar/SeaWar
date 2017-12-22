@@ -13,7 +13,8 @@ public class Grille {
     public Grille(int hauteur,int largeur){
         this.hauteur = hauteur;
         this.largeur = largeur;
-
+        bateaux1=new ArrayList<>();
+        bateaux2=new ArrayList<>();
         tableau=new Case[hauteur][largeur];
 
         for(int i=0;i<hauteur;i++){
@@ -103,11 +104,11 @@ public class Grille {
     }
 
     public void getCasesDisponible(Case c, int range, ArrayList<Case> tab){
-        if(!(tab.contains(c))) {
+        if(!(tab.contains(c)) &&!(c  instanceof CaseTerre)) {
             tab.add(c);
         }
 
-        if (range != 0) {
+        if (range != 0 && !(c  instanceof CaseTerre)) {
             if(c.getX()>0) {
                 getCasesDisponible(getCaseBas(c), (range - 1), tab);
             }
@@ -149,11 +150,27 @@ public class Grille {
                 '}';
     }*/
 
+    public ArrayList<Boat> getBateaux1() {
+        return bateaux1;
+    }
+
+    public void setBateaux1(ArrayList<Boat> bateaux1) {
+        this.bateaux1 = bateaux1;
+    }
+
+    public ArrayList<Boat> getBateaux2() {
+        return bateaux2;
+    }
+
+    public void setBateaux2(ArrayList<Boat> bateaux2) {
+        this.bateaux2 = bateaux2;
+    }
+
     public static void main(String[] args) {
         Grille grille = new DefaultMap();
         //System.out.println(grille);
 
-        Case a = grille.getCase(4, 5);
+        Case a = grille.getCase(0, 1);
 
 
       /*System.out.println(a);
@@ -166,9 +183,9 @@ public class Grille {
 
         ArrayList<Case> tab = new ArrayList<>();
 
-        grille.getCasesDisponibles(a, 1, tab);
+        grille.getCasesDisponibles(a, 3, tab);
 
-        for(int i=0; i<6;i++){
+        for(int i=0; i<13;i++){
             System.out.println(tab.get(i));
         }
 

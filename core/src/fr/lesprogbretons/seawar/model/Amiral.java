@@ -2,6 +2,13 @@ package fr.lesprogbretons.seawar.model;
 
 public class Amiral extends Boat{
 
+    @Override
+    public String toString() {
+        return "Amiral{" +
+                "position=" + position +
+                '}';
+    }
+
     public Amiral(){
         super();
         move = 3;

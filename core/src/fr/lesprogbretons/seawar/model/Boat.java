@@ -21,6 +21,13 @@ public class Boat {
     public Boat(){
     }
 
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "position=" + position +
+                '}';
+    }
+
     public Boat(Case position){
         this.position = position;
     }

@@ -11,6 +11,14 @@ public class Fregate extends Boat{
         dmgSecCanon = 10;
         reloadSecCanon = 0;
     }
+
+    @Override
+    public String toString() {
+        return "Fregate{" +
+                "position=" + position +
+                '}';
+    }
+
     public Fregate(Case c){
         super(c);
         move = 7;

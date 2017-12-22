@@ -5,6 +5,16 @@ public abstract class Case {
     private int x;
     private int y;
 
+    public boolean isPhare() {
+        return phare;
+    }
+
+    public void setPhare(boolean phare) {
+        this.phare = phare;
+    }
+
+    protected boolean phare;
+
     public Case(int xe, int ye){
         x=xe;
         y=ye;

@@ -1,10 +1,18 @@
 package fr.lesprogbretons.seawar.model;
 
 public class CaseEau extends Case {
-    private boolean phare;
+
 
     public CaseEau(int x, int y) {
         super(x, y);
-        phare = false;
+        phare=false;
+    }
+
+    public boolean isPhare() {
+        return phare;
+    }
+
+    public void setPhare(boolean phare) {
+        this.phare = phare;
     }
 }
