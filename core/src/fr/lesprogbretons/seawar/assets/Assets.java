@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
@@ -14,11 +15,11 @@ public class Assets {
     public static final AssetDescriptor<Texture> menu =
             new AssetDescriptor<>("menuShip.jpg", Texture.class, param);
 
-    public static final AssetDescriptor<Texture> hexes =
-            new AssetDescriptor<>("hexes.png", Texture.class, param);
+    public static final AssetDescriptor<TextureAtlas> hexes =
+                new AssetDescriptor<>("hexes.atlas", TextureAtlas.class);
 
-    public static final AssetDescriptor<Texture> hexes2 =
-            new AssetDescriptor<>("hexes2.png", Texture.class, param);
+//    public static final AssetDescriptor<Texture> hexes2 =
+//            new AssetDescriptor<>("hexes2.png", Texture.class, param);
 
     public static final AssetDescriptor<Skin> menuSkin =
             new AssetDescriptor<>("skin/uiskin.json", Skin.class);
@@ -28,7 +29,7 @@ public class Assets {
 
         assetManager.load(menu);
         assetManager.load(hexes);
-        assetManager.load(hexes2);
+//        assetManager.load(hexes2);
         assetManager.load(menuSkin);
     }
 

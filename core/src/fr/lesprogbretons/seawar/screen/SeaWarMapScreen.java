@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,6 +18,8 @@ import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.utils.OrthoCamController;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
 
@@ -33,13 +35,12 @@ public class SeaWarMapScreen extends ScreenAdapter {
     private TiledMap map;
     private TiledMapTileLayer layer;
     private TiledMapTile[] tiles;
-    private TiledMapTile[] tilesSelected;
+//    private TiledMapTile[] tilesSelected;
 
     private OrthographicCamera camera;
     private OrthoCamController cameraController;
     private HexagonalTiledMapRenderer renderer;
-    private Texture hexture;
-    private Texture hextureSel;
+    private TextureAtlas hexture;
 
 
     private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
@@ -59,32 +60,26 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
         cameraController = new OrthoCamController(camera);
 
-        hexture = (Texture) SeaWar.assets.get(Assets.hexes);
-        hextureSel = (Texture) SeaWar.assets.get(Assets.hexes2);
-
-        TextureRegion[][] hexes = TextureRegion.split(hexture, 112, 97);
-        TextureRegion[][] hexes2 = TextureRegion.split(hextureSel, 112, 97);
+        hexture = (TextureAtlas) SeaWar.assets.get(Assets.hexes);
 
         map = new TiledMap();
         MapLayers layers = map.getLayers();
 
 
-        tiles = new TiledMapTile[3];
-        tiles[0] = new StaticTiledMapTile(new TextureRegion(hexes[0][0]));
-        tiles[1] = new StaticTiledMapTile(new TextureRegion(hexes[0][1]));
-        tiles[2] = new StaticTiledMapTile(new TextureRegion(hexes[1][0]));
-
-        tilesSelected = new TiledMapTile[3];
-        tilesSelected[0] = new StaticTiledMapTile(new TextureRegion(hexes2[0][0]));
-        tilesSelected[1] = new StaticTiledMapTile(new TextureRegion(hexes2[0][1]));
-        tilesSelected[2] = new StaticTiledMapTile(new TextureRegion(hexes2[1][0]));
-
+        tiles = new TiledMapTile[7];
+        tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
+        tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
+        tiles[2] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexphare")));
+        tiles[3] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship1")));
+        tiles[4] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship2")));
+        tiles[5] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship3")));
+        tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
 
         for (int l = 0; l < 1; l++) {
             layer = new TiledMapTileLayer(13, 11, 112, 97);
             for (int y = 0; y < 11; y++) {
                 for (int x = 0; x < 13; x++) {
-                    int id = (int) (Math.random() * 3);
+                    int id = ThreadLocalRandom.current().nextInt(6);
                     Cell cell = new Cell();
                     cell.setTile(tiles[id]);
                     layer.setCell(x, y, cell);
@@ -119,9 +114,9 @@ public class SeaWarMapScreen extends ScreenAdapter {
             TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
             if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
                 if (!coords.equals(selectedTile)) {
-                    invertSelection(selectedTile, tilesSelected, tiles);
+//                    invertSelection(selectedTile, tilesSelected, tiles);
                 }
-                invertSelection(coords, tiles, tilesSelected);
+//                invertSelection(coords, tiles, tilesSelected);
                 selectedTile = coords;
             }
             //Le click est consomé
@@ -133,7 +128,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
     public void dispose() {
         renderer.dispose();
         hexture.dispose();
-        hextureSel.dispose();
+//        hextureSel.dispose();
         map.dispose();
     }
 
