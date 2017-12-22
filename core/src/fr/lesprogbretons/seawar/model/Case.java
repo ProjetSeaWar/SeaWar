@@ -1,5 +1,7 @@
 package fr.lesprogbretons.seawar.model;
 
+import static java.lang.Math.abs;
+
 public abstract class Case {
 
     private int x;
@@ -43,5 +45,9 @@ public abstract class Case {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int diff(Case c){
+        return (abs(this.x - c.getX()) + abs(this.y - c.getY()));
     }
 }

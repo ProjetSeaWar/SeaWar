@@ -9,7 +9,7 @@ public class Controller {
         if(destination instanceof CaseEau) {
             ArrayList<Case> casesDispo = new ArrayList<>();
 
-            map.getCasesDisponibles(boat.getPosition(), boat.getMoveAvalaible(), casesDispo);
+            map.getCasesDisponibles(boat.getPosition(), boat.getMoveAvailable(), casesDispo);
 
             if (casesDispo.contains(destination)) {
                 boat.moveBoat(destination);
