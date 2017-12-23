@@ -1,14 +1,15 @@
-package fr.lesprogbretons.seawar.utils;
+package fr.lesprogbretons.seawar.screen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
 
-public class OrthoCamController extends InputAdapter {
+public class MapOrthoCamController extends InputAdapter {
 
     private final OrthographicCamera camera;
 
@@ -16,16 +17,16 @@ public class OrthoCamController extends InputAdapter {
     private final Vector3 last = new Vector3(-1, -1, -1);
     private final Vector3 delta = new Vector3();
 
-    private final Vector2 finalPos = new Vector2(560, 560);
+    private final Vector2 finalPos = new Vector2();
     private final float downBound = 400;
     private final float upBound = 715;
 
     private boolean fullSize = false;
     private boolean zooming = false;
     private boolean displacement = false;
-    private float minZoom = 1.4f;
+    private float minZoom;
     private float maxZoom = 1f;
-    private float targetZoom = minZoom;
+    private float targetZoom;
     private float displacementSpeed = 20f;
 
     public boolean clicked;
@@ -34,9 +35,23 @@ public class OrthoCamController extends InputAdapter {
     public float touchY;
 
 
-    public OrthoCamController(OrthographicCamera camera) {
+    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heigthMap, int widthHexa, int heigthHexa) {
         this.camera = camera;
+
+        finalPos.x = MathUtils.floor((widthHexa * widthMap) / 2.6f);
+        finalPos.y = MathUtils.floor((heigthHexa * heigthMap) / 1.9f) - 1;
+
+
+        minZoom = MathUtils.ceil(((widthHexa * widthMap) / (heigthHexa * heigthMap)) * 100f) / 100f;
+//        minZoom = MathUtils.floor((((widthHexa * widthMap * heigthHexa * heigthMap)) / 1109680f) * 10f) / 10f;
+        minZoom = 6.2f;
+
+        logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
+
+
+        targetZoom = minZoom;
         camera.zoom = targetZoom;
+
         camera.position.set(finalPos, 0);
     }
 
@@ -44,23 +59,23 @@ public class OrthoCamController extends InputAdapter {
     public boolean touchDragged(int x, int y, int pointer) {
         //On ne veut pas cliquer lors du déplacement de la map
         dragged = true;
-        if (camera.zoom != minZoom && !zooming && !displacement) {
-            camera.unproject(curr.set(x, y, 0));
-            if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
-                camera.unproject(delta.set(last.x, last.y, 0));
-                delta.sub(curr);
-                camera.position.add(delta.x, delta.y, 0);
-            } else {
-                dragged = false;
-            }
-            last.set(x, y, 0);
+//        if (camera.zoom != minZoom && !zooming && !displacement) {
+        camera.unproject(curr.set(x, y, 0));
+        if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
+            camera.unproject(delta.set(last.x, last.y, 0));
+            delta.sub(curr);
+            camera.position.add(delta.x, delta.y, 0);
+        } else {
+            dragged = false;
         }
+        last.set(x, y, 0);
+//        }
 
 
-        if (camera.position.x < downBound) camera.position.x = downBound;
-        if (camera.position.x > upBound) camera.position.x = upBound;
-        if (camera.position.y < downBound) camera.position.y = downBound;
-        if (camera.position.y > upBound) camera.position.y = upBound;
+//        if (camera.position.x < downBound) camera.position.x = downBound;
+//        if (camera.position.x > upBound) camera.position.x = upBound;
+//        if (camera.position.y < downBound) camera.position.y = downBound;
+//        if (camera.position.y > upBound) camera.position.y = upBound;
 
         return false;
     }

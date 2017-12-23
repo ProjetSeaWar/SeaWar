@@ -15,7 +15,6 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
-import fr.lesprogbretons.seawar.utils.OrthoCamController;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -32,13 +31,18 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
  */
 public class SeaWarMapScreen extends ScreenAdapter {
 
+    private static final int WIDTH_MAP = 13;
+//    private static final int WIDTH_MAP = 50;
+    private static final int HEIGHT_MAP = 11;
+//    private static final int HEIGHT_MAP = 50;
+
     private TiledMap map;
     private TiledMapTileLayer layer;
     private TiledMapTile[] tiles;
 //    private TiledMapTile[] tilesSelected;
 
     private OrthographicCamera camera;
-    private OrthoCamController cameraController;
+    private MapOrthoCamController cameraController;
     private HexagonalTiledMapRenderer renderer;
     private TextureAtlas hexture;
 
@@ -55,10 +59,10 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (w / h) * 800, 800);
-        camera.position.set(616f, 630.5f, 0f);
-        camera.update();
+        camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0f);
 
-        cameraController = new OrthoCamController(camera);
+        cameraController = new MapOrthoCamController(camera, WIDTH_MAP, HEIGHT_MAP, 112, 97);
+        camera.update();
 
         hexture = (TextureAtlas) SeaWar.assets.get(Assets.hexes);
 
@@ -76,9 +80,9 @@ public class SeaWarMapScreen extends ScreenAdapter {
         tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
 
         for (int l = 0; l < 1; l++) {
-            layer = new TiledMapTileLayer(13, 11, 112, 97);
-            for (int y = 0; y < 11; y++) {
-                for (int x = 0; x < 13; x++) {
+            layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, 112, 97);
+            for (int y = 0; y < HEIGHT_MAP; y++) {
+                for (int x = 0; x < WIDTH_MAP; x++) {
                     int id = ThreadLocalRandom.current().nextInt(6);
                     Cell cell = new Cell();
                     cell.setTile(tiles[id]);
@@ -93,6 +97,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(cameraController);
         Gdx.input.setInputProcessor(multiplexer);
+
+        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
     }
 
     @Override
@@ -109,19 +115,20 @@ public class SeaWarMapScreen extends ScreenAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
 
-        if (cameraController.clicked) {
-            TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
-            if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
-                if (!coords.equals(selectedTile)) {
-//                    invertSelection(selectedTile, tilesSelected, tiles);
-                }
-//                invertSelection(coords, tiles, tilesSelected);
-                selectedTile = coords;
-            }
-            //Le click est consomé
-            cameraController.clicked = false;
-        }
+//        if (cameraController.clicked) {
+//            TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
+//            if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
+//                if (!coords.equals(selectedTile)) {
+////                    invertSelection(selectedTile, tilesSelected, tiles);
+//                }
+////                invertSelection(coords, tiles, tilesSelected);
+//                selectedTile = coords;
+//            }
+//            //Le click est consomé
+//            cameraController.clicked = false;
+//        }
     }
 
     @Override
