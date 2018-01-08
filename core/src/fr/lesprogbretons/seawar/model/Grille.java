@@ -137,9 +137,14 @@ public class Grille {
             }
         }
     }
+
     public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
         getCasesDisponible(c,range,tab);
         tab.remove(0);
+    }
+
+    public int distanceCase(Case c1, Case c2){
+        //
     }
 
     /* TODO : toString de la grille
