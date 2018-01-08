@@ -18,8 +18,6 @@ public class MapOrthoCamController extends InputAdapter {
     private final Vector3 delta = new Vector3();
 
     private final Vector2 finalPos = new Vector2();
-    private final float downBound = 400;
-    private final float upBound = 715;
 
     private boolean fullSize = false;
     private boolean zooming = false;
@@ -28,6 +26,10 @@ public class MapOrthoCamController extends InputAdapter {
     private float maxZoom = 1f;
     private float targetZoom;
     private float displacementSpeed = 20f;
+    //Celle-ci ne changeras pas
+    private final float downBound = 400;
+    private float upBoundX;
+    private float upBoundY;
 
     public boolean clicked;
     private boolean dragged;
@@ -38,12 +40,15 @@ public class MapOrthoCamController extends InputAdapter {
     public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa) {
         this.camera = camera;
 
-
         //Nombre de tiles en lageur / 2 -> Nb de full tiles + Nombre de tiles en lageur / 4 -> nb moitiés de tiles
         // + 0.25f pour le décalage
-        finalPos.x = (widthMap / 2f + (widthMap / 4f) + 0.25f) * widthHexa / 2f;
+        float xMap = (widthMap / 2f + (widthMap / 4f) + 0.25f) * widthHexa;
         //Nombre de tiles en hauteur + 0.5f pour le décalage entre les colones
-        finalPos.y = (heightMap + 0.5f) * heightHexa / 2f;
+        float yMap = (heightMap + 0.5f) * heightHexa;
+
+        //Diviser par 2 pour position
+        finalPos.x = xMap / 2f;
+        finalPos.y = yMap / 2f;
 
         if (finalPos.x > finalPos.y) {
             minZoom = MathUtils.ceil(1.06f * widthMap) / 10f;
@@ -54,8 +59,10 @@ public class MapOrthoCamController extends InputAdapter {
         targetZoom = minZoom;
         camera.zoom = targetZoom;
 
-        logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
+        upBoundX = xMap - 400f;
+        upBoundY = yMap - 400f;
 
+        logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
 
         camera.position.set(finalPos, 0);
     }
@@ -64,23 +71,23 @@ public class MapOrthoCamController extends InputAdapter {
     public boolean touchDragged(int x, int y, int pointer) {
         //On ne veut pas cliquer lors du déplacement de la map
         dragged = true;
-//        if (camera.zoom != minZoom && !zooming && !displacement) {
-        camera.unproject(curr.set(x, y, 0));
-        if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
-            camera.unproject(delta.set(last.x, last.y, 0));
-            delta.sub(curr);
-            camera.position.add(delta.x, delta.y, 0);
-        } else {
-            dragged = false;
+        if (camera.zoom != minZoom && !zooming && !displacement) {
+            camera.unproject(curr.set(x, y, 0));
+            if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
+                camera.unproject(delta.set(last.x, last.y, 0));
+                delta.sub(curr);
+                camera.position.add(delta.x, delta.y, 0);
+            } else {
+                dragged = false;
+            }
+            last.set(x, y, 0);
         }
-        last.set(x, y, 0);
-//        }
 
 
-//        if (camera.position.x < downBound) camera.position.x = downBound;
-//        if (camera.position.x > upBound) camera.position.x = upBound;
-//        if (camera.position.y < downBound) camera.position.y = downBound;
-//        if (camera.position.y > upBound) camera.position.y = upBound;
+        if (camera.position.x < downBound) camera.position.x = downBound;
+        if (camera.position.x > upBoundX) camera.position.x = upBoundX;
+        if (camera.position.y < downBound) camera.position.y = downBound;
+        if (camera.position.y > upBoundY) camera.position.y = upBoundY;
 
         return false;
     }
