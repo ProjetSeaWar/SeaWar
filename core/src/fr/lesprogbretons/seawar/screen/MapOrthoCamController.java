@@ -35,22 +35,27 @@ public class MapOrthoCamController extends InputAdapter {
     public float touchY;
 
 
-    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heigthMap, int widthHexa, int heigthHexa) {
+    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa) {
         this.camera = camera;
 
-        finalPos.x = MathUtils.floor((widthHexa * widthMap) / 2.6f);
-        finalPos.y = MathUtils.floor((heigthHexa * heigthMap) / 1.9f) - 1;
 
+        //Nombre de tiles en lageur / 2 -> Nb de full tiles + Nombre de tiles en lageur / 4 -> nb moitiés de tiles
+        // + 0.25f pour le décalage
+        finalPos.x = (widthMap / 2f + (widthMap / 4f) + 0.25f) * widthHexa / 2f;
+        //Nombre de tiles en hauteur + 0.5f pour le décalage entre les colones
+        finalPos.y = (heightMap + 0.5f) * heightHexa / 2f;
 
-        minZoom = MathUtils.ceil(((widthHexa * widthMap) / (heigthHexa * heigthMap)) * 100f) / 100f;
-//        minZoom = MathUtils.floor((((widthHexa * widthMap * heigthHexa * heigthMap)) / 1109680f) * 10f) / 10f;
-        minZoom = 6.2f;
-
-        logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
-
+        if (finalPos.x > finalPos.y) {
+            minZoom = MathUtils.ceil(1.06f * widthMap) / 10f;
+        } else {
+            minZoom = MathUtils.ceil(1.24f * heightMap) / 10f;
+        }
 
         targetZoom = minZoom;
         camera.zoom = targetZoom;
+
+        logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
+
 
         camera.position.set(finalPos, 0);
     }

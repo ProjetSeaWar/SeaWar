@@ -3,9 +3,11 @@ package fr.lesprogbretons.seawar.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -21,6 +23,7 @@ import fr.lesprogbretons.seawar.utils.Utils;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
+import static fr.lesprogbretons.seawar.SeaWar.shapeRenderer;
 
 
 /**
@@ -31,10 +34,10 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
  */
 public class SeaWarMapScreen extends ScreenAdapter {
 
-    private static final int WIDTH_MAP = 13;
-//    private static final int WIDTH_MAP = 50;
-    private static final int HEIGHT_MAP = 11;
-//    private static final int HEIGHT_MAP = 50;
+//    private static final int WIDTH_MAP = 13;
+        private static final int WIDTH_MAP = 40;
+//    private static final int HEIGHT_MAP = 11;
+    private static final int HEIGHT_MAP = 50;
 
     private TiledMap map;
     private TiledMapTileLayer layer;
@@ -59,7 +62,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (w / h) * 800, 800);
-        camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0f);
 
         cameraController = new MapOrthoCamController(camera, WIDTH_MAP, HEIGHT_MAP, 112, 97);
         camera.update();
@@ -116,7 +118,13 @@ public class SeaWarMapScreen extends ScreenAdapter {
         renderer.setView(camera);
         renderer.render();
         logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
-
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        float t = WIDTH_MAP / 2f;
+        float t1 = t + (t / 2f) + 0.25f;
+        shapeRenderer.rect(0, 0, t1 * 112, (HEIGHT_MAP + 0.5f) * 97);
+        shapeRenderer.end();
 //        if (cameraController.clicked) {
 //            TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
 //            if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
@@ -146,7 +154,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         else if (c.getTile() == tiledSet[2]) c.setTile(tilesToSet[2]);
     }
 
-    private TiledCoordinates getSelectedHexagon(float x, float y) {
+    private void getSelectedHexagon(float x, float y) {
 
         float hexWidth = 112f;
         float hexQuarterWidth = hexWidth / 4f;
@@ -190,6 +198,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         }
 
         logger.debug("col : " + column + " row : " + row);
-        return new TiledCoordinates(column, row);
+        selectedTile.column = column;
+        selectedTile.row = row;
     }
 }
