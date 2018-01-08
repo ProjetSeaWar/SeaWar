@@ -6,49 +6,56 @@ filter: Nearest,Nearest
 repeat: none
 hexblue
   rotate: false
-  xy: 2, 2
+  xy: 800, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 hexgreen
   rotate: false
-  xy: 458, 2
+  xy: 116, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 hexphare
   rotate: false
-  xy: 686, 2
+  xy: 230, 2
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+select
+  rotate: false
+  xy: 2, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 ship1
   rotate: false
-  xy: 116, 2
+  xy: 344, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 ship2
   rotate: false
-  xy: 572, 2
+  xy: 458, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 ship3
   rotate: false
-  xy: 230, 2
+  xy: 572, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0
   index: -1
 ship4
   rotate: false
-  xy: 344, 2
+  xy: 686, 2
   size: 112, 97
   orig: 112, 97
   offset: 0, 0

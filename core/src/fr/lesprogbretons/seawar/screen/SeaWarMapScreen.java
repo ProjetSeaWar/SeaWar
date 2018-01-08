@@ -31,23 +31,21 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
  */
 public class SeaWarMapScreen extends ScreenAdapter {
 
-//    private static final int WIDTH_MAP = 13;
-    private static final int WIDTH_MAP = 50;
-//    private static final int HEIGHT_MAP = 11;
-    private static final int HEIGHT_MAP = 50;
+    private static final int WIDTH_MAP = 13;
+    private static final int HEIGHT_MAP = 11;
 
     private TiledMap map;
-    private TiledMapTileLayer layer;
     private TiledMapTile[] tiles;
-//    private TiledMapTile[] tilesSelected;
 
     private OrthographicCamera camera;
     private MapOrthoCamController cameraController;
     private HexagonalTiledMapRenderer renderer;
     private TextureAtlas hexture;
 
-
+    //Sélection
     private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
+    private TiledCoordinates previousSelectedTile = new TiledCoordinates(0, 0);
+    private boolean isTileSelected = false;
 
     @Override
     public void show() {
@@ -69,7 +67,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         MapLayers layers = map.getLayers();
 
 
-        tiles = new TiledMapTile[7];
+        tiles = new TiledMapTile[8];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
         tiles[2] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexphare")));
@@ -77,9 +75,11 @@ public class SeaWarMapScreen extends ScreenAdapter {
         tiles[4] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship2")));
         tiles[5] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship3")));
         tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
+        tiles[7] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("select")));
 
         for (int l = 0; l < 1; l++) {
-            layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, 112, 97);
+            TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, 112, 97);
+            layer.setName("map");
             for (int y = 0; y < HEIGHT_MAP; y++) {
                 for (int x = 0; x < WIDTH_MAP; x++) {
                     int id = ThreadLocalRandom.current().nextInt(6);
@@ -90,6 +90,10 @@ public class SeaWarMapScreen extends ScreenAdapter {
             }
             layers.add(layer);
         }
+
+        TiledMapTileLayer layerSelect = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, 112, 97);
+        layerSelect.setName("select");
+        layers.add(layerSelect);
 
         renderer = new HexagonalTiledMapRenderer(map);
 
@@ -115,18 +119,30 @@ public class SeaWarMapScreen extends ScreenAdapter {
         renderer.setView(camera);
         renderer.render();
         logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
-//        if (cameraController.clicked) {
-//            TiledCoordinates coords = getSelectedHexagon(cameraController.touchX, cameraController.touchY);
-//            if (coords.row >= 0 && coords.row < 11 && coords.column >= 0 && coords.column < 13) {
-//                if (!coords.equals(selectedTile)) {
-////                    invertSelection(selectedTile, tilesSelected, tiles);
-//                }
-////                invertSelection(coords, tiles, tilesSelected);
-//                selectedTile = coords;
-//            }
-//            //Le click est consomé
-//            cameraController.clicked = false;
-//        }
+
+        if (cameraController.clicked) {
+            getSelectedHexagon(cameraController.touchX, cameraController.touchY);
+            if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
+                    && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
+                //Selectionner le bon layer
+                TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+
+                // Supprimer la marque de selection de la tile précédente
+                if (isTileSelected) {
+                    layer.setCell(previousSelectedTile.column, previousSelectedTile.row, null);
+                    isTileSelected = false;
+                }
+                //Mettre la tile de selection
+                Cell selected = new Cell();
+                selected.setTile(tiles[7]);
+                layer.setCell(selectedTile.column, selectedTile.row, selected);
+
+                previousSelectedTile.setCoords(selectedTile);
+                isTileSelected = true;
+            }
+            //Le click est consomé
+            cameraController.clicked = false;
+        }
     }
 
     @Override
@@ -134,13 +150,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
         renderer.dispose();
         hexture.dispose();
         map.dispose();
-    }
-
-    private void invertSelection(TiledCoordinates coords, TiledMapTile[] tiledSet, TiledMapTile[] tilesToSet) {
-        Cell c = layer.getCell(coords.column, coords.row);
-        if (c.getTile() == tiledSet[0]) c.setTile(tilesToSet[0]);
-        else if (c.getTile() == tiledSet[1]) c.setTile(tilesToSet[1]);
-        else if (c.getTile() == tiledSet[2]) c.setTile(tilesToSet[2]);
     }
 
     private void getSelectedHexagon(float x, float y) {

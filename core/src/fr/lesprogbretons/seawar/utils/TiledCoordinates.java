@@ -8,4 +8,14 @@ public class TiledCoordinates {
         this.column = column;
         this.row = row;
     }
+
+    public void setCoords(TiledCoordinates coords) {
+        this.column = coords.column;
+        this.row = coords.row;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (this.column == ((TiledCoordinates) obj).column && this.row == ((TiledCoordinates) obj).row);
+    }
 }
