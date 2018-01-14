@@ -63,7 +63,7 @@ public class Jeu {
             if(joueur==1){
                 while(tourFini){
                     while(g.bateaux1.get(0).tourTermine = false && g.bateaux1.get(0).getMoveAvailable()==g.bateaux1.get(0).getMove()){
-
+                        if
                     }
 
                     while (it1.hasNext()) {

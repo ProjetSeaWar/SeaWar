@@ -18,6 +18,8 @@ public class Boat {
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
+    protected boolean tourTermine = true;
+
     public Boat(){
     }
 
@@ -118,6 +120,8 @@ public class Boat {
     }
 
     public void newTurn(){
+        tourTermine = false;
+
         if(alive = false){
             this.endTurn();
         }
@@ -136,6 +140,7 @@ public class Boat {
     }
 
     private void endTurn() {
+        tourTermine = true;
         // TODO : Débuter le tour d'un autre bateau
     }
 
