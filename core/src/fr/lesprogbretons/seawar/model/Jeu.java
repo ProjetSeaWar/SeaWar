@@ -51,8 +51,6 @@ public class Jeu {
         }
     }
 
-    public void
-
     public void start (Grille g){
         boolean jeuFini=false,tourFini=false;
         int joueur=1;
@@ -64,7 +62,9 @@ public class Jeu {
         while(!jeuFini){
             if(joueur==1){
                 while(tourFini){
+                    while(g.bateaux1.get(0).tourTermine = false && g.bateaux1.get(0).getMoveAvailable()==g.bateaux1.get(0).getMove()){
 
+                    }
 
                     while (it1.hasNext()) {
                         Boat b = it1.next();
