@@ -2,6 +2,7 @@ package fr.lesprogbretons.seawar.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 
 public class Grille {
     protected ArrayList<Boat> bateaux1;
@@ -143,8 +144,46 @@ public class Grille {
         tab.remove(0);
     }
 
+    public boolean casePossedeBateau(Case c, Player joueur){
+        if(joueur.getNumber()==1){
+            for(int i =0;i<bateaux1.size();i++){
+                if(bateaux1.get(i).getPosition().equals(c)){
+                    return true;
+                }
+            }
+        }
+
+        else{
+            for(int i =0;i<bateaux2.size();i++){
+                if(bateaux2.get(i).getPosition().equals(c)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public Boat bateauSurCase(Case c){
+        for(int i = 0 ; i<bateaux1.size();i++){
+            if(bateaux1.get(i).getPosition().equals(c)){
+                return bateaux1.get(i);
+            }
+        }
+
+        for(int i =0;i<bateaux2.size();i++){
+            if(bateaux2.get(i).getPosition().equals(c)){
+                return bateaux2.get(i);
+            }
+        }
+
+        return null;
+    }
+
+
+
     public int distanceCase(Case c1, Case c2){
-        //
+        return 0;
     }
 
     /* TODO : toString de la grille
@@ -169,6 +208,22 @@ public class Grille {
 
     public void setBateaux2(ArrayList<Boat> bateaux2) {
         this.bateaux2 = bateaux2;
+    }
+
+    public void getCasesPortees(Case position, Boat bateauSelectionne, ArrayList<Case> casesPorteeTir) {
+    }
+
+    public void prendPhare(Case c, Player joueur){
+        if(c.getPossedePhare().equals(null)){
+            c.setPossedePhare(joueur);
+            joueur.setPharesPossedes(joueur.getPharesPossedes()+1);
+        }
+
+        else if(!(c.getPossedePhare().equals(joueur))){
+            c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes()-1);
+            c.setPossedePhare(joueur);
+            joueur.setPharesPossedes(joueur.getPharesPossedes()+1);
+        }
     }
 
     public static void main(String[] args) {

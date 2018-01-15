@@ -12,13 +12,23 @@ public class Boat {
     protected int dmgMainCanon;
     protected int dmgSecCanon;
     protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
+    protected int canonSelectionne = 0;                 // 1 pour le principal et 2 pour le secondaire
 
     protected int reloadMainCanon;
+
+    public int getCanonSelectionne() {
+        return canonSelectionne;
+    }
+
+    public void setCanonSelectionne(int canonSelectionne) {
+        this.canonSelectionne = canonSelectionne;
+    }
+
     protected int reloadSecCanon;
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
-    protected boolean tourTermine = true;
+    protected boolean tourTermine = false;
 
     public Boat(){
     }
@@ -98,6 +108,15 @@ public class Boat {
 
         shootTaken++;
 
+    }
+
+    public void shoot(Boat target){
+        if(this.canonSelectionne==1){
+            this.shootMainCanon(target);
+        }
+        else{
+            this.shootSecCanon(target);
+        }
     }
 
     public void shootMainCanon(Boat target) {

@@ -60,22 +60,13 @@ public class Jeu {
         Iterator<Boat> it2 = g.bateaux2.iterator();
 
         while(!jeuFini){
-            if(joueur==1){
-                while(tourFini){
-                    while(g.bateaux1.get(0).tourTermine = false && g.bateaux1.get(0).getMoveAvailable()==g.bateaux1.get(0).getMove()){
-                        if
-                    }
 
-                    while (it1.hasNext()) {
-                        Boat b = it1.next();
+            while(joueur==1){
 
-                    }
-
-                }
             }
-
         }
     }
+
 
     public static void main(String[] args){
         Jeu jeu = new Jeu();

@@ -1,11 +1,16 @@
 package fr.lesprogbretons.seawar.model;
 
+import java.util.Objects;
+
 import static java.lang.Math.abs;
 
 public abstract class Case {
 
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
+
+    protected boolean phare;
+    protected Player possedePhare = null;         //1 pour joueur1 et 2 pour joueur2
 
     public boolean isPhare() {
         return phare;
@@ -15,11 +20,35 @@ public abstract class Case {
         this.phare = phare;
     }
 
-    protected boolean phare;
 
     public Case(int xe, int ye){
         x=xe;
         y=ye;
+    }
+
+    public Player getPossedePhare() {
+        return possedePhare;
+    }
+
+    public void setPossedePhare(Player possedePhare) {
+        this.possedePhare = possedePhare;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Case)) return false;
+        Case aCase = (Case) o;
+        return x == aCase.x &&
+                y == aCase.y &&
+
+                phare == aCase.phare;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(x, y, phare);
     }
 
     public int getX() {
