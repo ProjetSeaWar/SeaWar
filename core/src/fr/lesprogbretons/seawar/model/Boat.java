@@ -16,28 +16,16 @@ public class Boat {
 
     protected int reloadMainCanon;
 
-    public int getCanonSelectionne() {
-        return canonSelectionne;
-    }
-
-    public void setCanonSelectionne(int canonSelectionne) {
-        this.canonSelectionne = canonSelectionne;
-    }
-
     protected int reloadSecCanon;
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
     protected boolean tourTermine = false;
 
-    public Boat(){
-    }
 
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "position=" + position +
-                '}';
+
+    /////////////////////////////////////////////////////////////////////////////////////////////:
+    public Boat(){
     }
 
     public Boat(Case position){
@@ -85,7 +73,21 @@ public class Boat {
         return position;
     }
 
+    public int getCanonSelectionne() {
+        return canonSelectionne;
+    }
+
+    public void setCanonSelectionne(int canonSelectionne) {
+        this.canonSelectionne = canonSelectionne;
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "position=" + position +
+                '}';
+    }
 
     public void loseHP(int dmg) {
 

@@ -105,11 +105,11 @@ public class Grille {
     }
 
     public void getCasesDisponible(Case c, int range, ArrayList<Case> tab){
-        if(!(tab.contains(c)) &&!(c  instanceof CaseTerre)) {
+        if(!(tab.contains(c)) &&!(c  instanceof CaseTerre)  &&!(casePossedeBateaux(c))) {
             tab.add(c);
         }
 
-        if (range != 0 && !(c  instanceof CaseTerre)) {
+        if (range != 0 && !(c  instanceof CaseTerre) &&!(casePossedeBateaux(c))) {
             if(c.getX()>0) {
                 getCasesDisponible(getCaseBas(c), (range - 1), tab);
             }
@@ -142,6 +142,22 @@ public class Grille {
     public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
         getCasesDisponible(c,range,tab);
         tab.remove(0);
+    }
+
+    public boolean casePossedeBateaux(Case c){
+        for(int i =0;i<bateaux1.size();i++){
+            if(bateaux1.get(i).getPosition().equals(c)){
+                return true;
+            }
+        }
+
+        for(int i =0;i<bateaux2.size();i++){
+            if(bateaux2.get(i).getPosition().equals(c)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean casePossedeBateau(Case c, Player joueur){

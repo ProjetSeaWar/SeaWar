@@ -14,6 +14,8 @@ public class Partie {
 
     private boolean fin = false;
 
+
+    ////////////////////////////////////////////////////////////////////////////:
     public Partie(){
         this.start();
     }
@@ -24,6 +26,9 @@ public class Partie {
         }
     }
 
+
+
+    /////////////////////////////GETTER ET SETTER//////////////////////////////////////////
     public Grille getMap() {
         return map;
     }
@@ -76,6 +81,8 @@ public class Partie {
         return fin;
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////:
     public Player getOtherPlayer(){
         if(getCurrentPlayer().getNumber()==1){
             return joueur2;
