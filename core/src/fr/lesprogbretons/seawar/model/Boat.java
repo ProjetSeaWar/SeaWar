@@ -12,7 +12,7 @@ public abstract class Boat {
     protected int dmgMainCanon;
     protected int dmgSecCanon;
     protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
-    protected int canonSelectionne = 0;                 // 1 pour le principal et 2 pour le secondaire
+    protected int canonSelectionne = 1;                 // 1 pour le principal et 2 pour le secondaire
 
     protected int reloadMainCanon;
 
@@ -23,6 +23,7 @@ public abstract class Boat {
     protected boolean tourTermine = false;
     protected Player joueur;
 
+    protected int orientation = 0;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////:
@@ -85,6 +86,15 @@ public abstract class Boat {
     public void setCanonSelectionne(int canonSelectionne) {
         this.canonSelectionne = canonSelectionne;
     }
+
+    public int getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -170,7 +180,53 @@ public abstract class Boat {
         // TODO : Débuter le tour d'un autre bateau
     }
 
-    public void moveBoat(Case destination){
+    public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
+        moveAvailable--;
+
+        if(destination.getX() == position.getX()+1 && destination.getY() == position.getY()){
+            orientation = 0;
+        }
+
+        if(destination.getX() == position.getX()-1 && destination.getY() == position.getY()){
+            orientation = 3;
+        }
+
+        if(destination.getX()==position.getX() && destination.getY()==position.getY()+1){
+            if(position.getY()%2==0){
+                orientation = 1;
+            }
+
+            else {
+                orientation = 2;
+            }
+        }
+
+        if(destination.getX()== position.getX() && destination.getY()==position.getY()-1){
+            if(position.getY()%2==0){
+                orientation = 5;
+            }
+
+            else {
+                orientation = 4;
+            }
+        }
+
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()+1){
+            orientation = 1;
+        }
+
+        if(destination.getX()==position.getX()-1 && destination.getY() == destination.getY()-1){
+            orientation = 4;
+        }
+
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()-1){
+            orientation = 2;
+        }
+
+        if(destination.getX()==position.getX()+1 && destination.getY()==position.getY()-1){
+            orientation = 5;
+        }
+
         this.position = destination;
     }
 
