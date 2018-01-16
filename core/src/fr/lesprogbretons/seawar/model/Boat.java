@@ -1,6 +1,6 @@
 package fr.lesprogbretons.seawar.model;
 
-public class Boat {
+public abstract class Boat {
 
     protected boolean alive = true;
 
@@ -21,15 +21,16 @@ public class Boat {
     protected int secCD = 0;
 
     protected boolean tourTermine = false;
+    protected Player joueur;
 
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////:
-    public Boat(){
-    }
 
-    public Boat(Case position){
+
+    public Boat(Case position,Player p){
         this.position = position;
+        this.joueur = p;
     }
 
     ////////////////// GETTER POUR PERMETTRE DE VOIR LES STATS EN JEU ////////////////////////////////////
@@ -67,6 +68,10 @@ public class Boat {
 
     public int getSecCD() {
         return secCD;
+    }
+
+    public Player getJoueur() {
+        return joueur;
     }
 
     public Case getPosition(){

@@ -4,8 +4,8 @@ public class Partie {
 
     private Grille map = new DefaultMap();
 
-    private Player joueur1 = new Player(1);
-    private Player joueur2 = new Player(2);
+    private Player joueur1 = map.getJoueur1();
+    private Player joueur2= map.getJoueur2();
 
     private Player currentPlayer = joueur1;
 

@@ -5,10 +5,10 @@ public class DefaultMap extends Grille {
     public DefaultMap(){
         super(11,13);
 
-        bateaux1.add(new Amiral(tableau[10][0]));
-        bateaux1.add(new Fregate(tableau[10][1]));
-        bateaux2.add(new Amiral(tableau[0][12]));
-        bateaux2.add(new Fregate(tableau[1][12]));
+        bateaux1.add(new Amiral(tableau[10][0],joueur1));
+        bateaux1.add(new Fregate(tableau[10][1],joueur1));
+        bateaux2.add(new Amiral(tableau[0][12],joueur2));
+        bateaux2.add(new Fregate(tableau[1][12],joueur2));
         tableau[4][3]=new CaseTerre(4,3);
         tableau[4][4]=new CaseTerre(4,4);
         tableau[3][6]=new CaseTerre(3,6);

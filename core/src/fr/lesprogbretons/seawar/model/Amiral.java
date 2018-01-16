@@ -9,17 +9,9 @@ public class Amiral extends Boat{
                 '}';
     }
 
-    public Amiral(){
-        super();
-        move = 3;
-        hp = 100;
-        dmgMainCanon = 50;
-        reloadMainCanon = 3;
-        dmgSecCanon = 30;
-        reloadSecCanon = 1;
-    }
-    public Amiral(Case c){
-        super(c);
+
+    public Amiral(Case c,Player p){
+        super(c,p);
         move = 3;
         hp = 100;
         dmgMainCanon = 50;

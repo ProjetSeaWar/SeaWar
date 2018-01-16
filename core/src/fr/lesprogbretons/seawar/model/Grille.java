@@ -5,6 +5,25 @@ import java.util.Arrays;
 import java.util.BitSet;
 
 public class Grille {
+    protected Player joueur1 = new Player(1);
+
+    public Player getJoueur1() {
+        return joueur1;
+    }
+
+    public void setJoueur1(Player joueur1) {
+        this.joueur1 = joueur1;
+    }
+
+    public Player getJoueur2() {
+        return joueur2;
+    }
+
+    public void setJoueur2(Player joueur2) {
+        this.joueur2 = joueur2;
+    }
+
+    protected Player joueur2 = new Player(2);
     protected ArrayList<Boat> bateaux1;
     protected ArrayList<Boat> bateaux2;
     protected Case tableau[][];
