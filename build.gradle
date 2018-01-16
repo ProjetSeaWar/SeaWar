@@ -13,7 +13,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '0.1'
+    version = 'LPB-build-0.1'
 
     ext {
         appName = "LPB_SeaWar"
