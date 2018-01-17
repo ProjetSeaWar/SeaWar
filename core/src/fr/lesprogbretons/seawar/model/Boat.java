@@ -111,6 +111,14 @@ public abstract class Boat {
     }
 
 
+    public int getShootTaken() {
+        return shootTaken;
+    }
+
+    public void setShootTaken(int shootTaken) {
+        this.shootTaken = shootTaken;
+    }
+
     public void loseHP(int dmg) {
 
         if (shootTaken == 1) {                          // Si le bateau a deja pris des degats pendant le tour
@@ -131,7 +139,6 @@ public abstract class Boat {
             }
         }
 
-        shootTaken++;
 
     }
 

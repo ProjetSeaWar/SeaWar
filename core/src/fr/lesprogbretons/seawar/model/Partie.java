@@ -147,18 +147,38 @@ public class Partie {
     }
 
     public void endTurn(){
+        boolean bateauxDeplaces = true;
+
         if(getCurrentPlayer().equals(joueur1)){
-            for(int i = 0;i<map.bateaux1.size();i++){
-                map.bateaux1.get(i).endTurn();
+            for(int i = 0 ; i < map.bateaux1.size() ; i++ ){
+                if(map.bateaux1.get(i).getMoveAvailable() == map.bateaux1.get(i).getMove()){
+                    bateauxDeplaces = false;
+                }
             }
         }
 
         else {
-            for(int i = 0;i<map.bateaux2.size();i++){
-                map.bateaux2.get(i).endTurn();
+            for(int i = 0 ; i < map.bateaux2.size() ; i++ ){
+                if(map.bateaux2.get(i).getMoveAvailable() == map.bateaux2.get(i).getMove()){
+                    bateauxDeplaces = false;
+                }
             }
         }
 
-        setCurrentPlayer(getOtherPlayer());
+        if(bateauxDeplaces) {
+            if (getCurrentPlayer().equals(joueur1)) {
+                for (int i = 0; i < map.bateaux1.size(); i++) {
+                    map.bateaux1.get(i).endTurn();
+                    map.bateaux2.get(i).setShootTaken(0);
+                }
+            } else {
+                for (int i = 0; i < map.bateaux2.size(); i++) {
+                    map.bateaux2.get(i).endTurn();
+                    map.bateaux1.get(i).setShootTaken(0);
+                }
+            }
+
+            setCurrentPlayer(getOtherPlayer());
+        }
     }
 }
