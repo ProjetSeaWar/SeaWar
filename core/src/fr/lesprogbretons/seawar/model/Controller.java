@@ -1,7 +1,6 @@
 package fr.lesprogbretons.seawar.model;
 
 /* Classe Controller qui va gère l'interraction avec l'utilisateur */
-// TODO : Ajouter les ActionListener
 
 import java.util.ArrayList;
 
@@ -34,7 +33,7 @@ public class Controller {
 
                 if(!actionFaite){
                     ArrayList<Case> casesDispo = new ArrayList<>();
-                    game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(),1,casesDispo);
+                    game.getMap().getCasesDisponible(game.getBateauSelectionne().getPosition(),1,casesDispo);
 
                     if(casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable()>0){
                         game.getBateauSelectionne().moveBoat(c);
