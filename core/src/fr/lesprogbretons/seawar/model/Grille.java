@@ -387,10 +387,79 @@ public class Grille {
                     casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
                     casesPorteeTir.add(getCaseSudOuest(getCaseSudOuest(bateauSelectionne.getPosition())));
                     casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
-                    //casesPorteeTir.
+                    casesPorteeTir.add(getCaseSudOuest(getCaseNordOuest(bateauSelectionne.getPosition())));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(getCaseSud(bateauSelectionne.getPosition())));
+                }
+
+                else if(bateauSelectionne.getOrientation() == Orientation.NORDOUEST){
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(getCaseSudOuest(bateauSelectionne.getPosition())));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(getCaseNordOuest(bateauSelectionne.getPosition())));
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(getCaseNord(bateauSelectionne.getPosition())));
                 }
             }
 
+        } else if(bateauSelectionne instanceof Fregate){
+            if(bateauSelectionne.getCanonSelectionne()==1){
+                if(bateauSelectionne.getOrientation() == Orientation.NORD){
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNord(getCaseNord(bateauSelectionne.getPosition())));
+                }
+                else if(bateauSelectionne.getOrientation() == Orientation.NORDEST){
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(getCaseNordEst(bateauSelectionne.getPosition())));
+                }
+                else if(bateauSelectionne.getOrientation() == Orientation.SUDEST){
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(getCaseSudEst(bateauSelectionne.getPosition())));
+                }
+                else if(bateauSelectionne.getOrientation() == Orientation.SUD){
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(getCaseSud(bateauSelectionne.getPosition())));
+                }
+                else if(bateauSelectionne.getOrientation() == Orientation.SUDOUEST){
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(getCaseSudOuest(bateauSelectionne.getPosition())));
+                }
+                else if(bateauSelectionne.getOrientation() == Orientation.NORDOUEST){
+                    casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                    casesPorteeTir.add(getCaseNordOuest(getCaseNordOuest(bateauSelectionne.getPosition())));
+                }
+            } else {
+                casesPorteeTir.add(getCaseNord(bateauSelectionne.getPosition()));
+                casesPorteeTir.add(getCaseNordOuest(bateauSelectionne.getPosition()));
+                casesPorteeTir.add(getCaseNordEst(bateauSelectionne.getPosition()));
+                casesPorteeTir.add(getCaseSudOuest(bateauSelectionne.getPosition()));
+                casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
+                casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
+            }
         }
 
         for (int k=0; k< casesPorteeTir.size(); k++ ){
