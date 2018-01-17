@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Controller {
 
+
     Partie game = new Partie();
 
     public Controller(Partie game){
