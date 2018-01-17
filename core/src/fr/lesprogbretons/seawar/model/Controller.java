@@ -21,7 +21,7 @@ public class Controller {
 
             if(game.isAnyBateauSelectionne()){
                 ArrayList<Case> casesPorteeTir = new ArrayList<>();
-                game.getMap().getCasesPortees(game.getBateauSelectionne(),casesPorteeTir);
+                casesPorteeTir = game.getMap().getCasesPortees(game.getBateauSelectionne());
 
                 if(casesPorteeTir.contains(c)){
                     if(game.getMap().casePossedeBateau(c,game.getOtherPlayer())){

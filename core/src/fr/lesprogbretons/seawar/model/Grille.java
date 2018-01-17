@@ -291,7 +291,9 @@ public class Grille {
         this.bateaux2 = bateaux2;
     }
 
-    public void getCasesPortees(Boat bateauSelectionne, ArrayList<Case> casesPorteeTir) {
+    public ArrayList<Case> getCasesPortees(Boat bateauSelectionne) {
+        ArrayList<Case> casesPorteeTir = new ArrayList<>();
+        ArrayList<Case> casesPorteeTirfinal = new ArrayList<>();
         if(bateauSelectionne instanceof Amiral){
             if(bateauSelectionne.getCanonSelectionne()==1){
                 if(bateauSelectionne.getOrientation()==Orientation.NORD){
@@ -450,7 +452,15 @@ public class Grille {
                 casesPorteeTir.add(getCaseSud(bateauSelectionne.getPosition()));
                 casesPorteeTir.add(getCaseSudEst(bateauSelectionne.getPosition()));
             }
+
         }
+
+        for (int k=0; k< casesPorteeTir.size(); k++ ){
+            if (casesPorteeTir.get(k) != null) {
+                casesPorteeTirfinal.add(casesPorteeTir.get(k));
+            }
+        }
+        return casesPorteeTirfinal;
     }
 
     public void prendPhare(Case c, Player joueur){
