@@ -7,7 +7,6 @@ public class Player {
 
     private int pharesPossedes = 0;
 
-
  //////////////////////////////////////////////////////////////////////////////
     public Player(int number){
         this.number = number;
@@ -32,12 +31,6 @@ public class Player {
         this.pharesPossedes = pharesPossedes;
     }
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////
-    public void newTurn(){
-
-    }
 
 
 }

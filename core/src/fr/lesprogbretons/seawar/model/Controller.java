@@ -60,7 +60,12 @@ public class Controller {
 
     //Méthode qui finit un tour quand on appuie sur le bon bouton
     public void endTurn(){
-        game.getCurrentPlayer().newTurn();
+        game.finPartie();
+
+        if(!game.isFin()) {
+            game.setAnyBateauSelectionne(false);
+            game.endTurn();
+        }
     }
 
 }

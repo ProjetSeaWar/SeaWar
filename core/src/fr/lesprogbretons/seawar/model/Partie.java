@@ -5,7 +5,7 @@ public class Partie {
     private Grille map = new DefaultMap();
 
     private Player joueur1 = map.getJoueur1();
-    private Player joueur2= map.getJoueur2();
+    private Player joueur2 = map.getJoueur2();
 
     private Player currentPlayer = joueur1;
 
@@ -14,6 +14,7 @@ public class Partie {
 
     private boolean fin = false;
 
+    private Player winner;
 
     ////////////////////////////////////////////////////////////////////////////:
     public Partie(){
@@ -82,6 +83,18 @@ public class Partie {
     }
 
 
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public void setFin(boolean fin) {
+        this.fin = fin;
+    }
+
     /////////////////////////////////////////////////////////////////////////////:
     public Player getOtherPlayer(){
         if(getCurrentPlayer().getNumber()==1){
@@ -93,7 +106,59 @@ public class Partie {
         }
     }
 
-    public void setFin(boolean fin) {
-        this.fin = fin;
+    public void finPartie() {
+        if (getJoueur1().getPharesPossedes() == 3) {
+            setFin(true);
+            setWinner(getJoueur1());
+        } else if (getJoueur2().getPharesPossedes() == 3) {
+            setFin(true);
+            setWinner(getJoueur2());
+        }
+
+        else if(getCurrentPlayer().equals(getJoueur1())){
+            boolean fin = true;
+
+            for(int i=0; i<map.bateaux1.size();i++){
+                if(map.bateaux1.get(i).isAlive()){
+                    fin = false;
+                }
+            }
+
+            if(fin){
+                setFin(true);
+                setWinner(joueur1);
+            }
+        }
+
+        else if(getCurrentPlayer().equals(getJoueur2())){
+            boolean fin = true;
+
+            for(int i=0; i<map.bateaux2.size();i++){
+                if(map.bateaux2.get(i).isAlive()){
+                    fin = false;
+                }
+            }
+
+            if(fin){
+                setFin(true);
+                setWinner(joueur2);
+            }
+        }
+    }
+
+    public void endTurn(){
+        if(getCurrentPlayer().equals(joueur1)){
+            for(int i = 0;i<map.bateaux1.size();i++){
+                map.bateaux1.get(i).endTurn();
+            }
+        }
+
+        else {
+            for(int i = 0;i<map.bateaux2.size();i++){
+                map.bateaux2.get(i).endTurn();
+            }
+        }
+
+        setCurrentPlayer(getOtherPlayer());
     }
 }

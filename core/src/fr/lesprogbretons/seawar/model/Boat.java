@@ -20,7 +20,6 @@ public abstract class Boat {
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
-    protected boolean tourTermine = false;
     protected Player joueur;
 
     protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
@@ -95,6 +94,13 @@ public abstract class Boat {
         this.orientation = orientation;
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -104,6 +110,7 @@ public abstract class Boat {
                 '}';
     }
 
+
     public void loseHP(int dmg) {
 
         if (shootTaken == 1) {                          // Si le bateau a deja pris des degats pendant le tour
@@ -112,6 +119,7 @@ public abstract class Boat {
                 alive = false;
             } else {
                 hp = hp - (3 * dmg);
+
             }
 
         } else {
@@ -155,13 +163,7 @@ public abstract class Boat {
         }
     }
 
-    public void newTurn(){
-        tourTermine = false;
-
-        if(alive = false){
-            this.endTurn();
-        }
-
+    public void endTurn(){
         moveAvailable = move;
 
         if(mainCD > 0){
@@ -173,11 +175,6 @@ public abstract class Boat {
         }
 
         shootTaken = 0;
-    }
-
-    private void endTurn() {
-        tourTermine = true;
-        // TODO : Débuter le tour d'un autre bateau
     }
 
     public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
