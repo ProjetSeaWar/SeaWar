@@ -1,8 +1,6 @@
 package fr.lesprogbretons.seawar.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
 
 public class Grille {
     protected ArrayList<Boat> bateaux1;
@@ -11,148 +9,153 @@ public class Grille {
     protected int hauteur;
     protected int largeur;
 
-    public Grille(int hauteur,int largeur){
+    public Grille(int hauteur, int largeur) {
         this.hauteur = hauteur;
         this.largeur = largeur;
-        bateaux1=new ArrayList<>();
-        bateaux2=new ArrayList<>();
-        tableau=new Case[hauteur][largeur];
+        bateaux1 = new ArrayList<>();
+        bateaux2 = new ArrayList<>();
+        tableau = new Case[hauteur][largeur];
 
-        for(int i=0;i<hauteur;i++){
-            for(int j=0;j<largeur;j++){
-                tableau[i][j]=new CaseEau(i,j);
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
+                tableau[i][j] = new CaseEau(i, j);
             }
         }
     }
 
-    public Case getCase(int hauteur,int largeur){
+    public Case getCase(int hauteur, int largeur) {
         return tableau[hauteur][largeur];
     }
 
-    public Case getCaseHaut(Case c){
+    public Case getCaseHaut(Case c) {
         int x;
         int y;
         Case cas;
-        x=c.getX();
-        y=c.getY();
-        cas=getCase((x+1),y);
+        x = c.getX();
+        y = c.getY();
+        cas = getCase((x + 1), y);
         return cas;
     }
-    public Case getCaseBas(Case c){
+
+    public Case getCaseBas(Case c) {
         int x;
         int y;
         Case cas;
-        x=c.getX();
-        y=c.getY();
-        cas=getCase((x-1),y);
+        x = c.getX();
+        y = c.getY();
+        cas = getCase((x - 1), y);
         return cas;
     }
-    public Case getCaseDroiteh(Case c){
+
+    public Case getCaseDroiteh(Case c) {
         int x;
         int y;
         Case cas;
-        x=c.getX();
-        y=c.getY();
-        if (y%2==0){
-            cas=getCase(x,(y+1));
-        }
-        else {
-            cas = getCase((x+1), (y + 1));
-        }
-        return cas;
-    }
-    public Case getCaseDroiteb(Case c){
-        int x;
-        int y;
-        Case cas;
-        x=c.getX();
-        y=c.getY();
-        if (y%2==0){
-            cas=getCase((x-1),(y+1));
-        }
-        else {
-            cas = getCase(x,(y+1) );
-        }
-        return cas;
-    }
-    public Case getCaseGaucheh(Case c){
-        int x;
-        int y;
-        Case cas;
-        x=c.getX();
-        y=c.getY();
-        if (y%2==0){
-            cas=getCase(x,(y-1));
-        }
-        else {
-            cas = getCase((x+1), (y-1));
-        }
-        return cas;
-    }
-    public Case getCaseGaucheb(Case c){
-        int x;
-        int y;
-        Case cas;
-        x=c.getX();
-        y=c.getY();
-        if (y%2==0){
-            cas=getCase((x-1),(y-1));
-        }
-        else {
-            cas = getCase(x,(y-1));
+        x = c.getX();
+        y = c.getY();
+        if (y % 2 == 0) {
+            cas = getCase(x, (y + 1));
+        } else {
+            cas = getCase((x + 1), (y + 1));
         }
         return cas;
     }
 
-    public void getCasesDisponible(Case c, int range, ArrayList<Case> tab){
-        if(!(tab.contains(c)) &&!(c  instanceof CaseTerre)  &&!(casePossedeBateaux(c))) {
+    public Case getCaseDroiteb(Case c) {
+        int x;
+        int y;
+        Case cas;
+        x = c.getX();
+        y = c.getY();
+        if (y % 2 == 0) {
+            cas = getCase((x - 1), (y + 1));
+        } else {
+            cas = getCase(x, (y + 1));
+        }
+        return cas;
+    }
+
+    public Case getCaseGaucheh(Case c) {
+        int x;
+        int y;
+        Case cas;
+        x = c.getX();
+        y = c.getY();
+        if (y % 2 == 0) {
+            cas = getCase(x, (y - 1));
+        } else {
+            cas = getCase((x + 1), (y - 1));
+        }
+        return cas;
+    }
+
+    public Case getCaseGaucheb(Case c) {
+        int x;
+        int y;
+        Case cas;
+        x = c.getX();
+        y = c.getY();
+        if (y % 2 == 0) {
+            cas = getCase((x - 1), (y - 1));
+        } else {
+            cas = getCase(x, (y - 1));
+        }
+        return cas;
+    }
+
+    public ArrayList<Case> getCasesDisponible(Case c, int range) {
+        ArrayList<Case> tab = new ArrayList<>();
+
+        if (!(tab.contains(c)) && !(c instanceof CaseTerre)) {
             tab.add(c);
         }
 
-        if (range != 0 && !(c  instanceof CaseTerre) &&!(casePossedeBateaux(c))) {
-            if(c.getX()>0) {
-                getCasesDisponible(getCaseBas(c), (range - 1), tab);
+        if (range != 0 && !(c instanceof CaseTerre)) {
+            if (c.getX() > 0) {
+                tab.addAll(getCasesDisponible(getCaseBas(c), (range - 1)));
             }
-            if(c.getY()<largeur-1) {
-                if((c.getY()%2==0 && c.getX()>0)|| c.getY()%2==1) {
-                    getCasesDisponible(getCaseDroiteb(c), (range - 1), tab);
+            if (c.getY() < largeur - 1) {
+                if ((c.getY() % 2 == 0 && c.getX() > 0) || c.getY() % 2 == 1) {
+                    tab.addAll(getCasesDisponible(getCaseDroiteb(c), (range - 1)));
                 }
             }
-            if(c.getY()<largeur-1) {
-                if ((c.getY() % 2 == 1 && c.getX() < hauteur-1)|| c.getY()%2==0) {
-                    getCasesDisponible(getCaseDroiteh(c), (range - 1), tab);
+            if (c.getY() < largeur - 1) {
+                if ((c.getY() % 2 == 1 && c.getX() < hauteur - 1) || c.getY() % 2 == 0) {
+                    tab.addAll(getCasesDisponible(getCaseDroiteh(c), (range - 1)));
                 }
             }
-            if(c.getY()>0) {
-                if ((c.getY() % 2 == 0 && c.getX() > 0)|| c.getY()%2==1) {
-                    getCasesDisponible(getCaseGaucheb(c), (range - 1), tab);
+            if (c.getY() > 0) {
+                if ((c.getY() % 2 == 0 && c.getX() > 0) || c.getY() % 2 == 1) {
+                    tab.addAll(getCasesDisponible(getCaseGaucheb(c), (range - 1)));
                 }
             }
-            if(c.getY()>0) {
-                if ((c.getY() % 2 == 1 && c.getX() <hauteur-1) || c.getY()%2==0 ) {
-                    getCasesDisponible(getCaseGaucheh(c), (range - 1), tab);
+            if (c.getY() > 0) {
+                if ((c.getY() % 2 == 1 && c.getX() < hauteur - 1) || c.getY() % 2 == 0) {
+                    tab.addAll(getCasesDisponible(getCaseGaucheh(c), (range - 1)));
                 }
             }
-            if(c.getX()<hauteur-1) {
-                getCasesDisponible(getCaseHaut(c), (range - 1), tab);
+            if (c.getX() < hauteur - 1) {
+                tab.addAll(getCasesDisponible(getCaseHaut(c), (range - 1)));
             }
         }
+        return tab;
     }
 
-    public void getCasesDisponibles(Case c, int range, ArrayList<Case> tab){
-        getCasesDisponible(c,range,tab);
+    public ArrayList<Case> getCasesDisponibles(Case c, int range) {
+        ArrayList<Case> tab = new ArrayList<>(getCasesDisponible(c, range));
         tab.remove(0);
+        return tab;
     }
 
-    public boolean casePossedeBateaux(Case c){
-        for(int i =0;i<bateaux1.size();i++){
-            if(bateaux1.get(i).getPosition().equals(c)){
+    public boolean casePossedeBateaux(Case c) {
+        for (Boat aBateaux1 : bateaux1) {
+            if (aBateaux1.getPosition().equals(c)) {
                 return true;
             }
         }
 
-        for(int i =0;i<bateaux2.size();i++){
-            if(bateaux2.get(i).getPosition().equals(c)){
+        for (Boat aBateaux2 : bateaux2) {
+            if (aBateaux2.getPosition().equals(c)) {
                 return true;
             }
         }
@@ -160,18 +163,16 @@ public class Grille {
         return false;
     }
 
-    public boolean casePossedeBateau(Case c, Player joueur){
-        if(joueur.getNumber()==1){
-            for(int i =0;i<bateaux1.size();i++){
-                if(bateaux1.get(i).getPosition().equals(c)){
+    public boolean casePossedeBateau(Case c, Player joueur) {
+        if (joueur.getNumber() == 1) {
+            for (Boat aBateaux1 : bateaux1) {
+                if (aBateaux1.getPosition().equals(c)) {
                     return true;
                 }
             }
-        }
-
-        else{
-            for(int i =0;i<bateaux2.size();i++){
-                if(bateaux2.get(i).getPosition().equals(c)){
+        } else {
+            for (Boat aBateaux2 : bateaux2) {
+                if (aBateaux2.getPosition().equals(c)) {
                     return true;
                 }
             }
@@ -180,26 +181,20 @@ public class Grille {
         return false;
     }
 
-    public Boat bateauSurCase(Case c){
-        for(int i = 0 ; i<bateaux1.size();i++){
-            if(bateaux1.get(i).getPosition().equals(c)){
-                return bateaux1.get(i);
+    public Boat bateauSurCase(Case c) {
+        for (Boat aBateaux1 : bateaux1) {
+            if (aBateaux1.getPosition().equals(c)) {
+                return aBateaux1;
             }
         }
 
-        for(int i =0;i<bateaux2.size();i++){
-            if(bateaux2.get(i).getPosition().equals(c)){
-                return bateaux2.get(i);
+        for (Boat aBateaux2 : bateaux2) {
+            if (aBateaux2.getPosition().equals(c)) {
+                return aBateaux2;
             }
         }
 
         return null;
-    }
-
-
-
-    public int distanceCase(Case c1, Case c2){
-        return 0;
     }
 
     /* TODO : toString de la grille
@@ -209,6 +204,10 @@ public class Grille {
                 "tableau=" +
                 '}';
     }*/
+
+    public int distanceCase(Case c1, Case c2) {
+        return 0;
+    }
 
     public ArrayList<Boat> getBateaux1() {
         return bateaux1;
@@ -229,41 +228,14 @@ public class Grille {
     public void getCasesPortees(Case position, Boat bateauSelectionne, ArrayList<Case> casesPorteeTir) {
     }
 
-    public void prendPhare(Case c, Player joueur){
-        if(c.getPossedePhare().equals(null)){
+    public void prendPhare(Case c, Player joueur) {
+        if (c.getPossedePhare() == null) {
             c.setPossedePhare(joueur);
-            joueur.setPharesPossedes(joueur.getPharesPossedes()+1);
-        }
-
-        else if(!(c.getPossedePhare().equals(joueur))){
-            c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes()-1);
+            joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
+        } else if (!(c.getPossedePhare().equals(joueur))) {
+            c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes() - 1);
             c.setPossedePhare(joueur);
-            joueur.setPharesPossedes(joueur.getPharesPossedes()+1);
+            joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
         }
-    }
-
-    public static void main(String[] args) {
-        Grille grille = new DefaultMap();
-        //System.out.println(grille);
-
-        Case a = grille.getCase(0, 1);
-
-
-      /*System.out.println(a);
-        System.out.println(grille.getCaseBas(a));
-        System.out.println(grille.getCaseGaucheb(a));
-        System.out.println(grille.getCaseGaucheh(a));
-        System.out.println(grille.getCaseHaut(a));
-        System.out.println(grille.getCaseDroiteh(a));
-        System.out.println(grille.getCaseDroiteb(a));*/
-
-        ArrayList<Case> tab = new ArrayList<>();
-
-        grille.getCasesDisponibles(a, 3, tab);
-
-        for(int i=0; i<13;i++){
-            System.out.println(tab.get(i));
-        }
-
     }
 }

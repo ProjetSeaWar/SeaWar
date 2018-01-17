@@ -2,10 +2,11 @@ package fr.lesprogbretons.seawar.model;
 
 public class Partie {
 
-    private Grille map = new DefaultMap();
 
     private Player joueur1 = new Player(1);
     private Player joueur2 = new Player(2);
+
+    private Grille map = new DefaultMap(joueur1, joueur2);
 
     private Player currentPlayer = joueur1;
 
@@ -16,16 +17,14 @@ public class Partie {
 
 
     ////////////////////////////////////////////////////////////////////////////:
-    public Partie(){
-        this.start();
+    public Partie() {
     }
 
     private void start() {
-        while(!fin){
+        while (!fin) {
 
         }
     }
-
 
 
     /////////////////////////////GETTER ET SETTER//////////////////////////////////////////
@@ -81,19 +80,16 @@ public class Partie {
         return fin;
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////:
-    public Player getOtherPlayer(){
-        if(getCurrentPlayer().getNumber()==1){
-            return joueur2;
-        }
-
-        else{
-            return joueur1;
-        }
-    }
-
     public void setFin(boolean fin) {
         this.fin = fin;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////:
+    public Player getOtherPlayer() {
+        if (getCurrentPlayer().getNumber() == 1) {
+            return joueur2;
+        } else {
+            return joueur1;
+        }
     }
 }

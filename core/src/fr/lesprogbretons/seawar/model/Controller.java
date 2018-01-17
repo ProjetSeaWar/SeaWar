@@ -9,47 +9,43 @@ public class Controller {
 
     Partie game = new Partie();
 
-    public Controller(Partie game){
+    public Controller(Partie game) {
         this.game = game;
     }
 
 
     //Méthode qui gère la sélection d'une case à la souris
-    public void selection(Case c){
+    public void selection(Case c) {
         boolean actionFaite = false;
 
-        if(game.isAnyBateauSelectionne()){
+        if (game.isAnyBateauSelectionne()) {
             ArrayList<Case> casesPorteeTir = new ArrayList<>();
-            game.getMap().getCasesPortees(game.getBateauSelectionne().getPosition(),game.getBateauSelectionne(),casesPorteeTir);
+            game.getMap().getCasesPortees(game.getBateauSelectionne().getPosition(), game.getBateauSelectionne(), casesPorteeTir);
 
-            if(casesPorteeTir.contains(c)){
-                if(game.getMap().casePossedeBateau(c,game.getOtherPlayer())){
+            if (casesPorteeTir.contains(c)) {
+                if (game.getMap().casePossedeBateau(c, game.getOtherPlayer())) {
                     game.getBateauSelectionne().shoot(game.getMap().bateauSurCase(c));
                     game.setAnyBateauSelectionne(false);
                     actionFaite = true;
                 }
             }
 
-            if(!actionFaite){
+            if (!actionFaite) {
                 ArrayList<Case> casesDispo = new ArrayList<>();
-                game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(),game.getBateauSelectionne().getMoveAvailable(),casesDispo);
+//                game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(), game.getBateauSelectionne().getMoveAvailable(), casesDispo);
 
-                if(casesDispo.contains(c)){
+                if (casesDispo.contains(c)) {
                     game.getBateauSelectionne().moveBoat(c);
-                    if(c.isPhare()){
-                        game.getMap().prendPhare(c,game.getCurrentPlayer());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
                     }
                     game.setAnyBateauSelectionne(false);
-                }
-
-                else {
+                } else {
                     game.setAnyBateauSelectionne(false);
                 }
             }
-        }
-
-        else {
-            if(game.getMap().casePossedeBateau(c,game.getCurrentPlayer())){
+        } else {
+            if (game.getMap().casePossedeBateau(c, game.getCurrentPlayer())) {
                 game.setBateauSelectionne(game.getMap().bateauSurCase(c));
             }
 
@@ -57,7 +53,7 @@ public class Controller {
     }
 
     //Méthode qui finit un tour quand on appuie sur le bon bouton
-    public void endTurn(){
+    public void endTurn() {
         game.getCurrentPlayer().newTurn();
     }
 

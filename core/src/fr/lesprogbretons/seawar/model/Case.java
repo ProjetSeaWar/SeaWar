@@ -12,18 +12,17 @@ public abstract class Case {
     protected boolean phare;
     protected Player possedePhare = null;         //1 pour joueur1 et 2 pour joueur2
 
+    public Case(int xe, int ye) {
+        x = xe;
+        y = ye;
+    }
+
     public boolean isPhare() {
         return phare;
     }
 
     public void setPhare(boolean phare) {
         this.phare = phare;
-    }
-
-
-    public Case(int xe, int ye){
-        x=xe;
-        y=ye;
     }
 
     public Player getPossedePhare() {
@@ -76,7 +75,7 @@ public abstract class Case {
         this.y = y;
     }
 
-    public int diff(Case c){
+    public int diff(Case c) {
         return (abs(this.x - c.getX()) + abs(this.y - c.getY()));
     }
 }

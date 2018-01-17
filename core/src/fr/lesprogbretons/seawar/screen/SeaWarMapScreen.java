@@ -15,12 +15,14 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.model.*;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
+import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 
 /**
@@ -47,16 +49,22 @@ public class SeaWarMapScreen extends ScreenAdapter {
     private TiledCoordinates previousSelectedTile = new TiledCoordinates(0, 0);
     private boolean isTileSelected = false;
 
+    //Modèle
+    private Grille g = partie.getMap();
+
+
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
-        Gdx.graphics.setWindowedMode(800, 800);
+        int width = 800;
+        int height = 800;
+        Gdx.graphics.setWindowedMode(width, height);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 800, 800);
+        camera.setToOrtho(false, (w / h) * width, height);
 
         cameraController = new MapOrthoCamController(camera, WIDTH_MAP, HEIGHT_MAP, 112, 97);
         camera.update();
@@ -64,9 +72,10 @@ public class SeaWarMapScreen extends ScreenAdapter {
         hexture = (TextureAtlas) SeaWar.assets.get(Assets.hexes);
 
         map = new TiledMap();
+        map.getProperties().put("staggerindex", "even");
         MapLayers layers = map.getLayers();
 
-
+        //Construction de la carte
         tiles = new TiledMapTile[8];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
@@ -82,9 +91,35 @@ public class SeaWarMapScreen extends ScreenAdapter {
             layer.setName("map");
             for (int y = 0; y < HEIGHT_MAP; y++) {
                 for (int x = 0; x < WIDTH_MAP; x++) {
-                    int id = ThreadLocalRandom.current().nextInt(6);
                     Cell cell = new Cell();
-                    cell.setTile(tiles[id]);
+                    Case aCase = g.getCase(y, x);
+
+                    if (g.casePossedeBateaux(aCase)) {
+                        Boat boat = g.bateauSurCase(aCase);
+                        if (boat.getJoueur() == partie.getJoueur1()) {
+                            if (boat instanceof Amiral) {
+                                cell.setTile(tiles[3]);
+                            } else if (boat instanceof Fregate) {
+                                cell.setTile(tiles[4]);
+                            }
+                        } else {
+                            if (boat instanceof Amiral) {
+                                cell.setTile(tiles[5]);
+                            } else if (boat instanceof Fregate) {
+                                cell.setTile(tiles[6]);
+                            }
+                        }
+                    } else {
+                        if (aCase instanceof CaseEau) {
+                            if (aCase.isPhare()) {
+                                cell.setTile(tiles[2]);
+                            } else {
+                                cell.setTile(tiles[0]);
+                            }
+                        } else if (aCase instanceof CaseTerre) {
+                            cell.setTile(tiles[1]);
+                        }
+                    }
                     layer.setCell(x, y, cell);
                 }
             }
@@ -101,7 +136,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         multiplexer.addProcessor(cameraController);
         Gdx.input.setInputProcessor(multiplexer);
 
-        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
+//        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
     }
 
     @Override
@@ -118,31 +153,65 @@ public class SeaWarMapScreen extends ScreenAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
+//        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
 
         if (cameraController.clicked) {
             getSelectedHexagon(cameraController.touchX, cameraController.touchY);
+
             if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
                     && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
-                //Selectionner le bon layer
-                TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
 
-                // Supprimer la marque de selection de la tile précédente
-                if (isTileSelected) {
-                    layer.setCell(previousSelectedTile.column, previousSelectedTile.row, null);
-                    isTileSelected = false;
+                if (!cameraController.rightClicked) {
+                    //Si clic gauche
+                    //Retirer les sélections précédentes
+                    removeSelectionMark();
+
+                    Case aCase = g.getCase(selectedTile.row, selectedTile.column);
+                    if (g.casePossedeBateaux(aCase)) {
+                        Boat boat = g.bateauSurCase(aCase);
+
+
+                        batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
+                    } else {
+                        markSelectedTile(selectedTile.column, selectedTile.row);
+                    }
+
+                    previousSelectedTile.setCoords(selectedTile);
+                    isTileSelected = true;
+                } else {
+                    //Clic droit
+                    //TODO Tir du bateau
                 }
-                //Mettre la tile de selection
-                Cell selected = new Cell();
-                selected.setTile(tiles[7]);
-                layer.setCell(selectedTile.column, selectedTile.row, selected);
-
-                previousSelectedTile.setCoords(selectedTile);
-                isTileSelected = true;
             }
             //Le click est consomé
             cameraController.clicked = false;
         }
+    }
+
+    public void batchSelectionMark(ArrayList<Case> cases) {
+        for (Case c : cases) {
+            markSelectedTile(c.getY(), c.getX());
+        }
+    }
+
+    public void removeSelectionMark() {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+        for (int y = 0; y < HEIGHT_MAP; y++) {
+            for (int x = 0; x < WIDTH_MAP; x++) {
+                layer.setCell(x, y, null);
+            }
+        }
+    }
+
+    public void markSelectedTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[7]);
+        layer.setCell(x, y, selected);
     }
 
     @Override
@@ -169,15 +238,15 @@ public class SeaWarMapScreen extends ScreenAdapter {
         boolean columnIsOdd = column % 2 == 0;
 
         // Is the column an odd number?
-        if (columnIsOdd)// yes: Offset x to match the indent of the row
+        if (!columnIsOdd)// no: Offset x to match the indent of the row
             row = (int) ((y - hexHalfHeight) / hexHeight);
-        else// No: Calculate normally
+        else// Yes: Calculate normally
             row = (int) (y / hexHeight);
         // Work out the position of the point relative to the box it is in
         double relX = x - (column * hexThreeQuartersWidth);
         double relY;
 
-        if (columnIsOdd)
+        if (!columnIsOdd)
             relY = (y - (row * hexHeight)) - hexHalfHeight;
         else
             relY = y - (row * hexHeight);
@@ -186,12 +255,12 @@ public class SeaWarMapScreen extends ScreenAdapter {
         if (relX < (-m * relY) + hexQuarterWidth) // LEFT edge
         {
             column--;
-            if (!columnIsOdd)
+            if (columnIsOdd)
                 row--;
         } else if (relX < (m * relY) - hexQuarterWidth) // RIGHT edge
         {
             column--;
-            if (columnIsOdd)
+            if (!columnIsOdd)
                 row++;
         }
 
