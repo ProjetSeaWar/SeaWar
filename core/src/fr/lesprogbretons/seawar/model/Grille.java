@@ -61,6 +61,7 @@ public class Grille {
         }
         return null;
     }
+
     public Case getCaseSud(Case c){
         if(c.equals(null)){
             return null;
