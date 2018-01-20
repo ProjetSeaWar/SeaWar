@@ -63,6 +63,7 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
+        //Prendre en compte la taille de l'UI
         int width = 800;
         int height = 800;
         Gdx.graphics.setWindowedMode(width, height);
@@ -179,6 +180,7 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
             if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
                     && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
 
+                myUi.setJoueur("Joueur 1");
                 if (!cameraController.rightClicked) {
                     //Si clic gauche
                     //Retirer les sélections précédentes
@@ -290,6 +292,6 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
     //TODO
     @Override
     public void update(Observable o, Object arg) {
-
+        //Mettre à jour carte et position joueurs
     }
 }

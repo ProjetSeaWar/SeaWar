@@ -18,8 +18,8 @@ public class Assets {
     public static final AssetDescriptor<TextureAtlas> hexes =
                 new AssetDescriptor<>("hexes.atlas", TextureAtlas.class);
 
-//    public static final AssetDescriptor<Texture> hexes2 =
-//            new AssetDescriptor<>("hexes2.png", Texture.class, param);
+    public static final AssetDescriptor<Texture> background =
+            new AssetDescriptor<>("back.png", Texture.class, param);
 
     public static final AssetDescriptor<Skin> skin =
             new AssetDescriptor<>("skin/uiskin.json", Skin.class);
@@ -29,7 +29,7 @@ public class Assets {
 
         assetManager.load(menu);
         assetManager.load(hexes);
-//        assetManager.load(hexes2);
+        assetManager.load(background);
         assetManager.load(skin);
     }
 
