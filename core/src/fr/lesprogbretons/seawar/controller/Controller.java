@@ -56,7 +56,7 @@ public class Controller {
             }
 
             //Si la case sélectionnée est à portée de tir
-            else if (casesPorteeTir.contains(c)) {
+             else if (casesPorteeTir.contains(c)) {
                 if (game.getMap().casePossedeBateau(c, game.getOtherPlayer())) {
                     game.getBateauSelectionne().shoot(game.getMap().bateauSurCase(c));
                     game.setAnyBateauSelectionne(false);
@@ -65,8 +65,8 @@ public class Controller {
             }
 
             if (!actionFaite) {
-                ArrayList<Case> casesDispo = new ArrayList<>();
-                casesDispo = game.getMap().getCasesDisponibles(c,1);
+                ArrayList<Case> casesDispo;
+                casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(),1);
 
                 //Si la case sélectionnée est à portée de déplacement
                 if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {

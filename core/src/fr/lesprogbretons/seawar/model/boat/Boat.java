@@ -276,5 +276,14 @@ public abstract class Boat {
         this.position = destination;
     }
 
+
+    public static void main(String[] args){
+        Boat b = new Amiral(new CaseEau(2,2),new Player(1));
+
+        System.out.println(b.getPosition());
+
+        b.moveBoat(new CaseEau(2,3));
+        System.out.println(b.getPosition());
+    }
 }
 

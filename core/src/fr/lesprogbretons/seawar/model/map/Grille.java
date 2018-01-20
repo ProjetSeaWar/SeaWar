@@ -565,4 +565,5 @@ public class Grille {
             joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
         }
     }
+
 }

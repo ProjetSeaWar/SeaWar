@@ -80,12 +80,22 @@ public class Ui extends Stage {
             }
         });
 
+        TextButton menuButton = new TextButton("Menu", skin, "default");
+        menuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SeaWarMenuScreen());
+            }
+        });
+
+
         playerLabel = new Label("Player", skin, "default");
         turnLabel = new Label("Turn XXX", skin, "default");
 
         show.add(playerLabel).width(100).padLeft(10).padTop(2).padBottom(3);
         show.add(optionsButton).padLeft(10);
         show.add(saveButton).padLeft(10);
+        show.add(menuButton).padLeft(10);
         show.add(hideButton).padLeft(10);
         show.add(endTurnButton).padLeft(50);
         show.add(turnLabel).width(100).padLeft(200);
