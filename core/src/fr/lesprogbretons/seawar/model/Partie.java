@@ -1,26 +1,22 @@
 package fr.lesprogbretons.seawar.model;
 
-import fr.lesprogbretons.seawar.model.boat.Boat;
-import fr.lesprogbretons.seawar.model.map.DefaultMap;
-import fr.lesprogbretons.seawar.model.map.Grille;
+import fr.lesprogbretons.seawar.model.map.*;
+import fr.lesprogbretons.seawar.model.boat.*;
+import java.io.Serializable;
 
-/**
- * Classe Partie
- */
-public class Partie {
+
+
+public class Partie implements Serializable{
 
     //Carte
-    private Grille map;
+    private Grille map = new DefaultMap();
 
     //Joueurs
-    private Player joueur1;
-    private Player joueur2;
+    private Player joueur1 = map.getJoueur1();
+    private Player joueur2 = map.getJoueur2();
 
     //Joueur dont c'est le tour
-    private Player currentPlayer;
-    //Compteur de tours
-    private int turnCounter = 1;
-    private boolean isPlayer2 = false;
+    private Player currentPlayer = joueur1;
 
     //Bateau sélectionné par le joueur
     private Boat bateauSelectionne;
@@ -31,7 +27,9 @@ public class Partie {
 
     //Vainqueur
     private Player winner;
-
+    //tours
+    private int turnCounter=1;
+    private boolean isPlayer2=false;
 
     //Constructeurs
     public Partie() {
@@ -58,6 +56,7 @@ public class Partie {
     public Player getJoueur1() {
         return joueur1;
     }
+
 
     public Player getJoueur2() {
         return joueur2;

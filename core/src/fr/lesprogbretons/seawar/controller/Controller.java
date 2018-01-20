@@ -1,9 +1,14 @@
 package fr.lesprogbretons.seawar.controller;
 
+
+
 /* Classe Controller qui va gère l'interraction avec l'utilisateur */
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.cases.Case;
+import java.io.*;
 
 import java.util.ArrayList;
 
@@ -93,6 +98,20 @@ public class Controller {
 
     public void changercanon() {
         game.getBateauSelectionne().setCanonSelectionne(3 - game.getBateauSelectionne().getCanonSelectionne());
+
+    }
+    public void save(String nom){
+        FileHandle fichier = Gdx.files.internal("saves/"+nom+".ser");
+        //File fichier =new File("save/"+nom+".ser");
+        //fichier.mkdirs();
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
+            oos.writeObject(game);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
