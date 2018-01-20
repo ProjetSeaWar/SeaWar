@@ -13,11 +13,11 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = 'LPB-build-0.1'
+    version = 'LPB-build-0.9'
 
     ext {
         appName = "LPB_SeaWar"
-        gdxVersion = '1.9.7'
+        gdxVersion = '1.9.8'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
     }

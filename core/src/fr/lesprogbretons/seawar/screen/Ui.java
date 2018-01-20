@@ -1,24 +1,26 @@
 package fr.lesprogbretons.seawar.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import fr.lesprogbretons.seawar.assets.Assets;
 
-import static fr.lesprogbretons.seawar.SeaWar.assets;
-import static fr.lesprogbretons.seawar.SeaWar.logger;
+import static fr.lesprogbretons.seawar.SeaWar.*;
 
 public class Ui extends Stage {
-    private Label joueurLabel;
+
+    private Stage s = this;
+
     private Table show;
     private Table hide;
+
+    private Label playerLabel;
+    private Label turnLabel;
 
 
     public Ui() {
@@ -42,8 +44,24 @@ public class Ui extends Stage {
         show.setBackground(new SpriteDrawable(sp));
         show.pack();
 
-        TextButton options = new TextButton("Options", skin, "default");
-        TextButton save = new TextButton("Save", skin, "default");
+        TextButton optionsButton = new TextButton("Options", skin, "default");
+        TextButton saveButton = new TextButton("Save", skin, "default");
+
+        TextButton endTurnButton = new TextButton("End Turn", skin, "default");
+        endTurnButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean turnOver = seaWarController.endTurn();
+                if (!turnOver) {
+                    Dialog d = new Dialog("Turn isn't over", skin, "dialog")
+                            .text("One of your ship haven't moved")
+                            .button("Okay", true)
+                            .key(Input.Keys.ENTER, true)
+                            .show(s);
+                }
+            }
+        });
+
         TextButton hideButton = new TextButton("Hide", skin, "default");
         hideButton.addListener(new ClickListener() {
             @Override
@@ -52,6 +70,7 @@ public class Ui extends Stage {
                hide.setVisible(true);
             }
         });
+
         TextButton showButton = new TextButton("Show", skin, "default");
         showButton.addListener(new ClickListener() {
             @Override
@@ -61,13 +80,15 @@ public class Ui extends Stage {
             }
         });
 
-        joueurLabel = new Label("Joueur", skin, "default");
+        playerLabel = new Label("Player", skin, "default");
+        turnLabel = new Label("Turn XXX", skin, "default");
 
-        show.add(joueurLabel).width(100).padLeft(10).padTop(2).padBottom(3);
-        show.add(options).padLeft(10);
-        show.add(save).padLeft(10);
+        show.add(playerLabel).width(100).padLeft(10).padTop(2).padBottom(3);
+        show.add(optionsButton).padLeft(10);
+        show.add(saveButton).padLeft(10);
         show.add(hideButton).padLeft(10);
-        show.add(new Label("Tour XXX", skin, "default")).width(100).padLeft(350);
+        show.add(endTurnButton).padLeft(50);
+        show.add(turnLabel).width(100).padLeft(200);
         show.row();
         show.left().top();
 
@@ -76,8 +97,12 @@ public class Ui extends Stage {
         hide.left().top();
     }
 
-    public void setJoueur(String j) {
-        joueurLabel.setText(j);
+    public void setPlayer(String j) {
+        playerLabel.setText(j);
+    }
+
+    public void setTurn(int turn) {
+        turnLabel.setText("Turn " + turn);
     }
 
     @Override

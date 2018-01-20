@@ -7,19 +7,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import fr.lesprogbretons.seawar.utils.Utils;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.utils.Utils;
 
-import static fr.lesprogbretons.seawar.SeaWar.assets;
-import static fr.lesprogbretons.seawar.SeaWar.game;
-import static fr.lesprogbretons.seawar.SeaWar.spriteBatch;
+import static fr.lesprogbretons.seawar.SeaWar.*;
 
 /**
  * Classe qui permet d'afficher un menu
@@ -33,8 +30,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
     private Viewport viewport;
 
     private Sprite menu;
-
-    private Label label;
 
     @Override
     public void show() {
@@ -52,8 +47,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
-//        table.setDebug(true);
 
         TextButton playButton = new TextButton("Jouer", skin, "default");
         playButton.setWidth(150);
@@ -76,10 +69,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
-        label = new Label("fps:" + Gdx.graphics.getFramesPerSecond(), skin, "default");
-
-        table.add(label).width(200).padLeft(10);
-        table.row();
         table.add(playButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(quitButton).width(quitButton.getWidth())
@@ -100,7 +89,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         Utils.clearScreen();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        label.setText("fps:" + Gdx.graphics.getFramesPerSecond());
         stage.act(delta);
 
         spriteBatch.begin();

@@ -29,5 +29,8 @@ public class Player {
         this.pharesPossedes = pharesPossedes;
     }
 
-
+    @Override
+    public String toString() {
+        return "Player " + number;
+    }
 }

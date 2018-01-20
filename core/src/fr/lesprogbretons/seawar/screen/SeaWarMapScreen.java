@@ -26,11 +26,8 @@ import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import static fr.lesprogbretons.seawar.SeaWar.logger;
-import static fr.lesprogbretons.seawar.SeaWar.partie;
+import static fr.lesprogbretons.seawar.SeaWar.*;
 
 
 /**
@@ -39,15 +36,20 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  * Inspiré par PixelScientist et Libgdx
  * </p>
  */
-public class SeaWarMapScreen extends ScreenAdapter implements Observer{
+public class SeaWarMapScreen extends ScreenAdapter {
 
     private static final int WIDTH_MAP = 13;
     private static final int HEIGHT_MAP = 11;
     private static final int WIDTH_HEXA = 112;
     private static final int HEIGHT_HEXA = 97;
 
+    private static final String MAP_LAYER_NAME = "map";
+    private static final String SELECT_LAYER_NAME = "select";
+    private static final String START_LAYER_NAME = "start";
+
     //Map
     private TiledMap map;
+    private MapLayers layers;
     private TiledMapTile[] tiles;
 
     private OrthographicCamera camera;
@@ -87,10 +89,10 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
 
         map = new TiledMap();
         map.getProperties().put("staggerindex", "even");
-        MapLayers layers = map.getLayers();
+        layers = map.getLayers();
 
         //Construction de la carte
-        tiles = new TiledMapTile[8];
+        tiles = new TiledMapTile[9];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
         tiles[2] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexphare")));
@@ -99,12 +101,43 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         tiles[5] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship3")));
         tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
         tiles[7] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("select")));
+        tiles[8] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("start")));
 
 
         //region Génération map
+        TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
+        layer.setName(MAP_LAYER_NAME);
+        generateMap(layer);
+        layers.add(layer);
+
+        TiledMapTileLayer layerStart = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
+        layerStart.setName(START_LAYER_NAME);
+        layers.add(layerStart);
+
+        TiledMapTileLayer layerSelect = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
+        layerSelect.setName(SELECT_LAYER_NAME);
+        layers.add(layerSelect);
+        //endregion
+
+
+        //region Ui
+
+        myUi = new Ui();
+
+        //endregion
+
+        renderer = new HexagonalTiledMapRenderer(map);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(myUi);
+        multiplexer.addProcessor(cameraController);
+        Gdx.input.setInputProcessor(multiplexer);
+
+    }
+
+    private void generateMap(TiledMapTileLayer layer) {
         for (int l = 0; l < 1; l++) {
-            TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-            layer.setName("map");
+
             for (int y = 0; y < HEIGHT_MAP; y++) {
                 for (int x = 0; x < WIDTH_MAP; x++) {
                     Cell cell = new Cell();
@@ -139,33 +172,35 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
                     layer.setCell(x, y, cell);
                 }
             }
-            layers.add(layer);
         }
-        //endregion
-
-        TiledMapTileLayer layerSelect = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-        layerSelect.setName("select");
-        layers.add(layerSelect);
-
-        //region Ui
-
-        myUi = new Ui();
-
-        //endregion
-
-        renderer = new HexagonalTiledMapRenderer(map);
-
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(myUi);
-        multiplexer.addProcessor(cameraController);
-        Gdx.input.setInputProcessor(multiplexer);
-
     }
 
     @Override
     public void resize(int width, int height) {
         //A changer en fonction de comment est géré le stage
         // i.e. si c'est une classe que l'on redéfinit ou pas
+    }
+
+    public void update() {
+        //On regénère la map
+        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
+        //On met à jour l'interface
+        myUi.setTurn(partie.getTurnCounter());
+        myUi.setPlayer(partie.getCurrentPlayer().toString());
+
+        removeStartMark();
+
+        ArrayList<Boat> bateaux;
+
+        if (partie.getCurrentPlayer().getNumber() == 1) {
+            bateaux = partie.getMap().getBateaux1();
+        } else {
+            bateaux = partie.getMap().getBateaux2();
+        }
+
+        for (Boat b : bateaux) {
+            markStartTile(b.getPosition().getY(), b.getPosition().getX());
+        }
     }
 
     @Override
@@ -178,7 +213,8 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         renderer.setView(camera);
         renderer.render();
         myUi.draw();
-//        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
+        //Update game
+        update();
 
         if (cameraController.clicked) {
             getSelectedHexagon(cameraController.touchX, cameraController.touchY);
@@ -186,26 +222,33 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
             if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
                     && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
 
-                myUi.setJoueur("Joueur 1");
                 if (!cameraController.rightClicked) {
-                    //Si clic gauche
+                    //Clic gauche
+
+                    //Envoie au contrôleur
+                    seaWarController.selection(selectedTile.row, selectedTile.column);
+
                     //Retirer les sélections précédentes
                     removeSelectionMark();
 
-                    Case aCase = g.getCase(selectedTile.row, selectedTile.column);
-                    if (g.casePossedeBateaux(aCase)) {
-                        Boat boat = g.bateauSurCase(aCase);
+                    //Si pas de bateau sélectionné
+                    if (!partie.isAnyBateauSelectionne()) {
 
+                        Case aCase = g.getCase(selectedTile.row, selectedTile.column);
+                        if (g.casePossedeBateaux(aCase)) {
+                            Boat boat = g.bateauSurCase(aCase);
 
-                        batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
-                    } else {
-                        markSelectedTile(selectedTile.column, selectedTile.row);
+                            batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
+                        }
                     }
+
+                    //La sélection des cases ne sélectionne pas la case courante
+                    markSelectedTile(selectedTile.column, selectedTile.row);
 
                     previousSelectedTile.setCoords(selectedTile);
                 } else {
                     //Clic droit
-                    //TODO Tir du bateau
+                    //TODO Affichage des infos
                 }
             }
             //Le click est consomé
@@ -219,9 +262,9 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         }
     }
 
-    public void removeSelectionMark() {
+    private void removeSelectionMark() {
         //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
         for (int y = 0; y < HEIGHT_MAP; y++) {
             for (int x = 0; x < WIDTH_MAP; x++) {
                 layer.setCell(x, y, null);
@@ -229,9 +272,29 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         }
     }
 
-    public void markSelectedTile(int x, int y) {
+    private void removeStartMark() {
         //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(START_LAYER_NAME);
+        for (int y = 0; y < HEIGHT_MAP; y++) {
+            for (int x = 0; x < WIDTH_MAP; x++) {
+                layer.setCell(x, y, null);
+            }
+        }
+    }
+
+    private void markStartTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(START_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[8]);
+        layer.setCell(x, y, selected);
+    }
+
+    private void markSelectedTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
 
         //Mettre la tile de selection
         Cell selected = new Cell();
@@ -293,11 +356,5 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         logger.debug("col : " + column + " row : " + row);
         selectedTile.column = column;
         selectedTile.row = row;
-    }
-
-    //TODO
-    @Override
-    public void update(Observable o, Object arg) {
-        //Mettre à jour carte et position joueurs
     }
 }

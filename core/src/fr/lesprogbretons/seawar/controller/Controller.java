@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Controller {
 
 
-    Partie game = new Partie();
+    private Partie game;
 
     public Controller(Partie game) {
         this.game = game;
@@ -58,13 +58,15 @@ public class Controller {
     }
 
     //Méthode qui finit un tour quand on appuie sur le bon bouton
-    public void endTurn() {
+    public boolean endTurn() {
+        boolean isOver = false;
         game.finPartie();
 
         if (!game.isFin()) {
             game.setAnyBateauSelectionne(false);
-            game.endTurn();
+            isOver = game.endTurn();
         }
+        return isOver;
     }
 
 }
