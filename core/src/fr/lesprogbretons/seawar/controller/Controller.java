@@ -43,11 +43,16 @@ public class Controller {
 
         //Les actions que veut faire le joueur avec le bateau qu'il a sélectionné
         if (game.isAnyBateauSelectionne()) {
+
             ArrayList<Case> casesPorteeTir;
             casesPorteeTir = game.getMap().getCasesPortees(game.getBateauSelectionne());
 
+            if(game.getMap().casePossedeBateau(c,game.getCurrentPlayer())){
+                game.setBateauSelectionne(game.getMap().bateauSurCase(c));
+            }
+
             //Si la case sélectionnée est à portée de tir
-            if (casesPorteeTir.contains(c)) {
+            else if (casesPorteeTir.contains(c)) {
                 if (game.getMap().casePossedeBateau(c, game.getOtherPlayer())) {
                     game.getBateauSelectionne().shoot(game.getMap().bateauSurCase(c));
                     game.setAnyBateauSelectionne(false);

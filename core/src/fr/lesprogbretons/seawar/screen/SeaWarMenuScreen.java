@@ -58,6 +58,17 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
+        TextButton editeurButton = new TextButton("Editeur", skin, "default");
+        playButton.setWidth(150);
+        playButton.setHeight(50);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SeaWarMapScreen());
+            }
+        });
+
+
         TextButton quitButton = new TextButton("Quitter", skin, "default");
         quitButton.setWidth(150);
         quitButton.setHeight(50);
@@ -70,6 +81,8 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         });
 
         table.add(playButton).width(playButton.getWidth())
+                .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+        table.add(editeurButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(quitButton).width(quitButton.getWidth())
                 .height(quitButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
