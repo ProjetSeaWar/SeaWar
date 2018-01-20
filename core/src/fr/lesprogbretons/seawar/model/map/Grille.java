@@ -101,7 +101,7 @@ public class Grille {
                 return cas;
             }
         } else {
-            if (x + 1 >= 0 && x + 1 <= hauteur - 1 && y + 1 >= 0 && y + 1 <= hauteur - 1) {
+            if (x + 1 >= 0 && x + 1 <= hauteur - 1 && y + 1 >= 0 && y + 1 <= largeur - 1) {
                 cas = getCase((x + 1), (y + 1));
                 return cas;
             }
