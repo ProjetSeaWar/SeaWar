@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar.model;
+package fr.lesprogbretons.seawar.model.cases;
 
 public class CaseTerre extends Case {
     public CaseTerre(int x, int y) {
