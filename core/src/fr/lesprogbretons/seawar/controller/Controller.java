@@ -66,5 +66,9 @@ public class Controller {
             game.endTurn();
         }
     }
+    public void changercanon(){
+        game.getBateauSelectionne().setCanonSelectionne(3-game.getBateauSelectionne().getCanonSelectionne());
+
+    }
 
 }
