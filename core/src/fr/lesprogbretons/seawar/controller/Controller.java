@@ -52,6 +52,7 @@ public class Controller {
         } else {
             if (game.getMap().casePossedeBateau(c, game.getCurrentPlayer())) {
                 game.setBateauSelectionne(game.getMap().bateauSurCase(c));
+
             }
 
         }
