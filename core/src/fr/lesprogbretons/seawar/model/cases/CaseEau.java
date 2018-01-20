@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar.model;
+package fr.lesprogbretons.seawar.model.cases;
 
 public class CaseEau extends Case {
 
