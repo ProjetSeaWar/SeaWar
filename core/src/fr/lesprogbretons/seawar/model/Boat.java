@@ -12,7 +12,7 @@ public abstract class Boat {
     protected int dmgMainCanon;
     protected int dmgSecCanon;
     protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
-    protected int canonSelectionne = 0;                 // 1 pour le principal et 2 pour le secondaire
+    protected int canonSelectionne = 1;                 // 1 pour le principal et 2 pour le secondaire
 
     protected int reloadMainCanon;
 
@@ -20,12 +20,15 @@ public abstract class Boat {
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
-    protected boolean tourTermine = false;
     protected Player joueur;
+
+    protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////:
-    public Boat(Case position, Player p) {
+
+
+    public Boat(Case position,Player p){
         this.position = position;
         this.joueur = p;
     }
@@ -67,28 +70,53 @@ public abstract class Boat {
         return secCD;
     }
 
-    public Case getPosition() {
-        return position;
-    }
-
     public Player getJoueur() {
         return joueur;
+    }
+
+    public Case getPosition(){
+        return position;
     }
 
     public int getCanonSelectionne() {
         return canonSelectionne;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void setCanonSelectionne(int canonSelectionne) {
         this.canonSelectionne = canonSelectionne;
     }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
         return "Boat{" +
                 "position=" + position +
                 '}';
+    }
+
+
+    public int getShootTaken() {
+        return shootTaken;
+    }
+
+    public void setShootTaken(int shootTaken) {
+        this.shootTaken = shootTaken;
     }
 
     public void loseHP(int dmg) {
@@ -99,6 +127,7 @@ public abstract class Boat {
                 alive = false;
             } else {
                 hp = hp - (3 * dmg);
+
             }
 
         } else {
@@ -110,14 +139,14 @@ public abstract class Boat {
             }
         }
 
-        shootTaken++;
 
     }
 
-    public void shoot(Boat target) {
-        if (this.canonSelectionne == 1) {
+    public void shoot(Boat target){
+        if(this.canonSelectionne==1){
             this.shootMainCanon(target);
-        } else {
+        }
+        else{
             this.shootSecCanon(target);
         }
     }
@@ -141,33 +170,81 @@ public abstract class Boat {
         }
     }
 
-    public void newTurn() {
-        tourTermine = false;
-
-        if (!alive) {
-            this.endTurn();
-        }
-
+    public void endTurn(){
         moveAvailable = move;
 
-        if (mainCD > 0) {
-            mainCD--;
+        if(mainCD > 0){
+            mainCD --;
         }
 
-        if (secCD > 0) {
-            secCD--;
+        if(secCD > 0){
+            secCD --;
         }
 
         shootTaken = 0;
     }
 
-    private void endTurn() {
-        tourTermine = true;
-        // TODO : Débuter le tour d'un autre bateau
+    public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
+        moveAvailable--;
+
+        if(destination.getX() == position.getX()+1 && destination.getY() == position.getY()){
+            orientation = Orientation.NORD;
+        }
+
+        if(destination.getX() == position.getX()-1 && destination.getY() == position.getY()){
+            orientation = Orientation.SUD;
+        }
+
+        if(destination.getX()==position.getX() && destination.getY()==position.getY()+1){
+            if(position.getY()%2==0){
+                orientation = Orientation.NORDEST;
+            }
+
+            else {
+                orientation = Orientation.SUDEST;
+            }
+        }
+
+        if(destination.getX()== position.getX() && destination.getY()==position.getY()-1){
+            if(position.getY()%2==0){
+                orientation = Orientation.NORDOUEST;
+            }
+
+            else {
+                orientation = Orientation.SUDOUEST;
+            }
+        }
+
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()+1){
+            orientation = Orientation.NORDEST;
+        }
+
+        if(destination.getX()==position.getX()-1 && destination.getY() == destination.getY()-1){
+            orientation = Orientation.SUDOUEST;
+        }
+
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()-1){
+            orientation = Orientation.SUDEST;
+        }
+
+        if(destination.getX()==position.getX()+1 && destination.getY()==position.getY()-1){
+            orientation = Orientation.NORDOUEST;
+        }
+
+        this.position = destination;
     }
 
-    public void moveBoat(Case destination) {
-        this.position = destination;
+    public static void main(String[] args){
+       // Fregate fregate = new Fregate();
+       // Amiral amiral = new Amiral();
+
+       // System.out.println("Fregate a " +  fregate.hp + " hp.");
+       // System.out.println("Amiral a "+amiral.hp+ " hp.");
+
+       // fregate.shootMainCanon(amiral);
+        //System.out.println("Fregate attaque amiral avec son canon principal");
+       // System.out.println("Amiral : - " + fregate.dmgMainCanon + " hp.");
+       // System.out.println("Amiral a " + amiral.hp +" hp.");
     }
 
 }

@@ -23,6 +23,4 @@ public class DefaultMap extends Grille {
         tableau[2][2].setPhare(true);
         tableau[8][10].setPhare(true);
     }
-
-
 }

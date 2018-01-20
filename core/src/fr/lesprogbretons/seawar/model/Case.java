@@ -75,7 +75,7 @@ public abstract class Case {
         this.y = y;
     }
 
-    public int diff(Case c) {
+    public int diff(Case c){
         return (abs(this.x - c.getX()) + abs(this.y - c.getY()));
     }
 }
