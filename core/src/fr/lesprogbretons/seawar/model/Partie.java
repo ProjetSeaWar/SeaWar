@@ -18,7 +18,7 @@ public class Partie {
 
     ////////////////////////////////////////////////////////////////////////////:
     public Partie(){
-        this.start();
+
     }
 
     private void start() {
