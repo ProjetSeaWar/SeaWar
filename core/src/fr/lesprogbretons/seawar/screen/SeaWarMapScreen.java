@@ -15,7 +15,13 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
-import fr.lesprogbretons.seawar.model.*;
+import fr.lesprogbretons.seawar.model.boat.Amiral;
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.boat.Fregate;
+import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.model.cases.CaseEau;
+import fr.lesprogbretons.seawar.model.cases.CaseTerre;
+import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 

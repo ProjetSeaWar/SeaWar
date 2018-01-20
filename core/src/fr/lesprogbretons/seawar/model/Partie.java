@@ -1,5 +1,9 @@
 package fr.lesprogbretons.seawar.model;
 
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
+import fr.lesprogbretons.seawar.model.map.Grille;
+
 public class Partie {
 
     private Grille map = new DefaultMap();
@@ -17,16 +21,15 @@ public class Partie {
     private Player winner;
 
     ////////////////////////////////////////////////////////////////////////////:
-    public Partie(){
+    public Partie() {
 
     }
 
     private void start() {
-        while(!fin){
+        while (!fin) {
 
         }
     }
-
 
 
     /////////////////////////////GETTER ET SETTER//////////////////////////////////////////
@@ -82,6 +85,9 @@ public class Partie {
         return fin;
     }
 
+    public void setFin(boolean fin) {
+        this.fin = fin;
+    }
 
     public Player getWinner() {
         return winner;
@@ -91,17 +97,11 @@ public class Partie {
         this.winner = winner;
     }
 
-    public void setFin(boolean fin) {
-        this.fin = fin;
-    }
-
     /////////////////////////////////////////////////////////////////////////////:
-    public Player getOtherPlayer(){
-        if(getCurrentPlayer().getNumber()==1){
+    public Player getOtherPlayer() {
+        if (getCurrentPlayer().getNumber() == 1) {
             return joueur2;
-        }
-
-        else{
+        } else {
             return joueur1;
         }
     }
@@ -113,68 +113,62 @@ public class Partie {
         } else if (getJoueur2().getPharesPossedes() == 3) {
             setFin(true);
             setWinner(getJoueur2());
-        }
-
-        else if(getCurrentPlayer().equals(getJoueur1())){
+        } else if (getCurrentPlayer().equals(getJoueur1())) {
             boolean fin = true;
 
-            for(int i=0; i<map.bateaux1.size();i++){
-                if(map.bateaux1.get(i).isAlive()){
+            for (int i = 0; i < map.getBateaux1().size(); i++) {
+                if (map.getBateaux1().get(i).isAlive()) {
                     fin = false;
                 }
             }
 
-            if(fin){
+            if (fin) {
                 setFin(true);
                 setWinner(joueur1);
             }
-        }
-
-        else if(getCurrentPlayer().equals(getJoueur2())){
+        } else if (getCurrentPlayer().equals(getJoueur2())) {
             boolean fin = true;
 
-            for(int i=0; i<map.bateaux2.size();i++){
-                if(map.bateaux2.get(i).isAlive()){
+            for (int i = 0; i < map.getBateaux2().size(); i++) {
+                if (map.getBateaux2().get(i).isAlive()) {
                     fin = false;
                 }
             }
 
-            if(fin){
+            if (fin) {
                 setFin(true);
                 setWinner(joueur2);
             }
         }
     }
 
-    public void endTurn(){
+    public void endTurn() {
         boolean bateauxDeplaces = true;
 
-        if(getCurrentPlayer().equals(joueur1)){
-            for(int i = 0 ; i < map.bateaux1.size() ; i++ ){
-                if(map.bateaux1.get(i).getMoveAvailable() == map.bateaux1.get(i).getMove()){
+        if (getCurrentPlayer().equals(joueur1)) {
+            for (int i = 0; i < map.getBateaux1().size(); i++) {
+                if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove()) {
+                    bateauxDeplaces = false;
+                }
+            }
+        } else {
+            for (int i = 0; i < map.getBateaux2().size(); i++) {
+                if (map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove()) {
                     bateauxDeplaces = false;
                 }
             }
         }
 
-        else {
-            for(int i = 0 ; i < map.bateaux2.size() ; i++ ){
-                if(map.bateaux2.get(i).getMoveAvailable() == map.bateaux2.get(i).getMove()){
-                    bateauxDeplaces = false;
-                }
-            }
-        }
-
-        if(bateauxDeplaces) {
+        if (bateauxDeplaces) {
             if (getCurrentPlayer().equals(joueur1)) {
-                for (int i = 0; i < map.bateaux1.size(); i++) {
-                    map.bateaux1.get(i).endTurn();
-                    map.bateaux2.get(i).setShootTaken(0);
+                for (int i = 0; i < map.getBateaux1().size(); i++) {
+                    map.getBateaux1().get(i).endTurn();
+                    map.getBateaux2().get(i).setShootTaken(0);
                 }
             } else {
-                for (int i = 0; i < map.bateaux2.size(); i++) {
-                    map.bateaux2.get(i).endTurn();
-                    map.bateaux1.get(i).setShootTaken(0);
+                for (int i = 0; i < map.getBateaux2().size(); i++) {
+                    map.getBateaux2().get(i).endTurn();
+                    map.getBateaux1().get(i).setShootTaken(0);
                 }
             }
 

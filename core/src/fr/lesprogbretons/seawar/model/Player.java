@@ -12,8 +12,7 @@ public class Player {
     }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////:
+    ////////////////////////////////////////////////////////////////////////////////////:
     public int getNumber() {
         return number;
     }
@@ -29,7 +28,6 @@ public class Player {
     public void setPharesPossedes(int pharesPossedes) {
         this.pharesPossedes = pharesPossedes;
     }
-
 
 
 }

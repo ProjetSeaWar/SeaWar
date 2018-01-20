@@ -1,4 +1,7 @@
-package fr.lesprogbretons.seawar.model;
+package fr.lesprogbretons.seawar.model.boat;
+
+import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.model.Player;
 
 public class Amiral extends Boat {
 
