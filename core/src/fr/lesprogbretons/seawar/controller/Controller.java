@@ -52,7 +52,7 @@ public class Controller {
 
             if (!actionFaite) {
                 ArrayList<Case> casesDispo = new ArrayList<>();
-                game.getMap().getCasesDisponible(game.getBateauSelectionne().getPosition(), 1, casesDispo);
+                casesDispo = game.getMap().getCasesDisponibles(c,1);
 
                 //Si la case sélectionnée est à portée de déplacement
                 if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
