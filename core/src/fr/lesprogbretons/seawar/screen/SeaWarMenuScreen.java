@@ -38,7 +38,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Skin skin = (Skin) assets.get(Assets.menuSkin);
+        Skin skin = (Skin) assets.get(Assets.skin);
 
         menu = new Sprite((Texture) assets.get(Assets.menu));
         menu.setPosition(-menu.getWidth() / 2, -menu.getHeight() / 2);
@@ -85,7 +85,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         table.add(quitButton).width(quitButton.getWidth())
                 .height(quitButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.row();
-        table.left().bottom();
+        table.left();//.bottom();
 
     }
 

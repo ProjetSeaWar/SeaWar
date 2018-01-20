@@ -39,7 +39,7 @@ public class MapOrthoCamController extends InputAdapter {
     public float touchY;
 
 
-    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa) {
+    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa, int camMapWidth, int camMapHeight) {
         this.camera = camera;
 
         //Nombre de tiles en lageur / 2 -> Nb de full tiles + Nombre de tiles en lageur / 4 -> nb moitiés de tiles
@@ -62,10 +62,10 @@ public class MapOrthoCamController extends InputAdapter {
         targetZoom = minZoom;
         camera.zoom = targetZoom;
 
-        downBoundX = camera.viewportWidth / 2f;
-        downBoundY = camera.viewportHeight / 2f;
-        upBoundX = xMap - camera.viewportWidth / 2f;
-        upBoundY = yMap - camera.viewportHeight / 2f;
+        downBoundX = camMapWidth / 2f;
+        downBoundY = camMapHeight / 2f;
+        upBoundX = xMap - camMapWidth / 2f;
+        upBoundY = yMap - camMapHeight / 2f;
 
         logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
 
