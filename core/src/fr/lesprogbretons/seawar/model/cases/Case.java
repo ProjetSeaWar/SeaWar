@@ -6,19 +6,31 @@ import java.util.Objects;
 
 import static java.lang.Math.abs;
 
+/**
+ * Classe Case
+ */
 public abstract class Case {
 
+    //Coordonnées
     protected int x;
     protected int y;
 
+    //Phares
     protected boolean phare;
     protected Player possedePhare = null;         //1 pour joueur1 et 2 pour joueur2
 
+    /**
+     * Constructeur
+     * @param xe : colonne
+     * @param ye : ligne
+     */
     public Case(int xe, int ye) {
         x = xe;
         y = ye;
     }
 
+    /*-------------------------------------------------------------------*/
+    //Getters & Setters
     public boolean isPhare() {
         return phare;
     }
@@ -35,6 +47,29 @@ public abstract class Case {
         this.possedePhare = possedePhare;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    /*------------------------------------------------------------------------*/
+
+    /**
+     * Compare deux Case
+     * @param o : Case à comparer
+     * @return true si les cases sont les mêmes, false sinon
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,38 +81,15 @@ public abstract class Case {
                 phare == aCase.phare;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(x, y, phare);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
+    /**
+     * toString
+     * @return
+     */
     @Override
     public String toString() {
         return "Case{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';
-    }
-
-    public int getY() {
-
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int diff(Case c) {
-        return (abs(this.x - c.getX()) + abs(this.y - c.getY()));
     }
 }

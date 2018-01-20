@@ -3,6 +3,9 @@ package fr.lesprogbretons.seawar.model.boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.Player;
 
+/**
+ * Classe Fregate : sous-classe de Boat
+ */
 public class Fregate extends Boat {
 
     public Fregate(Case c, Player p) {
