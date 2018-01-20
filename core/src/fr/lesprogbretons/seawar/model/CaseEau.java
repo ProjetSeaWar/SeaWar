@@ -5,7 +5,7 @@ public class CaseEau extends Case {
 
     public CaseEau(int x, int y) {
         super(x, y);
-        phare=false;
+        phare = false;
     }
 
     public boolean isPhare() {

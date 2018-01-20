@@ -27,17 +27,19 @@ public class MapOrthoCamController extends InputAdapter {
     private float targetZoom;
     private float displacementSpeed = 20f;
     //Celle-ci ne changeras pas
-    private final float downBound = 400;
+    private float downBoundX;
+    private float downBoundY;
     private float upBoundX;
     private float upBoundY;
 
-    public boolean clicked;
     private boolean dragged;
+    public boolean clicked;
+    public boolean rightClicked;
     public float touchX;
     public float touchY;
 
 
-    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa) {
+    public MapOrthoCamController(OrthographicCamera camera, int widthMap, int heightMap, int widthHexa, int heightHexa, int camMapWidth, int camMapHeight) {
         this.camera = camera;
 
         //Nombre de tiles en lageur / 2 -> Nb de full tiles + Nombre de tiles en lageur / 4 -> nb moitiés de tiles
@@ -50,6 +52,7 @@ public class MapOrthoCamController extends InputAdapter {
         finalPos.x = xMap / 2f;
         finalPos.y = yMap / 2f;
 
+        //TODO Changer par un truc qui se base sur la largeur/hauteur de la map < au truc visible
         if (finalPos.x > finalPos.y) {
             minZoom = MathUtils.ceil(1.06f * widthMap) / 10f;
         } else {
@@ -59,8 +62,10 @@ public class MapOrthoCamController extends InputAdapter {
         targetZoom = minZoom;
         camera.zoom = targetZoom;
 
-        upBoundX = xMap - 400f;
-        upBoundY = yMap - 400f;
+        downBoundX = camMapWidth / 2f;
+        downBoundY = camMapHeight / 2f;
+        upBoundX = xMap - camMapWidth / 2f;
+        upBoundY = yMap - camMapHeight / 2f;
 
         logger.debug("Zoom : " + minZoom + " | final : " + finalPos.toString());
 
@@ -84,9 +89,9 @@ public class MapOrthoCamController extends InputAdapter {
         }
 
 
-        if (camera.position.x < downBound) camera.position.x = downBound;
+        if (camera.position.x < downBoundX) camera.position.x = downBoundX;
         if (camera.position.x > upBoundX) camera.position.x = upBoundX;
-        if (camera.position.y < downBound) camera.position.y = downBound;
+        if (camera.position.y < downBoundY) camera.position.y = downBoundY;
         if (camera.position.y > upBoundY) camera.position.y = upBoundY;
 
         return false;
@@ -163,13 +168,13 @@ public class MapOrthoCamController extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-            Vector3 position = camera.unproject(clickCoordinates);
+        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
+        Vector3 position = camera.unproject(clickCoordinates);
 
-            touchX = position.x;
-            touchY = position.y;
-        }
+        touchX = position.x;
+        touchY = position.y;
+
+        rightClicked = button != Input.Buttons.LEFT;
         return false;
     }
 

@@ -1,6 +1,6 @@
 package fr.lesprogbretons.seawar.model;
 
-public class Boat {
+public abstract class Boat {
 
     protected boolean alive = true;
 
@@ -21,15 +21,13 @@ public class Boat {
     protected int secCD = 0;
 
     protected boolean tourTermine = false;
-
+    protected Player joueur;
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////:
-    public Boat(){
-    }
-
-    public Boat(Case position){
+    public Boat(Case position, Player p) {
         this.position = position;
+        this.joueur = p;
     }
 
     ////////////////// GETTER POUR PERMETTRE DE VOIR LES STATS EN JEU ////////////////////////////////////
@@ -69,18 +67,22 @@ public class Boat {
         return secCD;
     }
 
-    public Case getPosition(){
+    public Case getPosition() {
         return position;
+    }
+
+    public Player getJoueur() {
+        return joueur;
     }
 
     public int getCanonSelectionne() {
         return canonSelectionne;
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void setCanonSelectionne(int canonSelectionne) {
         this.canonSelectionne = canonSelectionne;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
@@ -112,11 +114,10 @@ public class Boat {
 
     }
 
-    public void shoot(Boat target){
-        if(this.canonSelectionne==1){
+    public void shoot(Boat target) {
+        if (this.canonSelectionne == 1) {
             this.shootMainCanon(target);
-        }
-        else{
+        } else {
             this.shootSecCanon(target);
         }
     }
@@ -140,21 +141,21 @@ public class Boat {
         }
     }
 
-    public void newTurn(){
+    public void newTurn() {
         tourTermine = false;
 
-        if(alive = false){
+        if (!alive) {
             this.endTurn();
         }
 
         moveAvailable = move;
 
-        if(mainCD > 0){
-            mainCD --;
+        if (mainCD > 0) {
+            mainCD--;
         }
 
-        if(secCD > 0){
-            secCD --;
+        if (secCD > 0) {
+            secCD--;
         }
 
         shootTaken = 0;
@@ -165,21 +166,8 @@ public class Boat {
         // TODO : Débuter le tour d'un autre bateau
     }
 
-    public void moveBoat(Case destination){
+    public void moveBoat(Case destination) {
         this.position = destination;
-    }
-
-    public static void main(String[] args){
-        Fregate fregate = new Fregate();
-        Amiral amiral = new Amiral();
-
-        System.out.println("Fregate a " +  fregate.hp + " hp.");
-        System.out.println("Amiral a "+amiral.hp+ " hp.");
-
-        fregate.shootMainCanon(amiral);
-        System.out.println("Fregate attaque amiral avec son canon principal");
-        System.out.println("Amiral : - " + fregate.dmgMainCanon + " hp.");
-        System.out.println("Amiral a " + amiral.hp +" hp.");
     }
 
 }
