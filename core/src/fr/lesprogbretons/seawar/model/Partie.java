@@ -9,7 +9,7 @@ import fr.lesprogbretons.seawar.model.boat.*;
 public class Partie {
 
     //Carte
-    private Grille map = new DefaultMap();
+    private Grille map;
 
     //Joueurs
     private Player joueur1 = map.getJoueur1();
@@ -29,6 +29,14 @@ public class Partie {
     private Player winner;
 
 
+    //Constructeurs
+    public Partie(){
+        map = new DefaultMap();
+    }
+
+    public Partie(Grille map){
+        this.map = map;
+    }
 
     /*---------------------------------------------------------------------------------------*/
     //Getters & Setters

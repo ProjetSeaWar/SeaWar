@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Controller {
 
     //Partie que gère le contrôleur
-    Partie game = new Partie();
+    Partie game;
 
 
     /**
