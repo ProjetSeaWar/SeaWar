@@ -21,7 +21,7 @@ public class Controller {
             boolean actionFaite = false;
 
             if(game.isAnyBateauSelectionne()){
-                ArrayList<Case> casesPorteeTir = new ArrayList<>();
+                ArrayList<Case> casesPorteeTir;
                 casesPorteeTir = game.getMap().getCasesPortees(game.getBateauSelectionne());
 
                 if(casesPorteeTir.contains(c)){
