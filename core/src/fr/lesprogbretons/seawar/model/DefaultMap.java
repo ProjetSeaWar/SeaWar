@@ -2,13 +2,13 @@ package fr.lesprogbretons.seawar.model;
 
 public class DefaultMap extends Grille {
 
-    public DefaultMap(Player p1, Player p2) {
+    public DefaultMap() {
         super(11, 13);
 
-        bateaux1.add(new Amiral(tableau[10][0], p1));
-        bateaux1.add(new Fregate(tableau[10][1], p1));
-        bateaux2.add(new Amiral(tableau[0][12], p2));
-        bateaux2.add(new Fregate(tableau[1][12], p2));
+        bateaux1.add(new Amiral(tableau[10][0], getJoueur1()));
+        bateaux1.add(new Fregate(tableau[10][1], getJoueur1()));
+        bateaux2.add(new Amiral(tableau[0][12], getJoueur2()));
+        bateaux2.add(new Fregate(tableau[1][12], getJoueur2()));
         tableau[4][3] = new CaseTerre(4, 3);
         tableau[4][4] = new CaseTerre(4, 4);
         tableau[3][6] = new CaseTerre(3, 6);
@@ -23,6 +23,4 @@ public class DefaultMap extends Grille {
         tableau[2][2].setPhare(true);
         tableau[8][10].setPhare(true);
     }
-
-
 }
