@@ -3,7 +3,9 @@ package fr.lesprogbretons.seawar.model;
 import fr.lesprogbretons.seawar.model.map.*;
 import fr.lesprogbretons.seawar.model.boat.*;
 
-
+/**
+ * Classe Partie
+ */
 public class Partie {
 
     //Carte
@@ -79,7 +81,10 @@ public class Partie {
     /*----------------------------------------------------------------------------------------------------------*/
 
 
-    //Renvoie le joueur dont ce n'est pas le tour
+    /**
+     * Fonction renvoyant le joueur dont ce n'est pas le tour
+     * @return Player dont ce n'est pas le tour
+     */
     public Player getOtherPlayer(){
         if(getCurrentPlayer().getNumber()==1){
             return joueur2;
@@ -91,7 +96,9 @@ public class Partie {
     }
 
 
-    //Vérifie si la partie est finie
+    /**
+     * Procédure qui vérifie si la partie est terminée ou non
+     */
     public void finPartie() {
 
         //Si le joueur a 3 phares, il gagne
@@ -137,8 +144,10 @@ public class Partie {
     }
 
 
-
-    //Fin de partie : false si le joueur n'a pas déplacé ses bateaux, true ça passe à l'autre joueur
+    /**
+     * Fonction qui gere la fin d'un tour d'un joueur
+     * @return : false si le joueur n'a pas déplacé tous ses bateaux, true si le tour a changé
+     */
     public boolean endTurn(){
         boolean bateauxDeplaces = true;
 

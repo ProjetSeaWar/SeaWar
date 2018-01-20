@@ -1,18 +1,27 @@
 package fr.lesprogbretons.seawar.model;
 
+/**
+ * Classe joueur
+ */
 public class Player {
+
+    //Numéro du joueur
     private int number;
 
+    //Nombre de phares qu'il possede
     private int pharesPossedes = 0;
 
 
-    //////////////////////////////////////////////////////////////////////////////
+    /**
+     * Constructeur
+     * @param number
+     */
     public Player(int number) {
         this.number = number;
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////////:
+    //Getters & Setters
     public int getNumber() {
         return number;
     }
