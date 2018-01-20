@@ -13,12 +13,11 @@ import java.util.ArrayList;
 public class Controller {
 
     //Partie que gère le contrôleur
-    Partie game;
-
     private Partie game;
 
     /**
      * Constructeur
+     *
      * @param game
      */
     public Controller(Partie game) {
@@ -28,6 +27,7 @@ public class Controller {
 
     /**
      * Procédure qui gère la sélection d'une case quelconque à la souris
+     *
      * @param x : colonne de la case sélectionnée
      * @param y : ligne de la case sélectionnée
      */
@@ -77,13 +77,11 @@ public class Controller {
         }
     }
 
-    //Méthode qui finit un tour quand on appuie sur le bon bouton
-    public boolean endTurn() {
-        boolean isOver = false;
     /**
      * Procédure qui finit le tour du joueur quand on appuie sur le bouton fin de tour
      */
-    public void endTurn() {
+    public boolean endTurn() {
+        boolean isOver = false;
         game.finPartie();
 
         if (!game.isFin()) {
@@ -92,8 +90,9 @@ public class Controller {
         }
         return isOver;
     }
-    public void changercanon(){
-        game.getBateauSelectionne().setCanonSelectionne(3-game.getBateauSelectionne().getCanonSelectionne());
+
+    public void changercanon() {
+        game.getBateauSelectionne().setCanonSelectionne(3 - game.getBateauSelectionne().getCanonSelectionne());
 
     }
 
