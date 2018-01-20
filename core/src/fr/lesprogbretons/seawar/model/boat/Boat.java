@@ -1,8 +1,4 @@
-package fr.lesprogbretons.seawar.model.boat;
-
-import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.model.Orientation;
-import fr.lesprogbretons.seawar.model.Player;
+package fr.lesprogbretons.seawar.model;
 
 public abstract class Boat {
 
@@ -29,8 +25,10 @@ public abstract class Boat {
     protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    public Boat(Case position, Player p) {
+    /////////////////////////////////////////////////////////////////////////////////////////////:
+
+
+    public Boat(Case position,Player p){
         this.position = position;
         this.joueur = p;
     }
@@ -76,7 +74,7 @@ public abstract class Boat {
         return joueur;
     }
 
-    public Case getPosition() {
+    public Case getPosition(){
         return position;
     }
 
@@ -144,10 +142,11 @@ public abstract class Boat {
 
     }
 
-    public void shoot(Boat target) {
-        if (this.canonSelectionne == 1) {
+    public void shoot(Boat target){
+        if(this.canonSelectionne==1){
             this.shootMainCanon(target);
-        } else {
+        }
+        else{
             this.shootSecCanon(target);
         }
     }
@@ -171,64 +170,69 @@ public abstract class Boat {
         }
     }
 
-    public void endTurn() {
+    public void endTurn(){
         moveAvailable = move;
 
-        if (mainCD > 0) {
-            mainCD--;
+        if(mainCD > 0){
+            mainCD --;
         }
 
-        if (secCD > 0) {
-            secCD--;
+        if(secCD > 0){
+            secCD --;
         }
 
         shootTaken = 0;
     }
 
-    public void moveBoat(Case destination) {                         //Le bateau ne peut se déplacer que d'une case à la fois
+    public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
         moveAvailable--;
 
-        if (destination.getX() == position.getX() + 1 && destination.getY() == position.getY()) {
+        if(destination.getX() == position.getX()+1 && destination.getY() == position.getY()){
             orientation = Orientation.NORD;
         }
 
-        if (destination.getX() == position.getX() - 1 && destination.getY() == position.getY()) {
+        if(destination.getX() == position.getX()-1 && destination.getY() == position.getY()){
             orientation = Orientation.SUD;
         }
 
-        if (destination.getX() == position.getX() && destination.getY() == position.getY() + 1) {
-            if (position.getY() % 2 == 0) {
+        if(destination.getX()==position.getX() && destination.getY()==position.getY()+1){
+            if(position.getY()%2==0){
                 orientation = Orientation.NORDEST;
-            } else {
+            }
+
+            else {
                 orientation = Orientation.SUDEST;
             }
         }
 
-        if (destination.getX() == position.getX() && destination.getY() == position.getY() - 1) {
-            if (position.getY() % 2 == 0) {
+        if(destination.getX()== position.getX() && destination.getY()==position.getY()-1){
+            if(position.getY()%2==0){
                 orientation = Orientation.NORDOUEST;
-            } else {
+            }
+
+            else {
                 orientation = Orientation.SUDOUEST;
             }
         }
 
-        if (destination.getY() == position.getY() + 1 && destination.getX() == position.getX() + 1) {
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()+1){
             orientation = Orientation.NORDEST;
         }
 
-        if (destination.getX() == position.getX() - 1 && destination.getY() == destination.getY() - 1) {
+        if(destination.getX()==position.getX()-1 && destination.getY() == destination.getY()-1){
             orientation = Orientation.SUDOUEST;
         }
 
-        if (destination.getY() == position.getY() + 1 && destination.getX() == position.getX() - 1) {
+        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()-1){
             orientation = Orientation.SUDEST;
         }
 
-        if (destination.getX() == position.getX() + 1 && destination.getY() == position.getY() - 1) {
+        if(destination.getX()==position.getX()+1 && destination.getY()==position.getY()-1){
             orientation = Orientation.NORDOUEST;
         }
 
         this.position = destination;
     }
+
 }
 
