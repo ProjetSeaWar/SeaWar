@@ -231,9 +231,10 @@ public class SeaWarMapScreen extends ScreenAdapter {
                     //Retirer les sélections précédentes
                     removeSelectionMark();
 
+                    Case aCase = g.getCase(selectedTile.row, selectedTile.column);
+
                     //Si pas de bateau sélectionné
                     if (partie.isAnyBateauSelectionne()) {
-                        Case aCase = g.getCase(selectedTile.row, selectedTile.column);
                         if (g.casePossedeBateaux(aCase)) {
                             Boat boat = g.bateauSurCase(aCase);
                             if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
@@ -241,14 +242,15 @@ public class SeaWarMapScreen extends ScreenAdapter {
                             } else {
                                 batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
                             }
+                            markSelectedTile(selectedTile.column, selectedTile.row);
                         }
                     } else {
                         removeSelectionMark();
+                        //La sélection des cases ne sélectionne pas la case courante
+                        if (!g.casePossedeBateaux(aCase)) {
+                            markSelectedTile(selectedTile.column, selectedTile.row);
+                        }
                     }
-
-                    //La sélection des cases ne sélectionne pas la case courante
-                    markSelectedTile(selectedTile.column, selectedTile.row);
-
                     previousSelectedTile.setCoords(selectedTile);
                 } else {
                     //Clic droit
