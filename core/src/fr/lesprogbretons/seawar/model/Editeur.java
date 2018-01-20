@@ -5,8 +5,6 @@ import fr.lesprogbretons.seawar.model.map.*;
 public class Editeur {
     Grille map;
 
-    int compteurClique = 0;
-
     public Grille getMap() {
         return map;
     }

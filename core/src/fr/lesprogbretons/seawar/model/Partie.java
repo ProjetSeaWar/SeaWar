@@ -44,6 +44,10 @@ public class Partie {
         return map;
     }
 
+    public void setMap(Grille map){
+        this.map = map;
+    }
+
     public Player getJoueur1() {
         return joueur1;
     }
