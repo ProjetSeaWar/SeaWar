@@ -8,6 +8,7 @@ public class Fregate extends Boat {
     public Fregate(Case c, Player p) {
         super(c, p);
         move = 7;
+        moveAvailable = move;
         hp = 50;
         dmgMainCanon = 30;
         reloadMainCanon = 1;

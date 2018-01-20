@@ -1,4 +1,8 @@
-package fr.lesprogbretons.seawar.model;
+package fr.lesprogbretons.seawar.model.boat;
+
+import fr.lesprogbretons.seawar.model.cases.*;
+import fr.lesprogbretons.seawar.model.Player;
+import fr.lesprogbretons.seawar.model.Orientation;
 
 public abstract class Boat {
 

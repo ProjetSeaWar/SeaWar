@@ -8,6 +8,7 @@ public class Amiral extends Boat {
     public Amiral(Case c, Player p) {
         super(c, p);
         move = 3;
+        moveAvailable = move;
         hp = 100;
         dmgMainCanon = 50;
         reloadMainCanon = 3;
