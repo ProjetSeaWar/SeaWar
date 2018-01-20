@@ -1,5 +1,6 @@
 package fr.lesprogbretons.seawar.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -85,6 +86,7 @@ public class Ui extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SeaWarMenuScreen());
+                Gdx.graphics.setWindowedMode(800,480);
             }
         });
 
@@ -98,7 +100,7 @@ public class Ui extends Stage {
         show.add(menuButton).padLeft(10);
         show.add(hideButton).padLeft(10);
         show.add(endTurnButton).padLeft(50);
-        show.add(turnLabel).width(100).padLeft(200);
+        show.add(turnLabel).width(100).padLeft(100);
         show.row();
         show.left().top();
 
