@@ -1,62 +1,44 @@
 package fr.lesprogbretons.seawar.model;
 
-import fr.lesprogbretons.seawar.model.boat.Boat;
-import fr.lesprogbretons.seawar.model.map.DefaultMap;
-import fr.lesprogbretons.seawar.model.map.Grille;
+import fr.lesprogbretons.seawar.model.map.*;
+import fr.lesprogbretons.seawar.model.boat.*;
+
 
 public class Partie {
 
+    //Carte
     private Grille map = new DefaultMap();
 
+    //Joueurs
     private Player joueur1 = map.getJoueur1();
     private Player joueur2 = map.getJoueur2();
 
+    //Joueur dont c'est le tour
     private Player currentPlayer = joueur1;
 
+    //Bateau sélectionné par le joueur
     private Boat bateauSelectionne;
     private boolean isAnyBateauSelectionne = false;
 
+    //Pour savoir si la partie est finie
     private boolean fin = false;
 
+    //Vainqueur
     private Player winner;
 
-    ////////////////////////////////////////////////////////////////////////////:
-    public Partie() {
 
-    }
-
-    private void start() {
-        while (!fin) {
-
-        }
-    }
-
-
-    /////////////////////////////GETTER ET SETTER//////////////////////////////////////////
+    //Getters & Setters
     public Grille getMap() {
         return map;
-    }
-
-    public void setMap(Grille map) {
-        this.map = map;
     }
 
     public Player getJoueur1() {
         return joueur1;
     }
 
-    public void setJoueur1(Player joueur1) {
-        this.joueur1 = joueur1;
-    }
-
     public Player getJoueur2() {
         return joueur2;
     }
-
-    public void setJoueur2(Player joueur2) {
-        this.joueur2 = joueur2;
-    }
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -85,23 +67,21 @@ public class Partie {
         return fin;
     }
 
-    public void setFin(boolean fin) {
-        this.fin = fin;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
     public void setWinner(Player winner) {
         this.winner = winner;
     }
 
+    public void setFin(boolean fin) {
+        this.fin = fin;
+    }
+
     /////////////////////////////////////////////////////////////////////////////:
-    public Player getOtherPlayer() {
-        if (getCurrentPlayer().getNumber() == 1) {
+    public Player getOtherPlayer(){
+        if(getCurrentPlayer().getNumber()==1){
             return joueur2;
-        } else {
+        }
+
+        else{
             return joueur1;
         }
     }
@@ -113,53 +93,59 @@ public class Partie {
         } else if (getJoueur2().getPharesPossedes() == 3) {
             setFin(true);
             setWinner(getJoueur2());
-        } else if (getCurrentPlayer().equals(getJoueur1())) {
+        }
+
+        else if(getCurrentPlayer().equals(getJoueur1())){
             boolean fin = true;
 
-            for (int i = 0; i < map.getBateaux1().size(); i++) {
-                if (map.getBateaux1().get(i).isAlive()) {
+            for(int i = 0; i< map.getBateaux1().size(); i++){
+                if(map.getBateaux1().get(i).isAlive()){
                     fin = false;
                 }
             }
 
-            if (fin) {
+            if(fin){
                 setFin(true);
                 setWinner(joueur1);
             }
-        } else if (getCurrentPlayer().equals(getJoueur2())) {
+        }
+
+        else if(getCurrentPlayer().equals(getJoueur2())){
             boolean fin = true;
 
-            for (int i = 0; i < map.getBateaux2().size(); i++) {
-                if (map.getBateaux2().get(i).isAlive()) {
+            for(int i = 0; i< map.getBateaux2().size(); i++){
+                if(map.getBateaux2().get(i).isAlive()){
                     fin = false;
                 }
             }
 
-            if (fin) {
+            if(fin){
                 setFin(true);
                 setWinner(joueur2);
             }
         }
     }
 
-    public void endTurn() {
+    public boolean endTurn(){
         boolean bateauxDeplaces = true;
 
-        if (getCurrentPlayer().equals(joueur1)) {
-            for (int i = 0; i < map.getBateaux1().size(); i++) {
-                if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove()) {
-                    bateauxDeplaces = false;
-                }
-            }
-        } else {
-            for (int i = 0; i < map.getBateaux2().size(); i++) {
-                if (map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove()) {
+        if(getCurrentPlayer().equals(joueur1)){
+            for(int i = 0; i < map.getBateaux1().size() ; i++ ){
+                if(map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove()){
                     bateauxDeplaces = false;
                 }
             }
         }
 
-        if (bateauxDeplaces) {
+        else {
+            for(int i = 0; i < map.getBateaux2().size() ; i++ ){
+                if(map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove()){
+                    bateauxDeplaces = false;
+                }
+            }
+        }
+
+        if(bateauxDeplaces) {
             if (getCurrentPlayer().equals(joueur1)) {
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).endTurn();
@@ -169,10 +155,17 @@ public class Partie {
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
                     map.getBateaux2().get(i).endTurn();
                     map.getBateaux1().get(i).setShootTaken(0);
+
                 }
             }
 
             setCurrentPlayer(getOtherPlayer());
+            return true;
+        }
+
+        //Si le joueur n'a pas déplacé tous ses bateaux
+        else {
+            return false;
         }
     }
 }
