@@ -143,8 +143,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
                     Cell cell = new Cell();
                     Case aCase = g.getCase(y, x);
 
-                    if (g.casePossedeBateaux(aCase)) {
-                        Boat boat = g.bateauSurCase(aCase);
+                    Boat boat = g.bateauSurCase(aCase);
+                    if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
                         if (boat.getJoueur() == partie.getJoueur1()) {
                             if (boat instanceof Amiral) {
                                 cell.setTile(tiles[3]);
@@ -232,14 +232,18 @@ public class SeaWarMapScreen extends ScreenAdapter {
                     removeSelectionMark();
 
                     //Si pas de bateau sélectionné
-                    if (!partie.isAnyBateauSelectionne()) {
-
+                    if (partie.isAnyBateauSelectionne()) {
                         Case aCase = g.getCase(selectedTile.row, selectedTile.column);
                         if (g.casePossedeBateaux(aCase)) {
                             Boat boat = g.bateauSurCase(aCase);
-
-                            batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
+                            if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
+                                if (boat.getMoveAvailable() > 0) batchSelectionMark(g.getCasesDisponibles(aCase, 1));
+                            } else {
+                                batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
+                            }
                         }
+                    } else {
+                        removeSelectionMark();
                     }
 
                     //La sélection des cases ne sélectionne pas la case courante

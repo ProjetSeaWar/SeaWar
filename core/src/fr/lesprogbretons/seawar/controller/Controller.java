@@ -8,8 +8,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.cases.Case;
-import java.io.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -70,7 +73,6 @@ public class Controller {
                     if (c.isPhare()) {
                         game.getMap().prendPhare(c, game.getCurrentPlayer());
                     }
-                    game.setAnyBateauSelectionne(false);
                 } else {
                     game.setAnyBateauSelectionne(false);
                 }
@@ -81,7 +83,6 @@ public class Controller {
             //Si le joueur sélectionne un de ses bateaux
             if (game.getMap().casePossedeBateau(c, game.getCurrentPlayer())) {
                 game.setBateauSelectionne(game.getMap().bateauSurCase(c));
-
             }
 
         }

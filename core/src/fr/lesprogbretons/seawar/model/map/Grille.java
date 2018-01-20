@@ -9,7 +9,6 @@ import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
-import java.lang.management.BufferPoolMXBean;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +31,7 @@ public class Grille {
 
     /**
      * Constructeur
+     *
      * @param hauteur : nombre de colonnes
      * @param largeur : nombre de lignes
      */
@@ -112,26 +112,27 @@ public class Grille {
     }
 
     //modifier une case de la grille
-    public void setCase(Case c){
+    public void setCase(Case c) {
         Case[][] tab = getTableau();
 
-        tab[c.getX()][c.getY()]=c;
+        tab[c.getX()][c.getY()] = c;
 
         setTableau(tab);
     }
 
     //ajouter un bateau joueur 1
-    public void ajouterBateauJoueur1(Boat b){
+    public void ajouterBateauJoueur1(Boat b) {
         ArrayList<Boat> tab = getBateaux1();
         tab.add(b);
         setBateaux1(tab);
     }
 
-    public void ajouterBateauJoueur2(Boat b){
+    public void ajouterBateauJoueur2(Boat b) {
         ArrayList<Boat> tab = getBateaux2();
         tab.add(b);
         setBateaux1(tab);
     }
+
     /*******************************************************/
     //Fonctions permettant d'avoir les cases voisines
     public Case getCaseNord(Case c) {
@@ -167,7 +168,7 @@ public class Grille {
     }
 
     public Case getCaseNordEst(Case c) {
-        if (c.equals(null)) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -190,7 +191,7 @@ public class Grille {
     }
 
     public Case getCaseSudEst(Case c) {
-        if (c.equals(null)) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -213,7 +214,7 @@ public class Grille {
     }
 
     public Case getCaseNordOuest(Case c) {
-        if (c.equals(null)) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -236,7 +237,7 @@ public class Grille {
     }
 
     public Case getCaseSudOuest(Case c) {
-        if (c.equals(null)) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -262,9 +263,10 @@ public class Grille {
 
     /**
      * Procédure permettant d'avoir toutes les accessibles depuis une case à une certaine distance
-     * @param c : Case dont on veut les cases voisines
+     *
+     * @param c     : Case dont on veut les cases voisines
      * @param range : Distance à laquelle on veut les voisins
-     * @param tab : Tableau contenant les cases voisines
+     * @param tab   : Tableau contenant les cases voisines
      */
     public void getCasesDisponible(Case c, int range, ArrayList<Case> tab) {
         if (c != null) {
@@ -305,23 +307,27 @@ public class Grille {
 
     /**
      * Fonction renvoyant un tableau de cases contenant toutes les cases sur lesquelles un bateau peut se déplacer depuis une case voulue
-     * @param c : case de départ
+     *
+     * @param c     : case de départ
      * @param range : distance à laquelle on veut se déplacer
      * @return un tableau contenant toutes les cases sur lesquelles on peut se déplacer
      */
     public ArrayList<Case> getCasesDisponibles(Case c, int range) {
         ArrayList<Case> tab = new ArrayList<>();
-        getCasesDisponible(getCaseNord(c), range - 1, tab);
-        getCasesDisponible(getCaseNordEst(c), range - 1, tab);
-        getCasesDisponible(getCaseSudEst(c), range - 1, tab);
-        getCasesDisponible(getCaseSud(c), range - 1, tab);
-        getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
-        getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+        if (range > 0) {
+            getCasesDisponible(getCaseNord(c), range - 1, tab);
+            getCasesDisponible(getCaseNordEst(c), range - 1, tab);
+            getCasesDisponible(getCaseSudEst(c), range - 1, tab);
+            getCasesDisponible(getCaseSud(c), range - 1, tab);
+            getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
+            getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+        }
         return tab;
     }
 
     /**
      * Fonction permettant de savoir si un bateau est sur une case
+     *
      * @param c : Case dont on veut savoir si elle possède un bateau ou non
      * @return true si la case possède un bateau, false sinon
      */
@@ -343,7 +349,8 @@ public class Grille {
 
     /**
      * Fonction permettant de savoir si une case possède un bateau d'un joueur particulier
-     * @param c : case donc on veut savoir si elle possède un bateau d'un joueur
+     *
+     * @param c      : case donc on veut savoir si elle possède un bateau d'un joueur
      * @param joueur : joueur
      * @return true si la case possède un bateau du joueur, false sinon
      */
@@ -367,6 +374,7 @@ public class Grille {
 
     /**
      * Fonction renvoyant le bateau qui est sur la case
+     *
      * @param c : Case
      * @return le bateau qui se situe sur la case
      */
@@ -388,6 +396,7 @@ public class Grille {
 
     /**
      * Fonction renvoyant un tableau contenant les cases à portée de tir du bateau
+     *
      * @param bateauSelectionne
      * @return un tableau contenant les cases a portee de tir du bateau
      */
@@ -538,7 +547,8 @@ public class Grille {
 
     /**
      * procédure permettant à un joueur de prendre un phare sur une case
-     * @param c : Case sur laquelle il y a un phare
+     *
+     * @param c      : Case sur laquelle il y a un phare
      * @param joueur : joueur qui prend le phare
      */
     public void prendPhare(Case c, Player joueur) {
@@ -547,7 +557,7 @@ public class Grille {
             c.setPossedePhare(joueur);
             joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
 
-        //si le joueur adverse possede le phare
+            //si le joueur adverse possede le phare
 
         } else if (!(c.getPossedePhare().equals(joueur))) {
             c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes() - 1);

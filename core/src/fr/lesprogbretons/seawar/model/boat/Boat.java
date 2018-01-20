@@ -4,6 +4,8 @@ import fr.lesprogbretons.seawar.model.cases.*;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.Orientation;
 
+import static fr.lesprogbretons.seawar.SeaWar.logger;
+
 /**
  * Classe Boat
  */
@@ -156,6 +158,7 @@ public abstract class Boat {
             }
         }
 
+        logger.debug("Shot taken " + hp);
 
     }
 

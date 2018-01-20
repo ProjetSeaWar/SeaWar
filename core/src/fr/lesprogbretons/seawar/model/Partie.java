@@ -80,6 +80,7 @@ public class Partie implements Serializable{
 
     public void setBateauSelectionne(Boat bateauSelectionne) {
         this.bateauSelectionne = bateauSelectionne;
+        isAnyBateauSelectionne = true;
     }
 
     public boolean isAnyBateauSelectionne() {
