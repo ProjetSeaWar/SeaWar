@@ -16,7 +16,7 @@ public abstract class Case {
     protected int y;
 
     //Phares
-    protected boolean phare;
+    protected boolean phare = false;
     protected Player possedePhare = null;         //1 pour joueur1 et 2 pour joueur2
 
     /**
@@ -24,13 +24,15 @@ public abstract class Case {
      * @param xe : colonne
      * @param ye : ligne
      */
+
+    /*-------------------------------------------------------------------*/
+    //Getters & Setters
+
     public Case(int xe, int ye) {
         x = xe;
         y = ye;
     }
 
-    /*-------------------------------------------------------------------*/
-    //Getters & Setters
     public boolean isPhare() {
         return phare;
     }

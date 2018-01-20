@@ -9,6 +9,7 @@ import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+import java.lang.management.BufferPoolMXBean;
 import java.util.ArrayList;
 
 /**
@@ -84,6 +85,52 @@ public class Grille {
 
     public void setBateaux2(ArrayList<Boat> bateaux2) {
         this.bateaux2 = bateaux2;
+    }
+
+    public Case[][] getTableau() {
+        return tableau;
+    }
+
+    public void setTableau(Case[][] tableau) {
+        this.tableau = tableau;
+    }
+
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public void setHauteur(int hauteur) {
+        this.hauteur = hauteur;
+    }
+
+    public int getLargeur() {
+        return largeur;
+    }
+
+    public void setLargeur(int largeur) {
+        this.largeur = largeur;
+    }
+
+    //modifier une case de la grille
+    public void setCase(Case c){
+        Case[][] tab = getTableau();
+
+        tab[c.getX()][c.getY()]=c;
+
+        setTableau(tab);
+    }
+
+    //ajouter un bateau joueur 1
+    public void ajouterBateauJoueur1(Boat b){
+        ArrayList<Boat> tab = getBateaux1();
+        tab.add(b);
+        setBateaux1(tab);
+    }
+
+    public void ajouterBateauJoueur2(Boat b){
+        ArrayList<Boat> tab = getBateaux2();
+        tab.add(b);
+        setBateaux1(tab);
     }
     /*******************************************************/
     //Fonctions permettant d'avoir les cases voisines
@@ -501,6 +548,7 @@ public class Grille {
             joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
 
         //si le joueur adverse possede le phare
+
         } else if (!(c.getPossedePhare().equals(joueur))) {
             c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes() - 1);
             c.setPossedePhare(joueur);
