@@ -4,40 +4,48 @@ import fr.lesprogbretons.seawar.model.cases.*;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.Orientation;
 
+/**
+ * Classe Boat
+ */
 public abstract class Boat {
 
+    //En vie ou non
     protected boolean alive = true;
 
+
+    //Position et déplacement
     protected int move;
     protected int moveAvailable;                        // Déplacement encore disponible pendant le tour
     protected Case position;
+    protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
+    //Combat
     protected int hp;
     protected int dmgMainCanon;
     protected int dmgSecCanon;
     protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
     protected int canonSelectionne = 1;                 // 1 pour le principal et 2 pour le secondaire
-
     protected int reloadMainCanon;
-
     protected int reloadSecCanon;
     protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
     protected int secCD = 0;
 
+    //Joueur possédant ce bateau
     protected Player joueur;
 
-    protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////:
-
-
+    /**
+     * Constructeur
+     * @param position : case initial
+     * @param p : joueur possédant ce bateau
+     */
     public Boat(Case position,Player p){
         this.position = position;
         this.joueur = p;
     }
 
-    ////////////////// GETTER POUR PERMETTRE DE VOIR LES STATS EN JEU ////////////////////////////////////
+    /*----------------------------------------------------------------------------*/
+    //Getters & Setters
     public int getMove() {
         return move;
     }
@@ -105,15 +113,6 @@ public abstract class Boat {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "position=" + position +
-                '}';
-    }
-
 
     public int getShootTaken() {
         return shootTaken;
@@ -123,6 +122,20 @@ public abstract class Boat {
         this.shootTaken = shootTaken;
     }
 
+    /*---------------------------------------------------------------------------------------------*/
+    //toString
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "position=" + position +
+                '}';
+    }
+
+
+    /**
+     * Procédure qui s'occupe de réduire les HP du bateau
+     * @param dmg : dommages qu'encaisse le bateau
+     */
     public void loseHP(int dmg) {
 
         if (shootTaken == 1) {                          // Si le bateau a deja pris des degats pendant le tour
@@ -146,15 +159,26 @@ public abstract class Boat {
 
     }
 
+    /**
+     * Procédure de tir
+     * @param target : Bateau cible
+     */
     public void shoot(Boat target){
+        //Si le canon sélectionné est le canon principal
         if(this.canonSelectionne==1){
             this.shootMainCanon(target);
         }
+
+        //Si le canon sélectionné est le canon secondaire
         else{
             this.shootSecCanon(target);
         }
     }
 
+    /**
+     * procédure de tir avec le canon principal
+     * @param target : bateau cible
+     */
     public void shootMainCanon(Boat target) {
         if (mainCD == 0) {
             target.loseHP(dmgMainCanon);
@@ -165,6 +189,10 @@ public abstract class Boat {
 
     }
 
+    /**
+     * procédure de tir avec le canon secondaire
+     * @param target
+     */
     public void shootSecCanon(Boat target) {
         if (secCD == 0) {
             target.loseHP(dmgSecCanon);
@@ -174,6 +202,9 @@ public abstract class Boat {
         }
     }
 
+    /**
+     * Procédure de fin de tour d'un bateau : prépare les caractéristiques du bateau pour le prochain tour
+     */
     public void endTurn(){
         moveAvailable = move;
 
@@ -188,6 +219,10 @@ public abstract class Boat {
         shootTaken = 0;
     }
 
+    /**
+     * procédure de déplacement du bateau
+     * @param destination : case cible
+     */
     public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
         moveAvailable--;
 

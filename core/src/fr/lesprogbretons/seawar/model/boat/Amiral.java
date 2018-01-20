@@ -3,6 +3,9 @@ package fr.lesprogbretons.seawar.model.boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.Player;
 
+/**
+ * Classe Amiral : sous-classe de Boat
+ */
 public class Amiral extends Boat {
 
     public Amiral(Case c, Player p) {

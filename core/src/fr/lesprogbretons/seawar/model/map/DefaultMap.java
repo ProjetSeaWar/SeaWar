@@ -4,6 +4,9 @@ import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+/**
+ * Classe DefaultMap : il s'agit de la carte par défaut implémentée dans le jeu
+ */
 public class DefaultMap extends Grille {
 
     public DefaultMap() {
