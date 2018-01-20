@@ -1,15 +1,14 @@
 package fr.lesprogbretons.seawar.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -80,12 +79,33 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
+        TextButton loadButton = new TextButton("Charger", skin, "default");
+        loadButton.setWidth(150);
+        loadButton.setHeight(50);
+        loadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean turnOver = seaWarController.endTurn();
+                if (!turnOver) {
+                    Dialog d = new Dialog("Turn isn't over", skin, "dialog")
+                            .text("One of your ship haven't moved")
+                            .button("Okay", true)
+                            .key(Input.Keys.ENTER, true)
+                            .show(stage);
+                }
+            }
+        });
+
         table.add(playButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(editeurButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+        table.add(loadButton).width(loadButton.getWidth())
+                .height(loadButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(quitButton).width(quitButton.getWidth())
                 .height(quitButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
+
+
         table.row();
         table.left();//.bottom();
 

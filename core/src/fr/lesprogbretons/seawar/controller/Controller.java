@@ -109,8 +109,6 @@ public class Controller {
     }
     public void save(String nom){
         FileHandle fichier = Gdx.files.internal("saves/"+nom+".ser");
-        //File fichier =new File("save/"+nom+".ser");
-        //fichier.mkdirs();
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
             oos.writeObject(game);
         } catch (FileNotFoundException e) {
