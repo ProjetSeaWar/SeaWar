@@ -52,6 +52,7 @@ public class Controller {
 
             if(game.getMap().casePossedeBateau(c,game.getCurrentPlayer())){
                 game.setBateauSelectionne(game.getMap().bateauSurCase(c));
+                actionFaite = true;
             }
 
             //Si la case sélectionnée est à portée de tir
