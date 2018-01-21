@@ -20,4 +20,8 @@ public class Editeur implements Serializable{
             map = new Grille(x,y);
         }
     }
+
+    public Editeur(){
+        map = new Grille(11,13);
+    }
 }

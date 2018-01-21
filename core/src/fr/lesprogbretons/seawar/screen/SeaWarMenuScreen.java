@@ -73,8 +73,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         editeurButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Dialog d = new Dialog("Editeur de carte", skin, "dialog");
-                d.show(stage);
+                game.setScreen(new SeaWarEditeurScreen());
             }
         });
 

@@ -60,14 +60,14 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
     private TextureAtlas hexture;
 
     //Ui
-    private Ui myUi;
+    private UiEditeur myUi;
 
     //Sélection
     private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
     private TiledCoordinates previousSelectedTile = new TiledCoordinates(0, 0);
 
     //Modèle
-    private Grille g = partie.getMap();
+    private Grille g = editeur.getMap();
 
 
     @Override
@@ -125,7 +125,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
 
         //region Ui
 
-        myUi = new Ui();
+        myUi = new UiEditeur();
 
         //endregion
 
@@ -194,8 +194,6 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
         //On regénère la map
         generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
         //On met à jour l'interface
-        myUi.setTurn(partie.getTurnCounter());
-        myUi.setPlayer(partie.getCurrentPlayer().toString());
 
         removeLayerMark(SHIP_LAYER_NAME);
         removeLayerMark(ORIENTATION_LAYER_NAME);

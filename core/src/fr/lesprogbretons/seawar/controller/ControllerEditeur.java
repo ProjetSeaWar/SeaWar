@@ -11,6 +11,10 @@ import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 public class ControllerEditeur {
     Editeur editeur;
 
+    public ControllerEditeur(Editeur e){
+        editeur = e;
+    }
+
     public void creerCarte(int x, int y){
         editeur = new Editeur(x,y);
     }
@@ -60,4 +64,6 @@ public class ControllerEditeur {
         }
     }
 
+    public void save(String text) {
+    }
 }
