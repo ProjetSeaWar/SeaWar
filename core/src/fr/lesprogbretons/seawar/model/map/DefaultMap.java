@@ -1,5 +1,6 @@
 package fr.lesprogbretons.seawar.model.map;
 
+import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
@@ -13,9 +14,14 @@ public class DefaultMap extends Grille {
         super(11, 13);
 
         bateaux1.add(new Amiral(tableau[10][0], getJoueur1()));
+        bateaux1.get(0).setOrientation(Orientation.SUDEST);
         bateaux1.add(new Fregate(tableau[10][1], getJoueur1()));
+        bateaux1.get(1).setOrientation(Orientation.SUDEST);
         bateaux2.add(new Amiral(tableau[0][12], getJoueur2()));
+        bateaux2.get(0).setOrientation(Orientation.NORDOUEST);
         bateaux2.add(new Fregate(tableau[1][12], getJoueur2()));
+        bateaux2.get(1).setOrientation(Orientation.NORDOUEST);
+
         tableau[4][3] = new CaseTerre(4, 3);
         tableau[4][4] = new CaseTerre(4, 4);
         tableau[3][6] = new CaseTerre(3, 6);

@@ -136,7 +136,7 @@ public class Grille {
     /*******************************************************/
     //Fonctions permettant d'avoir les cases voisines
     public Case getCaseNord(Case c) {
-        if (c.equals(null)) {
+        if (c==null) {
             return null;
         }
         int x;
@@ -152,7 +152,7 @@ public class Grille {
     }
 
     public Case getCaseSud(Case c) {
-        if (c.equals(null)) {
+        if (c==null) {
             return null;
         }
         int x;
@@ -315,12 +315,41 @@ public class Grille {
     public ArrayList<Case> getCasesDisponibles(Case c, int range) {
         ArrayList<Case> tab = new ArrayList<>();
         if (range > 0) {
-            getCasesDisponible(getCaseNord(c), range - 1, tab);
-            getCasesDisponible(getCaseNordEst(c), range - 1, tab);
-            getCasesDisponible(getCaseSudEst(c), range - 1, tab);
-            getCasesDisponible(getCaseSud(c), range - 1, tab);
-            getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
-            getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+            if(bateauSurCase(c).getOrientation()==Orientation.NORD){
+                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
+                getCasesDisponible(getCaseNord(c),range-1,tab);
+                getCasesDisponible(getCaseNordEst(c),range-1,tab);
+            }
+
+            else if(bateauSurCase(c).getOrientation()==Orientation.NORDOUEST){
+                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
+                getCasesDisponible(getCaseNord(c),range-1,tab);
+                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
+            }
+
+            else if(bateauSurCase(c).getOrientation()==Orientation.SUDOUEST){
+                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
+                getCasesDisponible(getCaseSud(c),range-1,tab);
+                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
+            }
+
+            else if(bateauSurCase(c).getOrientation()==Orientation.SUD){
+                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
+                getCasesDisponible(getCaseSud(c),range-1,tab);
+                getCasesDisponible(getCaseSudEst(c),range-1,tab);
+            }
+
+            else if(bateauSurCase(c).getOrientation()==Orientation.SUDEST){
+                getCasesDisponible(getCaseNordEst(c),range-1,tab);
+                getCasesDisponible(getCaseSud(c),range-1,tab);
+                getCasesDisponible(getCaseSudEst(c),range-1,tab);
+            }
+
+            else if(bateauSurCase(c).getOrientation()==Orientation.NORDEST){
+                getCasesDisponible(getCaseNordEst(c),range-1,tab);
+                getCasesDisponible(getCaseNord(c),range-1,tab);
+                getCasesDisponible(getCaseSudEst(c),range-1,tab);
+            }
         }
         return tab;
     }
