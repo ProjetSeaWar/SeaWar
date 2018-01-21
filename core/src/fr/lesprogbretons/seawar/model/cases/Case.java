@@ -2,6 +2,7 @@ package fr.lesprogbretons.seawar.model.cases;
 
 import fr.lesprogbretons.seawar.model.Player;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static java.lang.Math.abs;
@@ -9,7 +10,7 @@ import static java.lang.Math.abs;
 /**
  * Classe Case
  */
-public abstract class Case {
+public abstract class Case implements Serializable{
 
     //Coordonnées
     protected int x;

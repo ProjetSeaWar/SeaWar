@@ -1,8 +1,10 @@
 package fr.lesprogbretons.seawar.screen;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.utils.Utils;
+
+import java.lang.reflect.Array;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
 
@@ -47,6 +51,8 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         stage.addActor(table);
 
+
+
         TextButton playButton = new TextButton("Jouer", skin, "default");
         playButton.setWidth(150);
         playButton.setHeight(50);
@@ -78,6 +84,33 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 Gdx.app.exit();
             }
         });
+        List sauvegardes = new List(skin);
+        stage.addActor(sauvegardes);
+        FileHandle[] saves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves"))).list();
+        String[] parties =new String[saves.length];
+        int i=0;
+        for(FileHandle file: saves) {
+            parties[i]=file.nameWithoutExtension();
+            i=i+1;
+        }
+        sauvegardes.setItems(parties);
+
+        Table tablesave = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        tablesave.add(sauvegardes);
+        tablesave.row();
+
+        TextButton chargerButton = new TextButton("Charger", skin, "default");
+        chargerButton.setWidth(150);
+        chargerButton.setHeight(50);
+
+        TextButton annulerButton = new TextButton("Annuler", skin, "default");
+        annulerButton.setWidth(150);
+        annulerButton.setHeight(50);
+
+        tablesave.add(chargerButton);
+        tablesave.add(annulerButton);
 
         TextButton loadButton = new TextButton("Charger", skin, "default");
         loadButton.setWidth(150);
@@ -85,14 +118,11 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                boolean turnOver = seaWarController.endTurn();
-                if (!turnOver) {
-                    Dialog d = new Dialog("Turn isn't over", skin, "dialog")
-                            .text("One of your ship haven't moved")
-                            .button("Okay", true)
-                            .key(Input.Keys.ENTER, true)
-                            .show(stage);
-                }
+                Dialog d = new Dialog("Charger une partie", skin, "dialog")
+                        .text("Choisissez une partie !");
+                d.add(tablesave);
+                d.show(stage);
+
             }
         });
 

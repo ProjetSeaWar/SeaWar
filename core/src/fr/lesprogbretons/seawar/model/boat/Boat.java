@@ -4,12 +4,14 @@ import fr.lesprogbretons.seawar.model.cases.*;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.Orientation;
 
+import java.io.Serializable;
+
 import static fr.lesprogbretons.seawar.SeaWar.logger;
 
 /**
  * Classe Boat
  */
-public abstract class Boat {
+public abstract class Boat implements Serializable {
 
     //En vie ou non
     protected boolean alive = true;

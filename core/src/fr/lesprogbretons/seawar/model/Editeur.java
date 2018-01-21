@@ -2,7 +2,9 @@ package fr.lesprogbretons.seawar.model;
 
 import fr.lesprogbretons.seawar.model.map.*;
 
-public class Editeur {
+import java.io.Serializable;
+
+public class Editeur implements Serializable{
     Grille map;
 
     public Grille getMap() {

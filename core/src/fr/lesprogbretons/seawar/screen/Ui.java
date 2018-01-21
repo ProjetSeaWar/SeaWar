@@ -47,6 +47,22 @@ public class Ui extends Stage {
 
         TextButton optionsButton = new TextButton("Options", skin, "default");
         TextButton saveButton = new TextButton("Save", skin, "default");
+        saveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean turnOver = seaWarController.endTurn();
+                    TextField nompartie = new TextField("",skin);
+                    Dialog d = new Dialog("Nom de la partie", skin, "dialog")
+                            .text("Choisissez le nom de votre sauvegarde :");
+
+
+                    seaWarController.save("pudelateub");
+
+                    d.show(s);
+
+                }
+
+        });
 
         TextButton endTurnButton = new TextButton("End Turn", skin, "default");
         endTurnButton.addListener(new ClickListener() {
