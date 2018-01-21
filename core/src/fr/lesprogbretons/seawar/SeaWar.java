@@ -78,7 +78,7 @@ public class SeaWar implements ApplicationListener {
             shapeRenderer = new ShapeRenderer();
             partie = new Partie();
             editeur = new Editeur();
-            seaWarController = new Controller(partie);
+            seaWarController = new Controller();
             editeurController = new ControllerEditeur(editeur);
             game.create();
         } catch (Exception e) {

@@ -22,19 +22,6 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  */
 public class Controller {
 
-    //Partie que gère le contrôleur
-    private Partie game;
-
-    /**
-     * Constructeur
-     *
-     * @param game
-     */
-    public Controller(Partie game) {
-        this.game = game;
-    }
-
-
     /**
      * Procédure qui gère la sélection d'une case quelconque à la souris
      *
@@ -42,56 +29,56 @@ public class Controller {
      * @param y : ligne de la case sélectionnée
      */
     public void selection(int x, int y) {
-        Case c = game.getMap().getCase(x, y);
+        Case c = partie.getMap().getCase(x, y);
 
         boolean actionFaite = false;
 
         //Les actions que veut faire le joueur avec le bateau qu'il a sélectionné
-        if (game.isAnyBateauSelectionne()) {
+        if (partie.isAnyBateauSelectionne()) {
 
             ArrayList<Case> casesPorteeTir;
-            casesPorteeTir = game.getMap().getCasesPortees(game.getBateauSelectionne());
+            casesPorteeTir = partie.getMap().getCasesPortees(partie.getBateauSelectionne());
 
 
-            if (game.getMap().casePossedeBateau(c, game.getCurrentPlayer()) && !(game.getMap().bateauSurCase(c).equals(game.getBateauSelectionne()))) {
-                game.setBateauSelectionne(game.getMap().bateauSurCase(c));
+            if (partie.getMap().casePossedeBateau(c, partie.getCurrentPlayer()) && !(partie.getMap().bateauSurCase(c).equals(partie.getBateauSelectionne()))) {
+                partie.setBateauSelectionne(partie.getMap().bateauSurCase(c));
                 actionFaite = true;
             }
 
             //Si la case sélectionnée est à portée de tir
             else if (casesPorteeTir.contains(c)) {
-                if (game.getMap().casePossedeBateau(c, game.getOtherPlayer())) {
-                    game.getBateauSelectionne().shoot(game.getMap().bateauSurCase(c));
-                    game.setAnyBateauSelectionne(false);
+                if (partie.getMap().casePossedeBateau(c, partie.getOtherPlayer())) {
+                    partie.getBateauSelectionne().shoot(partie.getMap().bateauSurCase(c));
+                    partie.setAnyBateauSelectionne(false);
                     actionFaite = true;
                 }
             }
 
             if (!actionFaite) {
-                ArrayList<Case> casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(), 1);
+                ArrayList<Case> casesDispo = partie.getMap().getCasesDisponibles(partie.getBateauSelectionne().getPosition(), 1);
 
                 //Si la case sélectionnée est à portée de déplacement
-                if (game.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
-                    game.getBateauSelectionne().moveBoat(c);
-                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                if (partie.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0) {
+                    partie.getBateauSelectionne().moveBoat(c);
+                    partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
                     if (c.isPhare()) {
-                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                        partie.getMap().prendPhare(c, partie.getCurrentPlayer());
                     }
-                } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).equals(game.getBateauSelectionne())) {
-                    game.getBateauSelectionne().moveBoat(c);
-                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                } else if (casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0 && partie.getBateauxDejaDeplaces().get(partie.getBateauxDejaDeplaces().size() - 1).equals(partie.getBateauSelectionne())) {
+                    partie.getBateauSelectionne().moveBoat(c);
+                    partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
                     if (c.isPhare()) {
-                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                        partie.getMap().prendPhare(c, partie.getCurrentPlayer());
                     }
-                } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && !(game.getBateauxDejaDeplaces().contains(game.getBateauSelectionne()))) {
-                    game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).setMoveAvailable(0);
-                    game.getBateauSelectionne().moveBoat(c);
-                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                } else if (casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0 && !(partie.getBateauxDejaDeplaces().contains(partie.getBateauSelectionne()))) {
+                    partie.getBateauxDejaDeplaces().get(partie.getBateauxDejaDeplaces().size() - 1).setMoveAvailable(0);
+                    partie.getBateauSelectionne().moveBoat(c);
+                    partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
                     if (c.isPhare()) {
-                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                        partie.getMap().prendPhare(c, partie.getCurrentPlayer());
                     }
                 } else {
-                    game.setAnyBateauSelectionne(false);
+                    partie.setAnyBateauSelectionne(false);
                 }
 
             }
@@ -99,8 +86,8 @@ public class Controller {
 
         } else {
             //Si le joueur sélectionne un de ses bateaux
-            if (game.getMap().casePossedeBateau(c, game.getCurrentPlayer())) {
-                game.setBateauSelectionne(game.getMap().bateauSurCase(c));
+            if (partie.getMap().casePossedeBateau(c, partie.getCurrentPlayer())) {
+                partie.setBateauSelectionne(partie.getMap().bateauSurCase(c));
             }
 
         }
@@ -111,18 +98,18 @@ public class Controller {
      */
     public boolean endTurn() {
         boolean isOver = false;
-        game.finPartie();
+        partie.finPartie();
 
-        if (!game.isFin()) {
-            game.setAnyBateauSelectionne(false);
-            isOver = game.endTurn();
+        if (!partie.isFin()) {
+            partie.setAnyBateauSelectionne(false);
+            isOver = partie.endTurn();
         }
 
         return isOver;
     }
 
     public void changercanon() {
-        game.getBateauSelectionne().setCanonSelectionne(3 - game.getBateauSelectionne().getCanonSelectionne());
+        partie.getBateauSelectionne().setCanonSelectionne(3 - partie.getBateauSelectionne().getCanonSelectionne());
 
     }
 
@@ -134,7 +121,7 @@ public class Controller {
         FileHandle fichier = Gdx.files.internal("saves/parties/" + nom + ".ser");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
-            oos.writeObject(game);
+            oos.writeObject(partie);
             oos.close();
 
         } catch (IOException e) {
@@ -144,9 +131,8 @@ public class Controller {
 
     }
 
-    public void load(Partie restoredGame) {
-        partie = restoredGame;
-        game = partie;
+    public void load(Partie restoredpartie) {
+        partie = restoredpartie;
         logger.debug("Restored save");
     }
 }
