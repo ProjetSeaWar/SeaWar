@@ -91,7 +91,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         });
         List sauvegardes = new List(skin);
         stage.addActor(sauvegardes);
-        FileHandle[] saves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves"))).list();
+        FileHandle[] saves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves/parties"))).list();
         String[] parties = new String[saves.length];
         int i = 0;
         for (FileHandle file : saves) {
@@ -111,11 +111,11 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         chargerButton.setHeight(50);
         chargerButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                FileHandle fichier = Gdx.files.local("saves/" + sauvegardes.getSelected() + ".ser");
+                FileHandle fichier = Gdx.files.local("saves/parties/" + sauvegardes.getSelected() + ".ser");
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichier)))) {
-                    partie = (Partie) ois.readObject();
-                    game.setScreen(new SeaWarMapScreen());
+                    seaWarController.load((Partie) ois.readObject());
                     ois.close();
+                    game.setScreen(new SeaWarMapScreen());
                 } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();
                 }

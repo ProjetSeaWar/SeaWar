@@ -50,30 +50,22 @@ public class Ui extends Stage {
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                boolean turnOver = seaWarController.endTurn();
+
                     TextField nompartie = new TextField("",skin);
                     Dialog d = new Dialog("Nom de la partie", skin, "dialog")
                             .text("Choisissez le nom de votre sauvegarde :");
 
                     TextButton validerButton = new TextButton("Sauvegarder",skin,"default");
-                    TextButton annulerButton = new TextButton("Annuler",skin,"default");
                     validerButton.addListener(new ClickListener(){
                         public void clicked(InputEvent event, float x, float y) {
                             seaWarController.save(nompartie.getText());
-                            d.hide();
+
                         }
                     });
-                annulerButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                       d.hide();
-                    }
-                });
-                    d.row();
-                    d.add(nompartie);
-                    d.row();
-                    d.add(validerButton);
-                    d.add(annulerButton);
+                    d.getContentTable().row();
+                    d.getContentTable().add(nompartie);
+                    d.button(validerButton,true);
+                    d.button("Annuler",false);
                     d.show(s);
 
                 }

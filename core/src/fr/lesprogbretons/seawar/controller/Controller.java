@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import static fr.lesprogbretons.seawar.SeaWar.logger;
+import static fr.lesprogbretons.seawar.SeaWar.partie;
+
 /**
  * Classe Controller
  */
@@ -128,7 +131,7 @@ public class Controller {
         if(!dossier.exists()){
             dossier.mkdirs();
         }
-        FileHandle fichier = Gdx.files.internal("saves/" + nom + ".ser");
+        FileHandle fichier = Gdx.files.internal("saves/parties/" + nom + ".ser");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
             oos.writeObject(game);
@@ -140,5 +143,8 @@ public class Controller {
 
 
     }
-
+    public void load(Partie game){
+        partie = game;
+        logger.debug("Restored save");
+    }
 }
