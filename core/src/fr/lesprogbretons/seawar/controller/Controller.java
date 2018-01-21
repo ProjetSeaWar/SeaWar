@@ -127,6 +127,8 @@ public class Controller {
         FileHandle fichier = Gdx.files.internal("saves/" + nom + ".ser");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
             oos.writeObject(game);
+            oos.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
