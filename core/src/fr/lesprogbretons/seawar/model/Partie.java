@@ -3,7 +3,7 @@ package fr.lesprogbretons.seawar.model;
 import fr.lesprogbretons.seawar.model.map.*;
 import fr.lesprogbretons.seawar.model.boat.*;
 import java.io.Serializable;
-
+import java.util.ArrayList;
 
 
 public class Partie implements Serializable{
@@ -27,9 +27,13 @@ public class Partie implements Serializable{
 
     //Vainqueur
     private Player winner;
+
     //tours
     private int turnCounter=1;
     private boolean isPlayer2=false;
+
+    //Liste de bateaux qui a deja joué pendant le tour
+    private ArrayList<Boat> bateauxDejaDeplaces = new ArrayList<>();
 
     //Constructeurs
     public Partie() {
@@ -57,6 +61,17 @@ public class Partie implements Serializable{
         return joueur1;
     }
 
+    public ArrayList<Boat> getBateauxDejaDeplaces() {
+        return bateauxDejaDeplaces;
+    }
+
+    public void setBateauxDejaDeplaces(ArrayList<Boat> bateauxDejaDeplaces) {
+        this.bateauxDejaDeplaces = bateauxDejaDeplaces;
+    }
+
+    public void ajouterBateauxDejaDeplaces(Boat b){
+        bateauxDejaDeplaces.add(b);
+    }
 
     public Player getJoueur2() {
         return joueur2;
@@ -204,6 +219,8 @@ public class Partie implements Serializable{
 
                 }
             }
+
+            bateauxDejaDeplaces = new ArrayList<>();
 
             setCurrentPlayer(getOtherPlayer());
             if (isPlayer2) {

@@ -124,6 +124,9 @@ public abstract class Boat {
         this.shootTaken = shootTaken;
     }
 
+    public void setMoveAvailable(int n){
+        moveAvailable = n;
+    }
     /*---------------------------------------------------------------------------------------------*/
     //toString
     @Override

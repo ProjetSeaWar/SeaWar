@@ -50,7 +50,7 @@ public class Controller {
             ArrayList<Case> casesPorteeTir;
             casesPorteeTir = game.getMap().getCasesPortees(game.getBateauSelectionne());
 
-            if(game.getMap().casePossedeBateau(c,game.getCurrentPlayer())){
+            if(game.getMap().casePossedeBateau(c,game.getCurrentPlayer()) && !(game.getMap().bateauSurCase(c).equals(game.getBateauSelectionne()))){
                 game.setBateauSelectionne(game.getMap().bateauSurCase(c));
                 actionFaite = true;
             }
@@ -69,12 +69,32 @@ public class Controller {
                 casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(),1);
 
                 //Si la case sélectionnée est à portée de déplacement
-                if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
+                if (game.getBateauxDejaDeplaces().size()==0 && casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
                     game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
                     if (c.isPhare()) {
                         game.getMap().prendPhare(c, game.getCurrentPlayer());
                     }
-                } else {
+                }
+
+                else if(casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable()>0 && game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size()-1).equals(game.getBateauSelectionne())){
+                    game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                    }
+                }
+
+                else if(casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable()>0 && !(game.getBateauxDejaDeplaces().contains(game.getBateauSelectionne()))) {
+                    game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size()-1).setMoveAvailable(0);
+                    game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                    }
+                }
+
+                else {
                     game.setAnyBateauSelectionne(false);
                 }
             }
