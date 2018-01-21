@@ -3,9 +3,6 @@ package fr.lesprogbretons.seawar.model.cases;
 import fr.lesprogbretons.seawar.model.Player;
 
 import java.io.Serializable;
-import java.util.Objects;
-
-import static java.lang.Math.abs;
 
 /**
  * Classe Case
@@ -90,9 +87,14 @@ public abstract class Case implements Serializable{
      */
     @Override
     public String toString() {
-        return "Case{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        if (isPhare()) {
+            if (possedePhare == null) {
+                return " Phare: free";
+            } else {
+                return " Phare: " + possedePhare.toString();
+            }
+        } else {
+            return "";
+        }
     }
 }

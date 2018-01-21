@@ -1,8 +1,9 @@
 package fr.lesprogbretons.seawar.model.boat;
 
-import fr.lesprogbretons.seawar.model.cases.*;
-import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.Orientation;
+import fr.lesprogbretons.seawar.model.Player;
+import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.model.cases.CaseEau;
 
 import java.io.Serializable;
 
@@ -40,10 +41,11 @@ public abstract class Boat implements Serializable {
 
     /**
      * Constructeur
+     *
      * @param position : case initial
-     * @param p : joueur possédant ce bateau
+     * @param p        : joueur possédant ce bateau
      */
-    public Boat(Case position,Player p){
+    public Boat(Case position, Player p) {
         this.position = position;
         this.joueur = p;
     }
@@ -90,7 +92,7 @@ public abstract class Boat implements Serializable {
         return joueur;
     }
 
-    public Case getPosition(){
+    public Case getPosition() {
         return position;
     }
 
@@ -126,21 +128,25 @@ public abstract class Boat implements Serializable {
         this.shootTaken = shootTaken;
     }
 
-    public void setMoveAvailable(int n){
+    public void setMoveAvailable(int n) {
         moveAvailable = n;
     }
+
     /*---------------------------------------------------------------------------------------------*/
     //toString
     @Override
     public String toString() {
-        return "Boat{" +
-                "position=" + position +
-                '}';
+        if (moveAvailable == 0) {
+            return ": no moves";
+        } else {
+            return ": " + moveAvailable + " moves";
+        }
     }
 
 
     /**
      * Procédure qui s'occupe de réduire les HP du bateau
+     *
      * @param dmg : dommages qu'encaisse le bateau
      */
     public void loseHP(int dmg) {
@@ -169,22 +175,24 @@ public abstract class Boat implements Serializable {
 
     /**
      * Procédure de tir
+     *
      * @param target : Bateau cible
      */
-    public void shoot(Boat target){
+    public void shoot(Boat target) {
         //Si le canon sélectionné est le canon principal
-        if(this.canonSelectionne==1){
+        if (this.canonSelectionne == 1) {
             this.shootMainCanon(target);
         }
 
         //Si le canon sélectionné est le canon secondaire
-        else{
+        else {
             this.shootSecCanon(target);
         }
     }
 
     /**
      * procédure de tir avec le canon principal
+     *
      * @param target : bateau cible
      */
     public void shootMainCanon(Boat target) {
@@ -199,6 +207,7 @@ public abstract class Boat implements Serializable {
 
     /**
      * procédure de tir avec le canon secondaire
+     *
      * @param target
      */
     public void shootSecCanon(Boat target) {
@@ -213,15 +222,15 @@ public abstract class Boat implements Serializable {
     /**
      * Procédure de fin de tour d'un bateau : prépare les caractéristiques du bateau pour le prochain tour
      */
-    public void endTurn(){
+    public void endTurn() {
         moveAvailable = move;
 
-        if(mainCD > 0){
-            mainCD --;
+        if (mainCD > 0) {
+            mainCD--;
         }
 
-        if(secCD > 0){
-            secCD --;
+        if (secCD > 0) {
+            secCD--;
         }
 
         shootTaken = 0;
@@ -229,52 +238,49 @@ public abstract class Boat implements Serializable {
 
     /**
      * procédure de déplacement du bateau
+     *
      * @param destination : case cible
      */
-    public void moveBoat(Case destination){                         //Le bateau ne peut se déplacer que d'une case à la fois
+    public void moveBoat(Case destination) {                         //Le bateau ne peut se déplacer que d'une case à la fois
         moveAvailable--;
 
-        if(destination.getX() == position.getX()+1 && destination.getY() == position.getY()){
+        if (destination.getX() == position.getX() + 1 && destination.getY() == position.getY()) {
             orientation = Orientation.NORD;
         }
 
-        if(destination.getX() == position.getX()-1 && destination.getY() == position.getY()){
+        if (destination.getX() == position.getX() - 1 && destination.getY() == position.getY()) {
             orientation = Orientation.SUD;
         }
 
-        if(destination.getX()==position.getX() && destination.getY()==position.getY()+1){
-            if(position.getY()%2==0){
+        if (destination.getX() == position.getX() && destination.getY() == position.getY() + 1) {
+            if (position.getY() % 2 == 0) {
                 orientation = Orientation.NORDEST;
-            }
-
-            else {
+            } else {
                 orientation = Orientation.SUDEST;
             }
         }
 
-        if(destination.getX()== position.getX() && destination.getY()==position.getY()-1){
-            if(position.getY()%2==0){
+        if (destination.getX() == position.getX() && destination.getY() == position.getY() - 1) {
+            if (position.getY() % 2 == 0) {
                 orientation = Orientation.NORDOUEST;
-            }
-
-            else {
+            } else {
                 orientation = Orientation.SUDOUEST;
             }
         }
 
-        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()+1){
+        if (destination.getY() == position.getY() + 1 && destination.getX() == position.getX() + 1) {
             orientation = Orientation.NORDEST;
         }
 
-        if(destination.getX()==position.getX()-1 && destination.getY() == destination.getY()-1){
+        if (destination.getX() == position.getX() - 1 && destination.getY() == destination.getY() - 1) {
             orientation = Orientation.SUDOUEST;
         }
 
-        if(destination.getY()==position.getY()+1 && destination.getX() == position.getX()-1){
+        if (destination.getY() == position.getY() + 1 && destination.getX() == position.getX() - 1) {
             orientation = Orientation.SUDEST;
         }
 
-        if(destination.getX()==position.getX()+1 && destination.getY()==position.getY()-1){
+        if (destination.getX() == position.getX() + 1 && destination.getY() == position.getY() - 1) {
             orientation = Orientation.NORDOUEST;
         }
 
@@ -282,12 +288,12 @@ public abstract class Boat implements Serializable {
     }
 
 
-    public static void main(String[] args){
-        Boat b = new Amiral(new CaseEau(2,2),new Player(1));
+    public static void main(String[] args) {
+        Boat b = new Amiral(new CaseEau(2, 2), new Player(1));
 
         System.out.println(b.getPosition());
 
-        b.moveBoat(new CaseEau(2,3));
+        b.moveBoat(new CaseEau(2, 3));
         System.out.println(b.getPosition());
     }
 }

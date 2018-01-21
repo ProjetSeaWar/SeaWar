@@ -17,4 +17,21 @@ public class CaseEau extends Case implements Serializable{
         super(x, y);
         phare = false;
     }
+
+    public boolean isPhare() {
+        return phare;
+    }
+
+    public void setPhare(boolean phare) {
+        this.phare = phare;
+    }
+
+    @Override
+    public String toString() {
+        if (isPhare()) {
+            return super.toString();
+        } else {
+            return "    Water";
+        }
+    }
 }

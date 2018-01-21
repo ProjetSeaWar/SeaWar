@@ -13,4 +13,8 @@ public class CaseTerre extends Case implements Serializable{
         phare = false;
     }
 
+    @Override
+    public String toString() {
+        return "    Land";
+    }
 }

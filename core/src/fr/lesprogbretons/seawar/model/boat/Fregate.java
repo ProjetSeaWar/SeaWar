@@ -23,8 +23,6 @@ public class Fregate extends Boat implements Serializable{
 
     @Override
     public String toString() {
-        return "Fregate{" +
-                "position=" + position +
-                '}';
+        return "Fregate" + super.toString();
     }
 }

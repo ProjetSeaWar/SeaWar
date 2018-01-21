@@ -1,8 +1,6 @@
 package fr.lesprogbretons.seawar.screen;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,8 +16,9 @@ import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.utils.Utils;
 
-import java.io.*;
-import java.lang.reflect.Array;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
 

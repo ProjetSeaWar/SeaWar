@@ -23,8 +23,6 @@ public class Amiral extends Boat implements Serializable {
 
     @Override
     public String toString() {
-        return "Amiral{" +
-                "position=" + position +
-                '}';
+        return "Amiral" + super.toString();
     }
 }

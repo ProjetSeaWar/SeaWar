@@ -127,8 +127,8 @@ public class Controller {
     }
 
     public void save(String nom) {
-        FileHandle dossier = Gdx.files.local("saves/parties" );
-        if(!dossier.exists()){
+        FileHandle dossier = Gdx.files.local("saves/parties");
+        if (!dossier.exists()) {
             dossier.mkdirs();
         }
         FileHandle fichier = Gdx.files.internal("saves/parties/" + nom + ".ser");
@@ -143,8 +143,10 @@ public class Controller {
 
 
     }
-    public void load(Partie game){
-        partie = game;
+
+    public void load(Partie restoredGame) {
+        partie = restoredGame;
+        game = partie;
         logger.debug("Restored save");
     }
 }

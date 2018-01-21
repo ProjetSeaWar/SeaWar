@@ -230,6 +230,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+
         myUi.draw();
         //Update game
         update();
@@ -251,11 +252,12 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
                     Case aCase = g.getCase(selectedTile.row, selectedTile.column);
 
-                    //Si pas de bateau sélectionné
+                    //Si bateau sélectionné
                     if (partie.isAnyBateauSelectionne()) {
                         if (g.casePossedeBateaux(aCase)) {
                             Boat boat = g.bateauSurCase(aCase);
                             if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
+                                myUi.setInfoSelected(boat.toString());
                                 if (boat.getMoveAvailable() > 0) batchSelectionMark(g.getCasesDisponibles(aCase, 1));
                                 batchAttackMark(g.getBoatInRange(boat, partie.getOtherPlayer()));
                             } else {
@@ -268,6 +270,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
                         removeLayerMark(SELECT_LAYER_NAME);
                         if (!g.casePossedeBateaux(aCase)) {
                             markSelectedTile(selectedTile.column, selectedTile.row);
+                            myUi.setInfoSelected(aCase.toString());
                         } else {
                             if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
                                 Boat boat = g.bateauSurCase(aCase);
@@ -288,7 +291,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
     }
 
     //region Layer Edit
-
     private void batchSelectionMark(ArrayList<Case> cases) {
         for (Case c : cases) {
             markSelectedTile(c.getY(), c.getX());

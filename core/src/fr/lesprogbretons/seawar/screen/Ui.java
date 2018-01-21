@@ -1,6 +1,5 @@
 package fr.lesprogbretons.seawar.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,9 +21,10 @@ public class Ui extends Stage {
 
     private Label playerLabel;
     private Label turnLabel;
+    private Label infoSelected;
 
 
-    public Ui() {
+    Ui() {
         super();
         Skin skin = (Skin) assets.get(Assets.skin);
         show = new Table();
@@ -47,6 +47,25 @@ public class Ui extends Stage {
 
         TextButton optionsButton = new TextButton("Options", skin, "default");
         TextButton saveButton = new TextButton("Save", skin, "default");
+        TextButton endTurnButton = new TextButton("End Turn", skin, "default");
+        TextButton hideButton = new TextButton("Hide", skin, "default");
+        TextButton showButton = new TextButton("Show", skin, "default");
+        TextButton menuButton = new TextButton("Menu", skin, "default");
+
+        //region Listener
+        optionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Dialog d = new Dialog("Options", skin, "dialog")
+                        .text("Choose your option")
+                        .button(saveButton)
+                        .button(menuButton)
+                        .button("Quit", false)
+                        .show(s);
+            }
+        });
+
+
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -72,7 +91,6 @@ public class Ui extends Stage {
 
         });
 
-        TextButton endTurnButton = new TextButton("End Turn", skin, "default");
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -87,7 +105,6 @@ public class Ui extends Stage {
             }
         });
 
-        TextButton hideButton = new TextButton("Hide", skin, "default");
         hideButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -96,7 +113,6 @@ public class Ui extends Stage {
             }
         });
 
-        TextButton showButton = new TextButton("Show", skin, "default");
         showButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -105,25 +121,24 @@ public class Ui extends Stage {
             }
         });
 
-        TextButton menuButton = new TextButton("Menu", skin, "default");
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SeaWarMenuScreen());
             }
         });
+        //endregion
 
-
-        playerLabel = new Label("Player", skin, "default");
-        turnLabel = new Label("Turn XXX", skin, "default");
+        playerLabel = new Label("", skin, "default");
+        turnLabel = new Label("", skin, "default");
+        infoSelected = new Label("", skin, "default");
 
         show.add(playerLabel).width(100).padLeft(10).padTop(2).padBottom(3);
+        show.add(infoSelected).width(200).padLeft(10);
         show.add(optionsButton).padLeft(10);
-        show.add(saveButton).padLeft(10);
-        show.add(menuButton).padLeft(10);
-        show.add(hideButton).padLeft(10);
+        show.add(hideButton).padLeft(25);
         show.add(endTurnButton).padLeft(50);
-        show.add(turnLabel).width(100).padLeft(100);
+        show.add(turnLabel).width(100).padLeft(45);
         show.row();
         show.left().top();
 
@@ -138,6 +153,10 @@ public class Ui extends Stage {
 
     public void setTurn(int turn) {
         turnLabel.setText("Turn " + turn);
+    }
+
+    public void setInfoSelected(String message) {
+        infoSelected.setText(message);
     }
 
     @Override
