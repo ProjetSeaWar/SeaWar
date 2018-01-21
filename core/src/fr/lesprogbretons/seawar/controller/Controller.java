@@ -124,10 +124,10 @@ public class Controller {
     }
 
     public void save(String nom) {
-//        FileHandle dossier = Gdx.files.internal("saves" );
-//        if(!dossier.exists()){
-//            dossier.mkdirs();
-//        }
+        FileHandle dossier = Gdx.files.local("saves/parties" );
+        if(!dossier.exists()){
+            dossier.mkdirs();
+        }
         FileHandle fichier = Gdx.files.internal("saves/" + nom + ".ser");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {

@@ -111,7 +111,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         chargerButton.setHeight(50);
         chargerButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                FileHandle fichier = Gdx.files.internal("saves/" + sauvegardes.getSelected() + ".ser");
+                FileHandle fichier = Gdx.files.local("saves/" + sauvegardes.getSelected() + ".ser");
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichier)))) {
                     partie = (Partie) ois.readObject();
                     game.setScreen(new SeaWarMapScreen());
