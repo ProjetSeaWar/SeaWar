@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
@@ -45,7 +46,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
     private static final String MAP_LAYER_NAME = "map";
     private static final String SELECT_LAYER_NAME = "select";
-    private static final String START_LAYER_NAME = "start";
+    private static final String SHIP_LAYER_NAME = "ship";
+    private static final String ORIENTATION_LAYER_NAME = "orientation";
 
     //Map
     private TiledMap map;
@@ -92,7 +94,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         layers = map.getLayers();
 
         //Construction de la carte
-        tiles = new TiledMapTile[9];
+        tiles = new TiledMapTile[16];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
         tiles[2] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexphare")));
@@ -101,22 +103,23 @@ public class SeaWarMapScreen extends ScreenAdapter {
         tiles[5] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship3")));
         tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
         tiles[7] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("select")));
-        tiles[8] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("start")));
+        tiles[8] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("myship")));
+        tiles[9] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("attack")));
+        tiles[10] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownorth")));
+        tiles[11] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownortheast")));
+        tiles[12] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownorthwest")));
+        tiles[13] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsouth")));
+        tiles[14] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsoutheast")));
+        tiles[15] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsouthwest")));
 
 
         //region Génération map
-        TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-        layer.setName(MAP_LAYER_NAME);
-        generateMap(layer);
-        layers.add(layer);
+        addNewLayer(MAP_LAYER_NAME);
+        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
 
-        TiledMapTileLayer layerStart = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-        layerStart.setName(START_LAYER_NAME);
-        layers.add(layerStart);
-
-        TiledMapTileLayer layerSelect = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-        layerSelect.setName(SELECT_LAYER_NAME);
-        layers.add(layerSelect);
+        addNewLayer(SELECT_LAYER_NAME);
+        addNewLayer(SHIP_LAYER_NAME);
+        addNewLayer(ORIENTATION_LAYER_NAME);
         //endregion
 
 
@@ -133,6 +136,12 @@ public class SeaWarMapScreen extends ScreenAdapter {
         multiplexer.addProcessor(cameraController);
         Gdx.input.setInputProcessor(multiplexer);
 
+    }
+
+    private void addNewLayer(String layerName) {
+        TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
+        layer.setName(layerName);
+        layers.add(layer);
     }
 
     private void generateMap(TiledMapTileLayer layer) {
@@ -181,25 +190,34 @@ public class SeaWarMapScreen extends ScreenAdapter {
         // i.e. si c'est une classe que l'on redéfinit ou pas
     }
 
-    public void update() {
+    private void update() {
         //On regénère la map
         generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
         //On met à jour l'interface
         myUi.setTurn(partie.getTurnCounter());
         myUi.setPlayer(partie.getCurrentPlayer().toString());
 
-        removeStartMark();
+        removeLayerMark(SHIP_LAYER_NAME);
+        removeLayerMark(ORIENTATION_LAYER_NAME);
 
         ArrayList<Boat> bateaux;
 
         if (partie.getCurrentPlayer().getNumber() == 1) {
-            bateaux = partie.getMap().getBateaux1();
+            bateaux = g.getBateaux1();
         } else {
-            bateaux = partie.getMap().getBateaux2();
+            bateaux = g.getBateaux2();
         }
 
         for (Boat b : bateaux) {
-            markStartTile(b.getPosition().getY(), b.getPosition().getX());
+            markShipTile(b.getPosition().getY(), b.getPosition().getX());
+        }
+
+        for (Boat b : g.getBateaux1()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
+        }
+
+        for (Boat b : g.getBateaux2()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
         }
     }
 
@@ -229,7 +247,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
                     seaWarController.selection(selectedTile.row, selectedTile.column);
 
                     //Retirer les sélections précédentes
-                    removeSelectionMark();
+                    removeLayerMark(SELECT_LAYER_NAME);
 
                     Case aCase = g.getCase(selectedTile.row, selectedTile.column);
 
@@ -239,16 +257,23 @@ public class SeaWarMapScreen extends ScreenAdapter {
                             Boat boat = g.bateauSurCase(aCase);
                             if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
                                 if (boat.getMoveAvailable() > 0) batchSelectionMark(g.getCasesDisponibles(aCase, 1));
+                                batchAttackMark(g.getBoatInRange(boat, partie.getOtherPlayer()));
                             } else {
                                 batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
                             }
+                            //La sélection des cases ne sélectionne pas la case courante
                             markSelectedTile(selectedTile.column, selectedTile.row);
                         }
                     } else {
-                        removeSelectionMark();
-                        //La sélection des cases ne sélectionne pas la case courante
+                        removeLayerMark(SELECT_LAYER_NAME);
                         if (!g.casePossedeBateaux(aCase)) {
                             markSelectedTile(selectedTile.column, selectedTile.row);
+                        } else {
+                            if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
+                                Boat boat = g.bateauSurCase(aCase);
+                                batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
+                                markSelectedTile(selectedTile.column, selectedTile.row);
+                            }
                         }
                     }
                     previousSelectedTile.setCoords(selectedTile);
@@ -262,40 +287,18 @@ public class SeaWarMapScreen extends ScreenAdapter {
         }
     }
 
-    public void batchSelectionMark(ArrayList<Case> cases) {
+    //region Layer Edit
+
+    private void batchSelectionMark(ArrayList<Case> cases) {
         for (Case c : cases) {
             markSelectedTile(c.getY(), c.getX());
         }
     }
 
-    private void removeSelectionMark() {
-        //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
-        for (int y = 0; y < HEIGHT_MAP; y++) {
-            for (int x = 0; x < WIDTH_MAP; x++) {
-                layer.setCell(x, y, null);
-            }
+    private void batchAttackMark(ArrayList<Case> cases) {
+        for (Case c : cases) {
+            markAttackTile(c.getY(), c.getX());
         }
-    }
-
-    private void removeStartMark() {
-        //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(START_LAYER_NAME);
-        for (int y = 0; y < HEIGHT_MAP; y++) {
-            for (int x = 0; x < WIDTH_MAP; x++) {
-                layer.setCell(x, y, null);
-            }
-        }
-    }
-
-    private void markStartTile(int x, int y) {
-        //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(START_LAYER_NAME);
-
-        //Mettre la tile de selection
-        Cell selected = new Cell();
-        selected.setTile(tiles[8]);
-        layer.setCell(x, y, selected);
     }
 
     private void markSelectedTile(int x, int y) {
@@ -307,6 +310,67 @@ public class SeaWarMapScreen extends ScreenAdapter {
         selected.setTile(tiles[7]);
         layer.setCell(x, y, selected);
     }
+
+    private void markAttackTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[9]);
+        layer.setCell(x, y, selected);
+    }
+
+    private void markShipTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SHIP_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[8]);
+        layer.setCell(x, y, selected);
+    }
+
+    private void markOrientationTile(int x, int y, Orientation o) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(ORIENTATION_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+
+        switch (o) {
+            case NORD:
+                selected.setTile(tiles[10]);
+                break;
+            case SUD:
+                selected.setTile(tiles[13]);
+                break;
+            case NORDEST:
+                selected.setTile(tiles[11]);
+                break;
+            case NORDOUEST:
+                selected.setTile(tiles[12]);
+                break;
+            case SUDEST:
+                selected.setTile(tiles[14]);
+                break;
+            case SUDOUEST:
+                selected.setTile(tiles[15]);
+                break;
+        }
+        layer.setCell(x, y, selected);
+    }
+
+    private void removeLayerMark(String layerName) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        for (int y = 0; y < HEIGHT_MAP; y++) {
+            for (int x = 0; x < WIDTH_MAP; x++) {
+                layer.setCell(x, y, null);
+            }
+        }
+    }
+    //endregion
 
     @Override
     public void dispose() {

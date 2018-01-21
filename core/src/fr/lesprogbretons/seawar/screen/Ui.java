@@ -86,7 +86,6 @@ public class Ui extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SeaWarMenuScreen());
-                Gdx.graphics.setWindowedMode(800,480);
             }
         });
 

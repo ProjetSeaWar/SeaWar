@@ -21,11 +21,11 @@ public class Grille {
     private Player joueur2 = new Player(2);
 
     //Bateaux
-    protected ArrayList<Boat> bateaux1;
-    protected ArrayList<Boat> bateaux2;
+    ArrayList<Boat> bateaux1;
+    ArrayList<Boat> bateaux2;
 
     //Cases de la Grille
-    protected Case tableau[][];
+    Case tableau[][];
     private int hauteur;
     private int largeur;
 
@@ -75,7 +75,7 @@ public class Grille {
         return bateaux1;
     }
 
-    public void setBateaux1(ArrayList<Boat> bateaux1) {
+    private void setBateaux1(ArrayList<Boat> bateaux1) {
         this.bateaux1 = bateaux1;
     }
 
@@ -87,11 +87,11 @@ public class Grille {
         this.bateaux2 = bateaux2;
     }
 
-    public Case[][] getTableau() {
+    private Case[][] getTableau() {
         return tableau;
     }
 
-    public void setTableau(Case[][] tableau) {
+    private void setTableau(Case[][] tableau) {
         this.tableau = tableau;
     }
 
@@ -135,8 +135,8 @@ public class Grille {
 
     /*******************************************************/
     //Fonctions permettant d'avoir les cases voisines
-    public Case getCaseNord(Case c) {
-        if (c==null) {
+    private Case getCaseNord(Case c) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -151,8 +151,8 @@ public class Grille {
         return null;
     }
 
-    public Case getCaseSud(Case c) {
-        if (c==null) {
+    private Case getCaseSud(Case c) {
+        if (c == null) {
             return null;
         }
         int x;
@@ -167,7 +167,7 @@ public class Grille {
         return null;
     }
 
-    public Case getCaseNordEst(Case c) {
+    private Case getCaseNordEst(Case c) {
         if (c == null) {
             return null;
         }
@@ -190,7 +190,7 @@ public class Grille {
         return null;
     }
 
-    public Case getCaseSudEst(Case c) {
+    private Case getCaseSudEst(Case c) {
         if (c == null) {
             return null;
         }
@@ -213,7 +213,7 @@ public class Grille {
         return null;
     }
 
-    public Case getCaseNordOuest(Case c) {
+    private Case getCaseNordOuest(Case c) {
         if (c == null) {
             return null;
         }
@@ -236,7 +236,7 @@ public class Grille {
         return null;
     }
 
-    public Case getCaseSudOuest(Case c) {
+    private Case getCaseSudOuest(Case c) {
         if (c == null) {
             return null;
         }
@@ -268,7 +268,7 @@ public class Grille {
      * @param range : Distance à laquelle on veut les voisins
      * @param tab   : Tableau contenant les cases voisines
      */
-    public void getCasesDisponible(Case c, int range, ArrayList<Case> tab) {
+    private void getCasesDisponible(Case c, int range, ArrayList<Case> tab) {
         if (c != null) {
             if (!(tab.contains(c)) && !(c instanceof CaseTerre) && !(casePossedeBateaux(c))) {
                 tab.add(c);
@@ -315,40 +315,30 @@ public class Grille {
     public ArrayList<Case> getCasesDisponibles(Case c, int range) {
         ArrayList<Case> tab = new ArrayList<>();
         if (range > 0) {
-            if(bateauSurCase(c).getOrientation()==Orientation.NORD){
-                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
-                getCasesDisponible(getCaseNord(c),range-1,tab);
-                getCasesDisponible(getCaseNordEst(c),range-1,tab);
-            }
-
-            else if(bateauSurCase(c).getOrientation()==Orientation.NORDOUEST){
-                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
-                getCasesDisponible(getCaseNord(c),range-1,tab);
-                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
-            }
-
-            else if(bateauSurCase(c).getOrientation()==Orientation.SUDOUEST){
-                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
-                getCasesDisponible(getCaseSud(c),range-1,tab);
-                getCasesDisponible(getCaseNordOuest(c),range-1,tab);
-            }
-
-            else if(bateauSurCase(c).getOrientation()==Orientation.SUD){
-                getCasesDisponible(getCaseSudOuest(c),range-1,tab);
-                getCasesDisponible(getCaseSud(c),range-1,tab);
-                getCasesDisponible(getCaseSudEst(c),range-1,tab);
-            }
-
-            else if(bateauSurCase(c).getOrientation()==Orientation.SUDEST){
-                getCasesDisponible(getCaseNordEst(c),range-1,tab);
-                getCasesDisponible(getCaseSud(c),range-1,tab);
-                getCasesDisponible(getCaseSudEst(c),range-1,tab);
-            }
-
-            else if(bateauSurCase(c).getOrientation()==Orientation.NORDEST){
-                getCasesDisponible(getCaseNordEst(c),range-1,tab);
-                getCasesDisponible(getCaseNord(c),range-1,tab);
-                getCasesDisponible(getCaseSudEst(c),range-1,tab);
+            if (bateauSurCase(c).getOrientation() == Orientation.NORD) {
+                getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+                getCasesDisponible(getCaseNord(c), range - 1, tab);
+                getCasesDisponible(getCaseNordEst(c), range - 1, tab);
+            } else if (bateauSurCase(c).getOrientation() == Orientation.NORDOUEST) {
+                getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
+                getCasesDisponible(getCaseNord(c), range - 1, tab);
+                getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+            } else if (bateauSurCase(c).getOrientation() == Orientation.SUDOUEST) {
+                getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
+                getCasesDisponible(getCaseSud(c), range - 1, tab);
+                getCasesDisponible(getCaseNordOuest(c), range - 1, tab);
+            } else if (bateauSurCase(c).getOrientation() == Orientation.SUD) {
+                getCasesDisponible(getCaseSudOuest(c), range - 1, tab);
+                getCasesDisponible(getCaseSud(c), range - 1, tab);
+                getCasesDisponible(getCaseSudEst(c), range - 1, tab);
+            } else if (bateauSurCase(c).getOrientation() == Orientation.SUDEST) {
+                getCasesDisponible(getCaseNordEst(c), range - 1, tab);
+                getCasesDisponible(getCaseSud(c), range - 1, tab);
+                getCasesDisponible(getCaseSudEst(c), range - 1, tab);
+            } else if (bateauSurCase(c).getOrientation() == Orientation.NORDEST) {
+                getCasesDisponible(getCaseNordEst(c), range - 1, tab);
+                getCasesDisponible(getCaseNord(c), range - 1, tab);
+                getCasesDisponible(getCaseSudEst(c), range - 1, tab);
             }
         }
         return tab;
@@ -361,14 +351,14 @@ public class Grille {
      * @return true si la case possède un bateau, false sinon
      */
     public boolean casePossedeBateaux(Case c) {
-        for (int i = 0; i < bateaux1.size(); i++) {
-            if (bateaux1.get(i).getPosition().equals(c)) {
+        for (Boat aBateaux1 : bateaux1) {
+            if (aBateaux1.getPosition() == c) {
                 return true;
             }
         }
 
-        for (int i = 0; i < bateaux2.size(); i++) {
-            if (bateaux2.get(i).getPosition().equals(c)) {
+        for (Boat aBateaux2 : bateaux2) {
+            if (aBateaux2.getPosition() == c) {
                 return true;
             }
         }
@@ -385,14 +375,14 @@ public class Grille {
      */
     public boolean casePossedeBateau(Case c, Player joueur) {
         if (joueur.getNumber() == 1) {
-            for (int i = 0; i < bateaux1.size(); i++) {
-                if (bateaux1.get(i).getPosition().equals(c)) {
+            for (Boat aBateaux1 : bateaux1) {
+                if (aBateaux1.getPosition() == c) {
                     return true;
                 }
             }
         } else {
-            for (int i = 0; i < bateaux2.size(); i++) {
-                if (bateaux2.get(i).getPosition().equals(c)) {
+            for (Boat aBateaux2 : bateaux2) {
+                if (aBateaux2.getPosition() == c) {
                     return true;
                 }
             }
@@ -408,15 +398,15 @@ public class Grille {
      * @return le bateau qui se situe sur la case
      */
     public Boat bateauSurCase(Case c) {
-        for (int i = 0; i < bateaux1.size(); i++) {
-            if (bateaux1.get(i).getPosition().equals(c)) {
-                return bateaux1.get(i);
+        for (Boat aBateaux1 : bateaux1) {
+            if (aBateaux1.getPosition() == c) {
+                return aBateaux1;
             }
         }
 
-        for (int i = 0; i < bateaux2.size(); i++) {
-            if (bateaux2.get(i).getPosition().equals(c)) {
-                return bateaux2.get(i);
+        for (Boat aBateaux2 : bateaux2) {
+            if (aBateaux2.getPosition() == c) {
+                return aBateaux2;
             }
         }
 
@@ -566,12 +556,23 @@ public class Grille {
             }
         }
 
-        for (int k = 0; k < casesPorteeTir.size(); k++) {
-            if (casesPorteeTir.get(k) != null) {
-                casesPorteeTirfinal.add(casesPorteeTir.get(k));
+        for (Case aCasesPorteeTir : casesPorteeTir) {
+            if (aCasesPorteeTir != null) {
+                casesPorteeTirfinal.add(aCasesPorteeTir);
             }
         }
         return casesPorteeTirfinal;
+    }
+
+    public ArrayList<Case> getBoatInRange(Boat bateauSelectionne, Player p) {
+        ArrayList<Case> myCases = new ArrayList<>();
+
+        for (Case c : getCasesPortees(bateauSelectionne)) {
+            if (casePossedeBateau(c, p)) {
+                myCases.add(c);
+            }
+        }
+        return myCases;
     }
 
     /**
@@ -588,7 +589,7 @@ public class Grille {
 
             //si le joueur adverse possede le phare
 
-        } else if (!(c.getPossedePhare().equals(joueur))) {
+        } else if (c.getPossedePhare() != joueur) {
             c.getPossedePhare().setPharesPossedes(c.getPossedePhare().getPharesPossedes() - 1);
             c.setPossedePhare(joueur);
             joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);

@@ -9,7 +9,6 @@ import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.cases.Case;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -66,14 +65,11 @@ public class Controller {
             }
 
             if (!actionFaite) {
-                ArrayList<Case> casesDispo;
-                casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(), 1);
+                ArrayList<Case> casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(), 1);
 
-                if(casesDispo.size()==0){
+                if (casesDispo.size() == 0) {
                     game.getBateauSelectionne().setMoveAvailable(0);
-                }
-
-                else {
+                } else {
                     //Si la case sélectionnée est à portée de déplacement
                     if (game.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
                         game.getBateauSelectionne().moveBoat(c);
@@ -133,8 +129,6 @@ public class Controller {
         FileHandle fichier = Gdx.files.internal("saves/" + nom + ".ser");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
             oos.writeObject(game);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
