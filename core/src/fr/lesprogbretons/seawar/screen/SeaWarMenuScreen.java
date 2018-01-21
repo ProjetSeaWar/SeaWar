@@ -66,13 +66,15 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
+
         TextButton editeurButton = new TextButton("Editeur", skin, "default");
-        playButton.setWidth(150);
-        playButton.setHeight(50);
-        playButton.addListener(new ClickListener() {
+        editeurButton.setWidth(150);
+        editeurButton.setHeight(50);
+        editeurButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarMapScreen());
+                Dialog d = new Dialog("Editeur de carte", skin, "dialog");
+                d.show(stage);
             }
         });
 

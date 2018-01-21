@@ -1,6 +1,8 @@
 package fr.lesprogbretons.seawar.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import fr.lesprogbretons.seawar.model.Editeur;
+import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
@@ -26,31 +28,36 @@ public class ControllerEditeur {
         editeur.getMap().setCase(new CaseTerre(x,y));
     }
 
-    public void ajouterAmiralJoueur1(int x, int y){
+    public void ajouterAmiralJoueur1(int x, int y, Orientation orientation){
         if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
             Amiral boat = new Amiral(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur1());
+            boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur1(boat);
         }
     }
 
-    public void ajouterFregateJoueur1(int x, int y){
+    public void ajouterFregateJoueur1(int x, int y, Orientation orientation){
         if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
             Fregate boat = new Fregate(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur1());
+            boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur1(boat);
         }
     }
 
-    public void ajouterAmiralJoueur2(int x, int y){
+    public void ajouterAmiralJoueur2(int x, int y, Orientation orientation){
         if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
             Amiral boat = new Amiral(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur2());
+            boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur2(boat);
         }
     }
 
-    public void ajouterFregateJoueur2(int x, int y){
+    public void ajouterFregateJoueur2(int x, int y, Orientation orientation){
         if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
             Fregate boat = new Fregate(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur2());
+            boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur2(boat);
         }
     }
+
 }
