@@ -67,33 +67,30 @@ public class Controller {
             if (!actionFaite) {
                 ArrayList<Case> casesDispo = game.getMap().getCasesDisponibles(game.getBateauSelectionne().getPosition(), 1);
 
-                if (casesDispo.size() == 0) {
-                    game.getBateauSelectionne().setMoveAvailable(0);
-                } else {
-                    //Si la case sélectionnée est à portée de déplacement
-                    if (game.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
-                        game.getBateauSelectionne().moveBoat(c);
-                        game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
-                        if (c.isPhare()) {
-                            game.getMap().prendPhare(c, game.getCurrentPlayer());
-                        }
-                    } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).equals(game.getBateauSelectionne())) {
-                        game.getBateauSelectionne().moveBoat(c);
-                        game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
-                        if (c.isPhare()) {
-                            game.getMap().prendPhare(c, game.getCurrentPlayer());
-                        }
-                    } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && !(game.getBateauxDejaDeplaces().contains(game.getBateauSelectionne()))) {
-                        game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).setMoveAvailable(0);
-                        game.getBateauSelectionne().moveBoat(c);
-                        game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
-                        if (c.isPhare()) {
-                            game.getMap().prendPhare(c, game.getCurrentPlayer());
-                        }
-                    } else {
-                        game.setAnyBateauSelectionne(false);
+                //Si la case sélectionnée est à portée de déplacement
+                if (game.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0) {
+                    game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
                     }
+                } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).equals(game.getBateauSelectionne())) {
+                    game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                    }
+                } else if (casesDispo.contains(c) && game.getBateauSelectionne().getMoveAvailable() > 0 && !(game.getBateauxDejaDeplaces().contains(game.getBateauSelectionne()))) {
+                    game.getBateauxDejaDeplaces().get(game.getBateauxDejaDeplaces().size() - 1).setMoveAvailable(0);
+                    game.getBateauSelectionne().moveBoat(c);
+                    game.ajouterBateauxDejaDeplaces(game.getBateauSelectionne());
+                    if (c.isPhare()) {
+                        game.getMap().prendPhare(c, game.getCurrentPlayer());
+                    }
+                } else {
+                    game.setAnyBateauSelectionne(false);
                 }
+
             }
 
 
@@ -117,6 +114,7 @@ public class Controller {
             game.setAnyBateauSelectionne(false);
             isOver = game.endTurn();
         }
+
         return isOver;
     }
 

@@ -2,11 +2,12 @@ package fr.lesprogbretons.seawar.model;
 
 import fr.lesprogbretons.seawar.model.map.*;
 import fr.lesprogbretons.seawar.model.boat.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Partie implements Serializable{
+public class Partie implements Serializable {
 
     //Carte
     private Grille map = new DefaultMap();
@@ -29,8 +30,8 @@ public class Partie implements Serializable{
     private Player winner;
 
     //tours
-    private int turnCounter=1;
-    private boolean isPlayer2=false;
+    private int turnCounter = 1;
+    private boolean isPlayer2 = false;
 
     //Liste de bateaux qui a deja joué pendant le tour
     private ArrayList<Boat> bateauxDejaDeplaces = new ArrayList<>();
@@ -69,7 +70,7 @@ public class Partie implements Serializable{
         this.bateauxDejaDeplaces = bateauxDejaDeplaces;
     }
 
-    public void ajouterBateauxDejaDeplaces(Boat b){
+    public void ajouterBateauxDejaDeplaces(Boat b) {
         bateauxDejaDeplaces.add(b);
     }
 
@@ -190,16 +191,16 @@ public class Partie implements Serializable{
     public boolean endTurn() {
         boolean bateauxDeplaces = true;
 
-        //On vérifie que le joueur courrant a déplacé tous ses bateaux
+        //On vérifie que le joueur courrant a déplacé tous ses bateaux ou que ses bateaux ne sont pas bloques
         if (getCurrentPlayer().equals(joueur1)) {
             for (int i = 0; i < map.getBateaux1().size(); i++) {
-                if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove()) {
+                if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove() && map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(), 1).size() != 0) {
                     bateauxDeplaces = false;
                 }
             }
         } else {
             for (int i = 0; i < map.getBateaux2().size(); i++) {
-                if (map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove()) {
+                if (map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove() && map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(), 1).size() != 0) {
                     bateauxDeplaces = false;
                 }
             }
