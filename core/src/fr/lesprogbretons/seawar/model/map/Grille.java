@@ -9,12 +9,13 @@ import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Grille
  */
-public class Grille {
+public class Grille implements Serializable{
 
     //Joueurs
     private Player joueur1 = new Player(1);

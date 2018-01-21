@@ -1,9 +1,11 @@
 package fr.lesprogbretons.seawar.model;
 
+import java.io.Serializable;
+
 /**
  * Classe joueur
  */
-public class Player {
+public class Player implements Serializable{
 
     //Numéro du joueur
     private int number;

@@ -1,10 +1,12 @@
 package fr.lesprogbretons.seawar.model.cases;
 
 
+import java.io.Serializable;
+
 /**
  * Classe CaseEau : sous-classe de Case
  */
-public class CaseEau extends Case {
+public class CaseEau extends Case implements Serializable{
 
     /**
      * Constructeur

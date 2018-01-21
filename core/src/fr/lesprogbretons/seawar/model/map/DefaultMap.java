@@ -5,10 +5,12 @@ import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+import java.io.Serializable;
+
 /**
  * Classe DefaultMap : il s'agit de la carte par défaut implémentée dans le jeu
  */
-public class DefaultMap extends Grille {
+public class DefaultMap extends Grille implements Serializable{
 
     public DefaultMap() {
         super(11, 13);

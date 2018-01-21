@@ -3,10 +3,12 @@ package fr.lesprogbretons.seawar.model.boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.Player;
 
+import java.io.Serializable;
+
 /**
  * Classe Fregate : sous-classe de Boat
  */
-public class Fregate extends Boat {
+public class Fregate extends Boat implements Serializable{
 
     public Fregate(Case c, Player p) {
         super(c, p);
