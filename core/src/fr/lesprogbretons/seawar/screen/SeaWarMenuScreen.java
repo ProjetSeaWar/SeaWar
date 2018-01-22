@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.io.FileInputStream;
@@ -61,6 +62,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //seaWarController.nouvellePartie();
                 game.setScreen(new SeaWarMapScreen());
             }
         });

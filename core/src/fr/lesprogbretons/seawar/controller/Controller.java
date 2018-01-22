@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
+import fr.lesprogbretons.seawar.model.map.Grille;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +23,10 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  * Classe Controller
  */
 public class Controller {
+
+    public void nouvellePartie(){
+        partie.setMap(new DefaultMap());
+    }
 
     /**
      * Procédure qui gère la sélection d'une case quelconque à la souris

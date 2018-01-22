@@ -69,7 +69,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
     //Modèle
     private Grille g = partie.getMap();
 
-
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
