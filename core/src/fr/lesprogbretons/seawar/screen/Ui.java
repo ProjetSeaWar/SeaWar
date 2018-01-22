@@ -26,6 +26,7 @@ public class Ui extends Stage {
     private Label playerLabel;
     private Label turnLabel;
     private Label infoSelected;
+    private Dialog openenedDialog;
 
 
     Ui() {
@@ -60,7 +61,7 @@ public class Ui extends Stage {
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Dialog d = new Dialog("Options", skin, "dialog")
+                openenedDialog = new Dialog("Options", skin, "dialog")
                         .text("Choose your option")
                         .button(saveButton)
                         .button(menuButton)
@@ -90,6 +91,7 @@ public class Ui extends Stage {
                 d.button(validerButton, true);
                 d.button("Annuler", false);
                 d.show(s);
+                openenedDialog = d;
 
             }
 
@@ -106,12 +108,15 @@ public class Ui extends Stage {
                                 .text(partie.getWinner().toString() + " wins by " + partie.getVictoryType().toString())
                                 .button(menuButton, true)
                                 .show(s);
+                        openenedDialog = d;
+
                     } else {
                         d = new Dialog("Turn isn't over", skin, "dialog")
                                 .text("One of your ship haven't moved")
                                 .button("Okay", true)
                                 .key(Input.Keys.ENTER, true)
                                 .show(s);
+                        openenedDialog = d;
                     }
                 } else {
                     startTurnMessage();
@@ -178,7 +183,7 @@ public class Ui extends Stage {
         for (String s : boatHps) {
             tour.append(s).append("\n");
         }
-        Dialog d = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
+        openenedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
                 .text(tour.toString())
                 .button("Okay", true)
                 .key(Input.Keys.ENTER, true)
@@ -202,6 +207,7 @@ public class Ui extends Stage {
         super.touchDown(screenX, screenY, pointer, button);
         logger.debug("screenY = " + screenY);
         //Only keep these clicks for the table, send the other to the board
+        openenedDialog.hide();
         return screenY < 25 && show.isVisible();
     }
 }
