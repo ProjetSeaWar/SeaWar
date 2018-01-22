@@ -29,7 +29,7 @@ public class Ui extends Stage {
         Skin skin = (Skin) assets.get(Assets.skin);
         show = new Table();
         show.setFillParent(false);
-        show.setPosition(0,770);
+        show.setPosition(0, 770);
         show.setSize(20, 800);
         show.setWidth(800);
         addActor(show);
@@ -70,37 +70,48 @@ public class Ui extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                    TextField nompartie = new TextField("",skin);
-                    Dialog d = new Dialog("Nom de la partie", skin, "dialog")
-                            .text("Choisissez le nom de votre sauvegarde :");
+                TextField nompartie = new TextField("", skin);
+                Dialog d = new Dialog("Nom de la partie", skin, "dialog")
+                        .text("Choisissez le nom de votre sauvegarde :");
 
-                    TextButton validerButton = new TextButton("Sauvegarder",skin,"default");
-                    validerButton.addListener(new ClickListener(){
-                        public void clicked(InputEvent event, float x, float y) {
-                            seaWarController.save(nompartie.getText());
+                TextButton validerButton = new TextButton("Sauvegarder", skin, "default");
+                validerButton.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        seaWarController.save(nompartie.getText());
 
-                        }
-                    });
-                    d.getContentTable().row();
-                    d.getContentTable().add(nompartie);
-                    d.button(validerButton,true);
-                    d.button("Annuler",false);
-                    d.show(s);
+                    }
+                });
+                d.getContentTable().row();
+                d.getContentTable().add(nompartie);
+                d.button(validerButton, true);
+                d.button("Annuler", false);
+                d.show(s);
 
-                }
+            }
 
         });
 
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Dialog d;
                 boolean turnOver = seaWarController.endTurn();
                 if (!turnOver) {
-                    Dialog d = new Dialog("Turn isn't over", skin, "dialog")
-                            .text("One of your ship haven't moved")
-                            .button("Okay", true)
-                            .key(Input.Keys.ENTER, true)
-                            .show(s);
+                    if (partie.isFin()) {
+                        //TODO back to menu
+                        d = new Dialog("The winner is " + partie.getWinner().toString(), skin, "dialog")
+                                .text(partie.getWinner().toString() + " wins by " + partie.getVictoryType().toString())
+                                .button(menuButton, true)
+                                .show(s);
+                    } else {
+                        d = new Dialog("Turn isn't over", skin, "dialog")
+                                .text("One of your ship haven't moved")
+                                .button("Okay", true)
+                                .key(Input.Keys.ENTER, true)
+                                .show(s);
+                    }
+                } else {
+                    //TODO Écran rappel tour
                 }
             }
         });
@@ -108,8 +119,8 @@ public class Ui extends Stage {
         hideButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               show.setVisible(false);
-               hide.setVisible(true);
+                show.setVisible(false);
+                hide.setVisible(true);
             }
         });
 

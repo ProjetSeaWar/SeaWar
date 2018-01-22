@@ -10,14 +10,15 @@ import java.util.ArrayList;
 public class Partie implements Serializable {
 
     //Carte
-    private Grille map = new DefaultMap();
+    private Grille map;
 
     //Joueurs
-    private Player joueur1 = map.getJoueur1();
-    private Player joueur2 = map.getJoueur2();
+    private Player joueur1;
+
+    private Player joueur2;
 
     //Joueur dont c'est le tour
-    private Player currentPlayer = joueur1;
+    private Player currentPlayer;
 
     //Bateau sélectionné par le joueur
     private Boat bateauSelectionne;
@@ -28,6 +29,9 @@ public class Partie implements Serializable {
 
     //Vainqueur
     private Player winner;
+
+    //Type de victoire
+    private VictoryType victoryType;
 
     //tours
     private int turnCounter = 1;
@@ -111,13 +115,26 @@ public class Partie implements Serializable {
         return fin;
     }
 
-    public void setWinner(Player winner) {
+    public Player getWinner() {
+        return winner;
+    }
+
+    private void setWinner(Player winner) {
         this.winner = winner;
     }
 
-    public void setFin(boolean fin) {
+    private void setFin(boolean fin) {
         this.fin = fin;
     }
+
+    public VictoryType getVictoryType() {
+        return victoryType;
+    }
+
+    private void setVictoryType(VictoryType victoryType) {
+        this.victoryType = victoryType;
+    }
+
     /*----------------------------------------------------------------------------------------------------------*/
 
 
@@ -144,9 +161,11 @@ public class Partie implements Serializable {
         if (getJoueur1().getPharesPossedes() == 3) {
             setFin(true);
             setWinner(getJoueur1());
+            setVictoryType(VictoryType.TAKE);
         } else if (getJoueur2().getPharesPossedes() == 3) {
             setFin(true);
             setWinner(getJoueur2());
+            setVictoryType(VictoryType.TAKE);
         }
 
         //Si tous les bateaux du joueur 2 sont détruits, c'est que le joueur 1 gagne
@@ -162,6 +181,7 @@ public class Partie implements Serializable {
             if (fin) {
                 setFin(true);
                 setWinner(joueur1);
+                setVictoryType(VictoryType.DESTROY);
             }
         }
 
@@ -178,6 +198,7 @@ public class Partie implements Serializable {
             if (fin) {
                 setFin(true);
                 setWinner(joueur2);
+                setVictoryType(VictoryType.DESTROY);
             }
         }
     }
