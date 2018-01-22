@@ -132,18 +132,24 @@ public abstract class Boat implements Serializable {
     }
 
     /*---------------------------------------------------------------------------------------------*/
-    //toString
-    @Override
-    public String toString() {
+    //infosCurrentPlayer
+
+    public String infosCurrentPlayer() {
+        String s = toString() + ": ";
         if (moveAvailable == 0) {
-            return ": no moves";
+            s += "no moves";
         } else {
-            return ": " + moveAvailable + " moves";
+            s += moveAvailable + " moves";
         }
+        return s;
+    }
+
+    public String infosOtherPlayer() {
+        return toString() + ": " + hp + " hp";
     }
 
     public String infos() {
-        String info = hp + " hp\n";
+        String info = toString() + ": " + hp + " hp\n";
         if (canonSelectionne == 1) info += "Main gun | Cooldown : " + mainCD;
         else info += "Secondary gun  | Cooldown : " + secCD;
         return info;

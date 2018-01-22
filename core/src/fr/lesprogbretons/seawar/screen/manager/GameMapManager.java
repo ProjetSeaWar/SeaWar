@@ -102,7 +102,7 @@ public class GameMapManager implements MapManager {
                     //Si il appartient au joueur qui joue
                     if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
                         //Mettre infos bateau sélectionné
-                        myUi.setInfoSelected(boat.toString());
+                        myUi.setInfoSelected(boat.infosCurrentPlayer());
                         //Mettre cases dispo déplacements
                         if (boat.getMoveAvailable() > 0)
                             myMapScreen.batchSelectionMark(g.getCasesDisponibles(aCase, 1));
@@ -126,6 +126,7 @@ public class GameMapManager implements MapManager {
                     //Si c'est un bateau de l'adversaire (impossible à sélectionner)
                     if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
                         Boat boat = g.bateauSurCase(aCase);
+                        myUi.setInfoSelected(boat.infosOtherPlayer());
                         myMapScreen.batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
                         myMapScreen.markSelectedTile(selectedTile.column, selectedTile.row);
                     }

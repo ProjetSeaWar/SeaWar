@@ -82,7 +82,7 @@ public abstract class Case implements Serializable{
     }
 
     /**
-     * toString
+     * infosCurrentPlayer
      * @return
      */
     @Override
