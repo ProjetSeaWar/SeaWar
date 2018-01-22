@@ -224,6 +224,13 @@ public abstract class Boat implements Serializable {
         }
     }
 
+    public boolean canShoot() {
+        if (canonSelectionne == 1) {
+            return !(mainCD > 0);
+        } else
+            return canonSelectionne == 2 && !(secCD > 0);
+    }
+
     /**
      * Procédure de fin de tour d'un bateau : prépare les caractéristiques du bateau pour le prochain tour
      */

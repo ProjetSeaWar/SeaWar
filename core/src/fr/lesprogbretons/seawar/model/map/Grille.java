@@ -1,6 +1,5 @@
 package fr.lesprogbretons.seawar.model.map;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
@@ -69,7 +68,7 @@ public class Grille implements Serializable{
         this.joueur2 = joueur2;
     }
 
-    public Case getCase(int hauteur, int largeur) {
+    public Case getCase(int hauteur, int largeur) throws ArrayIndexOutOfBoundsException{
         return tableau[hauteur][largeur];
     }
 

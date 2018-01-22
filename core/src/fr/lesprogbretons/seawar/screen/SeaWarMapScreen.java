@@ -63,7 +63,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
     private Ui myUi;
 
     //Sélection
-    private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
+    private TiledCoordinates selectedTile;
 
     //Modèle
     private Grille g = partie.getMap();
@@ -136,6 +136,9 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
         //Montrer le message de début de tour
         myUi.startTurnMessage();
+
+        //Pas de sélection pour le début
+        selectedTile = new TiledCoordinates(-1, -1);
     }
 
     private void addNewLayer(String layerName) {
@@ -146,7 +149,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
     private void generateMap(TiledMapTileLayer layer) {
         for (int l = 0; l < 1; l++) {
-
             for (int y = 0; y < HEIGHT_MAP; y++) {
                 for (int x = 0; x < WIDTH_MAP; x++) {
                     Cell cell = new Cell();
@@ -197,6 +199,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
         myUi.setTurn(partie.getTurnCounter());
         myUi.setPlayer(partie.getCurrentPlayer().toString());
 
+        //Retirer les sélections précédentes
+        removeLayerMark(SELECT_LAYER_NAME);
         removeLayerMark(SHIP_LAYER_NAME);
         removeLayerMark(ORIENTATION_LAYER_NAME);
 
@@ -219,6 +223,51 @@ public class SeaWarMapScreen extends ScreenAdapter {
         for (Boat b : g.getBateaux2()) {
             markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
         }
+
+        //Récupérer case sélectionnée
+        //Try catch car premier positionnement en -1,-1
+        try {
+            Case aCase = g.getCase(selectedTile.row, selectedTile.column);
+
+            //Si un bateau est sélectionné
+            if (partie.isAnyBateauSelectionne()) {
+                //Si il est sur la case sélectionnée
+                if (g.casePossedeBateaux(aCase)) {
+                    //Récupérer bateau
+                    Boat boat = g.bateauSurCase(aCase);
+                    //Si il appartient au joueur qui joue
+                    if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
+                        //Mettre infos bateau sélectionné
+                        myUi.setInfoSelected(boat.toString());
+                        //Mettre cases dispo déplacements
+                        if (boat.getMoveAvailable() > 0) batchSelectionMark(g.getCasesDisponibles(aCase, 1));
+                        //Mettre cases dispo attaques
+                        if (boat.canShoot()) batchAttackMark(g.getBoatInRange(boat, partie.getOtherPlayer()));
+                    } else {
+                        //Sinon montrer sa portée de déplacement
+                        batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
+                    }
+                    //La sélection des cases ne sélectionne pas la case courante
+                    markSelectedTile(selectedTile.column, selectedTile.row);
+                }
+            } else {
+                //Si aucun bateau sélectionné
+                if (!g.casePossedeBateaux(aCase)) {
+                    //Si une case de base sélectionnée
+                    markSelectedTile(selectedTile.column, selectedTile.row);
+                    myUi.setInfoSelected(aCase.toString());
+                } else {
+                    //Si c'est un bateau de l'adversaire (impossible à sélectionner)
+                    if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
+                        Boat boat = g.bateauSurCase(aCase);
+                        batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
+                        markSelectedTile(selectedTile.column, selectedTile.row);
+                    }
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+
     }
 
     @Override
@@ -246,39 +295,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
                     //Envoie au contrôleur
                     seaWarController.selection(selectedTile.row, selectedTile.column);
-
-                    //Retirer les sélections précédentes
-                    removeLayerMark(SELECT_LAYER_NAME);
-
-                    Case aCase = g.getCase(selectedTile.row, selectedTile.column);
-
-                    //Si bateau sélectionné
-                    if (partie.isAnyBateauSelectionne()) {
-                        if (g.casePossedeBateaux(aCase)) {
-                            Boat boat = g.bateauSurCase(aCase);
-                            if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
-                                myUi.setInfoSelected(boat.toString());
-                                if (boat.getMoveAvailable() > 0) batchSelectionMark(g.getCasesDisponibles(aCase, 1));
-                                batchAttackMark(g.getBoatInRange(boat, partie.getOtherPlayer()));
-                            } else {
-                                batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
-                            }
-                            //La sélection des cases ne sélectionne pas la case courante
-                            markSelectedTile(selectedTile.column, selectedTile.row);
-                        }
-                    } else {
-                        removeLayerMark(SELECT_LAYER_NAME);
-                        if (!g.casePossedeBateaux(aCase)) {
-                            markSelectedTile(selectedTile.column, selectedTile.row);
-                            myUi.setInfoSelected(aCase.toString());
-                        } else {
-                            if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
-                                Boat boat = g.bateauSurCase(aCase);
-                                batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
-                                markSelectedTile(selectedTile.column, selectedTile.row);
-                            }
-                        }
-                    }
                 } else {
                     //Clic droit
                     //TODO Affichage des infos
