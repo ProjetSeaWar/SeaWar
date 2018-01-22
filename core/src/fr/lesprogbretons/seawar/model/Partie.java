@@ -172,10 +172,8 @@ public class Partie implements Serializable {
         else if (getCurrentPlayer().equals(getJoueur1())) {
             boolean fin = true;
 
-            for (int i = 0; i < map.getBateaux2().size(); i++) {
-                if (map.getBateaux2().get(i).isAlive()) {
-                    fin = false;
-                }
+            if(map.getBateaux2().size()>=0){
+                fin = false;
             }
 
             if (fin) {
@@ -189,10 +187,8 @@ public class Partie implements Serializable {
         else if (getCurrentPlayer().equals(getJoueur2())) {
             boolean fin = true;
 
-            for (int i = 0; i < map.getBateaux1().size(); i++) {
-                if (map.getBateaux1().get(i).isAlive()) {
-                    fin = false;
-                }
+            if(map.getBateaux1().size()>=0){
+                fin = false;
             }
 
             if (fin) {
@@ -240,14 +236,10 @@ public class Partie implements Serializable {
 
             } else {
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
-                    if (map.getBateaux2().get(i) != null) {
-                        map.getBateaux2().get(i).endTurn();
-                    }
+                    map.getBateaux2().get(i).endTurn();
                 }
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
-                    if (map.getBateaux1().get(i) != null) {
-                        map.getBateaux1().get(i).setShootTaken(0);
-                    }
+                    map.getBateaux1().get(i).setShootTaken(0);
                 }
             }
 
