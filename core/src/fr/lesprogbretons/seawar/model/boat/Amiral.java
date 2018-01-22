@@ -22,6 +22,11 @@ public class Amiral extends Boat implements Serializable {
     }
 
     @Override
+    public String infos() {
+        return "Amiral: " + super.infos();
+    }
+
+    @Override
     public String toString() {
         return "Amiral" + super.toString();
     }

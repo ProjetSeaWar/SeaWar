@@ -172,8 +172,10 @@ public class Partie implements Serializable {
         else if (getCurrentPlayer().equals(getJoueur1())) {
             boolean fin = true;
 
-            if(map.getBateaux2().size()>=0){
-                fin = false;
+            for (Boat b : map.getBateaux2()) {
+                if (b.isAlive()) {
+                    fin = false;
+                }
             }
 
             if (fin) {
@@ -187,8 +189,10 @@ public class Partie implements Serializable {
         else if (getCurrentPlayer().equals(getJoueur2())) {
             boolean fin = true;
 
-            if(map.getBateaux1().size()>=0){
-                fin = false;
+            for (Boat b : map.getBateaux1()) {
+                if (b.isAlive()) {
+                    fin = false;
+                }
             }
 
             if (fin) {

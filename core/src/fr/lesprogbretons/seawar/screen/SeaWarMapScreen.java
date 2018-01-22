@@ -64,7 +64,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
     //Sélection
     private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
-    private TiledCoordinates previousSelectedTile = new TiledCoordinates(0, 0);
 
     //Modèle
     private Grille g = partie.getMap();
@@ -135,6 +134,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
         multiplexer.addProcessor(cameraController);
         Gdx.input.setInputProcessor(multiplexer);
 
+        //Montrer le message de début de tour
+        myUi.startTurnMessage();
     }
 
     private void addNewLayer(String layerName) {
@@ -278,7 +279,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
                             }
                         }
                     }
-                    previousSelectedTile.setCoords(selectedTile);
                 } else {
                     //Clic droit
                     //TODO Affichage des infos

@@ -22,6 +22,11 @@ public class Fregate extends Boat implements Serializable{
     }
 
     @Override
+    public String infos() {
+        return "Fregate: " + super.infos();
+    }
+
+    @Override
     public String toString() {
         return "Fregate" + super.toString();
     }

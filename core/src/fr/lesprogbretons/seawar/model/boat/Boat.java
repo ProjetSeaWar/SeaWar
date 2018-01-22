@@ -3,7 +3,6 @@ package fr.lesprogbretons.seawar.model.boat;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.model.cases.CaseEau;
 
 import java.io.Serializable;
 
@@ -15,28 +14,28 @@ import static fr.lesprogbretons.seawar.SeaWar.logger;
 public abstract class Boat implements Serializable {
 
     //En vie ou non
-    protected boolean alive = true;
+    private boolean alive = true;
 
 
     //Position et déplacement
-    protected int move;
-    protected int moveAvailable;                        // Déplacement encore disponible pendant le tour
-    protected Case position;
-    protected Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
+    int move;
+    int moveAvailable;                        // Déplacement encore disponible pendant le tour
+    private Case position;
+    private Orientation orientation;                        //0 : Nord, 1 : Nord-Est,   2: Sud-Est, 3 : Sud,    4 : Sud-Ouest,  5 : Nord-Ouest
 
     //Combat
-    protected int hp;
-    protected int dmgMainCanon;
-    protected int dmgSecCanon;
-    protected int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
-    protected int canonSelectionne = 1;                 // 1 pour le principal et 2 pour le secondaire
-    protected int reloadMainCanon;
-    protected int reloadSecCanon;
-    protected int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
-    protected int secCD = 0;
+    int hp;
+    int dmgMainCanon;
+    int dmgSecCanon;
+    private int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
+    private int canonSelectionne = 1;                 // 1 pour le principal et 2 pour le secondaire
+    int reloadMainCanon;
+    int reloadSecCanon;
+    private int mainCD = 0;                           // Nombre de tour avant la prochaine utilisation du canon principal
+    private int secCD = 0;
 
     //Joueur possédant ce bateau
-    protected Player joueur;
+    private Player joueur;
 
 
     /**
@@ -45,7 +44,7 @@ public abstract class Boat implements Serializable {
      * @param position : case initial
      * @param p        : joueur possédant ce bateau
      */
-    public Boat(Case position, Player p) {
+    Boat(Case position, Player p) {
         this.position = position;
         this.joueur = p;
     }
@@ -143,13 +142,19 @@ public abstract class Boat implements Serializable {
         }
     }
 
+    public String infos() {
+        String info = hp + " hp\n";
+        if (canonSelectionne == 1) info += "Main gun | Cooldown : " + mainCD;
+        else info += "Secondary gun  | Cooldown : " + secCD;
+        return info;
+    }
 
     /**
      * Procédure qui s'occupe de réduire les HP du bateau
      *
      * @param dmg : dommages qu'encaisse le bateau
      */
-    public void loseHP(int dmg) {
+    private void loseHP(int dmg) {
 
         if (shootTaken == 1) {                          // Si le bateau a deja pris des degats pendant le tour
             if (hp - (3 * dmg) <= 0) {
@@ -195,7 +200,7 @@ public abstract class Boat implements Serializable {
      *
      * @param target : bateau cible
      */
-    public void shootMainCanon(Boat target) {
+    private void shootMainCanon(Boat target) {
         if (mainCD == 0) {
             target.loseHP(dmgMainCanon);
             mainCD = reloadMainCanon;
@@ -210,7 +215,7 @@ public abstract class Boat implements Serializable {
      *
      * @param target
      */
-    public void shootSecCanon(Boat target) {
+    private void shootSecCanon(Boat target) {
         if (secCD == 0) {
             target.loseHP(dmgSecCanon);
             secCD = reloadSecCanon;
@@ -285,16 +290,6 @@ public abstract class Boat implements Serializable {
         }
 
         this.position = destination;
-    }
-
-
-    public static void main(String[] args) {
-        Boat b = new Amiral(new CaseEau(2, 2), new Player(1));
-
-        System.out.println(b.getPosition());
-
-        b.moveBoat(new CaseEau(2, 3));
-        System.out.println(b.getPosition());
     }
 }
 

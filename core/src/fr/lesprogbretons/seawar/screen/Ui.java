@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.model.boat.Boat;
+
+import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
 
@@ -18,6 +21,7 @@ public class Ui extends Stage {
 
     private Table show;
     private Table hide;
+    private Skin skin;
 
     private Label playerLabel;
     private Label turnLabel;
@@ -26,7 +30,7 @@ public class Ui extends Stage {
 
     Ui() {
         super();
-        Skin skin = (Skin) assets.get(Assets.skin);
+        skin = (Skin) assets.get(Assets.skin);
         show = new Table();
         show.setFillParent(false);
         show.setPosition(0, 770);
@@ -98,7 +102,6 @@ public class Ui extends Stage {
                 boolean turnOver = seaWarController.endTurn();
                 if (!turnOver) {
                     if (partie.isFin()) {
-                        //TODO back to menu
                         d = new Dialog("The winner is " + partie.getWinner().toString(), skin, "dialog")
                                 .text(partie.getWinner().toString() + " wins by " + partie.getVictoryType().toString())
                                 .button(menuButton, true)
@@ -111,7 +114,7 @@ public class Ui extends Stage {
                                 .show(s);
                     }
                 } else {
-                    //TODO Écran rappel tour
+                    startTurnMessage();
                 }
             }
         });
@@ -158,6 +161,30 @@ public class Ui extends Stage {
         hide.left().top();
     }
 
+    void startTurnMessage() {
+        //Construire la string qui contient les infos de tour
+        ArrayList<String> boatHps = new ArrayList<>();
+        if (partie.getCurrentPlayer().getNumber() == 1) {
+            for (Boat b : partie.getMap().getBateaux1()) {
+                boatHps.add(b.infos());
+            }
+        } else {
+            for (Boat b : partie.getMap().getBateaux2()) {
+                boatHps.add(b.infos());
+            }
+        }
+
+        StringBuilder tour = new StringBuilder(partie.getCurrentPlayer().getPharesPossedes() + " lighthouses taken\n");
+        for (String s : boatHps) {
+            tour.append(s).append("\n");
+        }
+        Dialog d = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
+                .text(tour.toString())
+                .button("Okay", true)
+                .key(Input.Keys.ENTER, true)
+                .show(s);
+    }
+
     public void setPlayer(String j) {
         playerLabel.setText(j);
     }
@@ -175,10 +202,6 @@ public class Ui extends Stage {
         super.touchDown(screenX, screenY, pointer, button);
         logger.debug("screenY = " + screenY);
         //Only keep these clicks for the table, send the other to the board
-        if (screenY < 25 && show.isVisible()) {
-            return true;
-        } else {
-            return false;
-        }
+        return screenY < 25 && show.isVisible();
     }
 }
