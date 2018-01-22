@@ -16,13 +16,10 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Orientation;
-import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Boat;
-import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.model.cases.CaseEau;
-import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 import fr.lesprogbretons.seawar.model.map.Grille;
+import fr.lesprogbretons.seawar.screen.ui.UiEditeur;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -59,7 +56,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
     private HexagonalTiledMapRenderer renderer;
     private TextureAtlas hexture;
 
-    //Ui
+    //GameUi
     private UiEditeur myUi;
 
     //Sélection
@@ -115,7 +112,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
 
         //region Génération map
         addNewLayer(MAP_LAYER_NAME);
-        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
+        Utils.generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME), tiles);
 
         addNewLayer(SELECT_LAYER_NAME);
         addNewLayer(SHIP_LAYER_NAME);
@@ -123,7 +120,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
         //endregion
 
 
-        //region Ui
+        //region GameUi
 
         myUi = new UiEditeur();
 
@@ -144,46 +141,6 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
         layers.add(layer);
     }
 
-    private void generateMap(TiledMapTileLayer layer) {
-        for (int l = 0; l < 1; l++) {
-
-            for (int y = 0; y < HEIGHT_MAP; y++) {
-                for (int x = 0; x < WIDTH_MAP; x++) {
-                    Cell cell = new Cell();
-                    Case aCase = g.getCase(y, x);
-
-                    Boat boat = g.bateauSurCase(aCase);
-                    if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
-                        if (boat.getJoueur() == partie.getJoueur1()) {
-                            if (boat instanceof Amiral) {
-                                cell.setTile(tiles[3]);
-                            } else if (boat instanceof Fregate) {
-                                cell.setTile(tiles[4]);
-                            }
-                        } else {
-                            if (boat instanceof Amiral) {
-                                cell.setTile(tiles[5]);
-                            } else if (boat instanceof Fregate) {
-                                cell.setTile(tiles[6]);
-                            }
-                        }
-                    } else {
-                        if (aCase instanceof CaseEau) {
-                            if (aCase.isPhare()) {
-                                cell.setTile(tiles[2]);
-                            } else {
-                                cell.setTile(tiles[0]);
-                            }
-                        } else if (aCase instanceof CaseTerre) {
-                            cell.setTile(tiles[1]);
-                        }
-                    }
-                    layer.setCell(x, y, cell);
-                }
-            }
-        }
-    }
-
     @Override
     public void resize(int width, int height) {
         //A changer en fonction de comment est géré le stage
@@ -192,7 +149,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
 
     private void update() {
         //On regénère la map
-        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME));
+        Utils.generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME), tiles);
         //On met à jour l'interface
 
         removeLayerMark(SHIP_LAYER_NAME);
@@ -233,7 +190,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
         update();
 
         if (cameraController.clicked) {
-            getSelectedHexagon(cameraController.touchX, cameraController.touchY);
+            Utils.getSelectedHexagon(cameraController.touchX, cameraController.touchY, selectedTile);
 
             if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
                     && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
@@ -376,53 +333,5 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
         hexture.dispose();
         map.dispose();
         myUi.dispose();
-    }
-
-    private void getSelectedHexagon(float x, float y) {
-
-        float hexWidth = 112f;
-        float hexQuarterWidth = hexWidth / 4f;
-        float hexHeight = 97f;
-        float hexHalfHeight = hexHeight / 2f;
-        float hexThreeQuartersWidth = hexWidth * 0.75f;
-
-
-        float m = hexQuarterWidth / hexHalfHeight;
-        // Find the row and column of the box that the point falls in.
-        int column = (int) (x / hexThreeQuartersWidth);
-        int row;
-
-        boolean columnIsOdd = column % 2 == 0;
-
-        // Is the column an odd number?
-        if (!columnIsOdd)// no: Offset x to match the indent of the row
-            row = (int) ((y - hexHalfHeight) / hexHeight);
-        else// Yes: Calculate normally
-            row = (int) (y / hexHeight);
-        // Work out the position of the point relative to the box it is in
-        double relX = x - (column * hexThreeQuartersWidth);
-        double relY;
-
-        if (!columnIsOdd)
-            relY = (y - (row * hexHeight)) - hexHalfHeight;
-        else
-            relY = y - (row * hexHeight);
-
-        // Work out if the point is above either of the hexagon's top edges
-        if (relX < (-m * relY) + hexQuarterWidth) // LEFT edge
-        {
-            column--;
-            if (columnIsOdd)
-                row--;
-        } else if (relX < (m * relY) - hexQuarterWidth) // RIGHT edge
-        {
-            column--;
-            if (!columnIsOdd)
-                row++;
-        }
-
-        logger.debug("col : " + column + " row : " + row);
-        selectedTile.column = column;
-        selectedTile.row = row;
     }
 }

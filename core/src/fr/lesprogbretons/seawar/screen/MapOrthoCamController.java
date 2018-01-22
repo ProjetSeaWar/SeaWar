@@ -26,7 +26,7 @@ public class MapOrthoCamController extends InputAdapter {
     private float maxZoom = 1f;
     private float targetZoom;
     private float displacementSpeed = 20f;
-    //Celle-ci ne changeras pas
+
     private float downBoundX;
     private float downBoundY;
     private float upBoundX;

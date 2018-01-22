@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
+import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.io.FileInputStream;
@@ -62,7 +63,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 seaWarController.nouvellePartie();
-                game.setScreen(new SeaWarMapScreen());
+                game.setScreen(new SeaWarMapScreen(new GameMapManager()));
             }
         });
 
@@ -114,7 +115,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichier)))) {
                     seaWarController.load((Partie) ois.readObject());
                     ois.close();
-                    game.setScreen(new SeaWarMapScreen());
+                    game.setScreen(new SeaWarMapScreen(new GameMapManager()));
                 } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();
                 }

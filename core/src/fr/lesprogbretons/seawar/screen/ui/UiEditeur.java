@@ -1,16 +1,15 @@
-package fr.lesprogbretons.seawar.screen;
+package fr.lesprogbretons.seawar.screen.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.screen.SeaWarEditeurScreen;
+import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
 

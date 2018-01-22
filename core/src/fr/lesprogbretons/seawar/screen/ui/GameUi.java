@@ -1,55 +1,33 @@
-package fr.lesprogbretons.seawar.screen;
+package fr.lesprogbretons.seawar.screen.ui;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 
 import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
 
-public class Ui extends Stage {
+public class GameUi extends Ui {
 
-    private Stage s = this;
-
-    private Table show;
     private Table hide;
-    private Skin skin;
 
     private Label playerLabel;
     private Label turnLabel;
     private Label infoSelected;
-    private Dialog openenedDialog;
 
-
-    Ui() {
+    public GameUi() {
         super();
-        skin = (Skin) assets.get(Assets.skin);
-        show = new Table();
-        show.setFillParent(false);
-        show.setPosition(0, 770);
-        show.setSize(20, 800);
-        show.setWidth(800);
-        addActor(show);
 
         hide = new Table();
         hide.setFillParent(true);
         addActor(hide);
         hide.setVisible(false);
 
-        // Get the image
-        final Texture t = (Texture) assets.get(Assets.background);
-        final Sprite sp = new Sprite(t);
-        show.setBackground(new SpriteDrawable(sp));
-        show.pack();
-
+        //region Buttons
         TextButton optionsButton = new TextButton("Options", skin, "default");
         TextButton saveButton = new TextButton("Save", skin, "default");
         TextButton endTurnButton = new TextButton("End Turn", skin, "default");
@@ -57,11 +35,10 @@ public class Ui extends Stage {
         TextButton showButton = new TextButton("Show", skin, "default");
         TextButton menuButton = new TextButton("Menu", skin, "default");
 
-        //region Listener
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                openenedDialog = new Dialog("Options", skin, "dialog")
+                openedDialog = new Dialog("Options", skin, "dialog")
                         .text("Choose your option")
                         .button(saveButton)
                         .button(menuButton)
@@ -91,7 +68,7 @@ public class Ui extends Stage {
                 d.button(validerButton, true);
                 d.button("Annuler", false);
                 d.show(s);
-                openenedDialog = d;
+                openedDialog = d;
 
             }
 
@@ -108,7 +85,7 @@ public class Ui extends Stage {
                                 .text(partie.getWinner().toString() + " wins by " + partie.getVictoryType().toString())
                                 .button(menuButton, true)
                                 .show(s);
-                        openenedDialog = d;
+                        openedDialog = d;
 
                     } else {
                         d = new Dialog("Turn isn't over", skin, "dialog")
@@ -116,7 +93,7 @@ public class Ui extends Stage {
                                 .button("Okay", true)
                                 .key(Input.Keys.ENTER, true)
                                 .show(s);
-                        openenedDialog = d;
+                        openedDialog = d;
                     }
                 } else {
                     startTurnMessage();
@@ -148,6 +125,7 @@ public class Ui extends Stage {
         });
         //endregion
 
+        //region Organisation
         playerLabel = new Label("", skin, "default");
         turnLabel = new Label("", skin, "default");
         infoSelected = new Label("", skin, "default");
@@ -164,9 +142,10 @@ public class Ui extends Stage {
         hide.add(showButton).padLeft(10);
         hide.row();
         hide.left().top();
+        //endregion
     }
 
-    void startTurnMessage() {
+    public void startTurnMessage() {
         //Construire la string qui contient les infos de tour
         ArrayList<String> boatHps = new ArrayList<>();
         if (partie.getCurrentPlayer().getNumber() == 1) {
@@ -183,7 +162,7 @@ public class Ui extends Stage {
         for (String s : boatHps) {
             tour.append(s).append("\n");
         }
-        openenedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
+        openedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
                 .text(tour.toString())
                 .button("Okay", true)
                 .key(Input.Keys.ENTER, true)
@@ -200,14 +179,5 @@ public class Ui extends Stage {
 
     public void setInfoSelected(String message) {
         infoSelected.setText(message);
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
-        logger.debug("screenY = " + screenY);
-        //Only keep these clicks for the table, send the other to the board
-        openenedDialog.hide();
-        return screenY < 25 && show.isVisible();
     }
 }
