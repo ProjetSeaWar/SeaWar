@@ -49,6 +49,13 @@ public class Controller {
             else if (casesPorteeTir.contains(c)) {
                 if (partie.getMap().casePossedeBateau(c, partie.getOtherPlayer())) {
                     partie.getBateauSelectionne().shoot(partie.getMap().bateauSurCase(c));
+                    if (!partie.getMap().bateauSurCase(c).isAlive()) {
+                        if (partie.getCurrentPlayer().getNumber() == 1) {
+                            partie.getMap().getBateaux2().remove(partie.getMap().bateauSurCase(c));
+                        } else {
+                            partie.getMap().getBateaux1().remove(partie.getMap().bateauSurCase(c));
+                        }
+                    }
                     partie.setAnyBateauSelectionne(false);
                     actionFaite = true;
                 }

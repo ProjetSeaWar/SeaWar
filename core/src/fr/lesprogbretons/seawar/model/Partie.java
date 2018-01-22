@@ -212,7 +212,7 @@ public class Partie implements Serializable {
     public boolean endTurn() {
         boolean bateauxDeplaces = true;
 
-        //On vérifie que le joueur courrant a déplacé tous ses bateaux ou que ses bateaux ne sont pas bloques
+        //On vérifie que le joueur courrant a déplacé tous ses bateaux ou que ses bateaux ne sont pas bloques ou detruits
         if (getCurrentPlayer().equals(joueur1)) {
             for (int i = 0; i < map.getBateaux1().size(); i++) {
                 if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove() && map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(), 1).size() != 0) {
@@ -232,13 +232,22 @@ public class Partie implements Serializable {
             if (getCurrentPlayer().equals(joueur1)) {
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).endTurn();
+
+                }
+                for (int i = 0; i < map.getBateaux2().size(); i++) {
                     map.getBateaux2().get(i).setShootTaken(0);
                 }
+
             } else {
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
-                    map.getBateaux2().get(i).endTurn();
-                    map.getBateaux1().get(i).setShootTaken(0);
-
+                    if (map.getBateaux2().get(i) != null) {
+                        map.getBateaux2().get(i).endTurn();
+                    }
+                }
+                for (int i = 0; i < map.getBateaux1().size(); i++) {
+                    if (map.getBateaux1().get(i) != null) {
+                        map.getBateaux1().get(i).setShootTaken(0);
+                    }
                 }
             }
 
