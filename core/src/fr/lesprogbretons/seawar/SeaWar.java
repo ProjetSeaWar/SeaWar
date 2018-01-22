@@ -79,7 +79,7 @@ public class SeaWar implements ApplicationListener {
             partie = new Partie();
             editeur = new Editeur();
             seaWarController = new Controller();
-            editeurController = new ControllerEditeur(editeur);
+            editeurController = new ControllerEditeur();
             game.create();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
