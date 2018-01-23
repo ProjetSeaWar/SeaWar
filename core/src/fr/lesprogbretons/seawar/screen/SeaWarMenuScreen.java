@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
+import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
 import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -74,7 +75,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         editeurButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarEditeurScreen());
+                game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
             }
         });
 

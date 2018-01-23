@@ -17,15 +17,18 @@ import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
 import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.screen.ui.GameUi;
 import fr.lesprogbretons.seawar.screen.manager.MapManager;
 import fr.lesprogbretons.seawar.screen.ui.Ui;
+import fr.lesprogbretons.seawar.screen.ui.UiEditeur;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.util.ArrayList;
 
+import static fr.lesprogbretons.seawar.SeaWar.editeur;
 import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 
@@ -70,6 +73,13 @@ public class SeaWarMapScreen extends ScreenAdapter {
         this.manager = manager;
         widthMap = partie.getMap().getLargeur();
         heightMap = partie.getMap().getHauteur();
+        manager.setMyMapScreen(this);
+    }
+
+    public SeaWarMapScreen(EditeurMapManager manager){
+        this.manager = manager;
+        widthMap = editeur.getMap().getLargeur();
+        heightMap = editeur.getMap().getHauteur();
         manager.setMyMapScreen(this);
     }
 
@@ -128,7 +138,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
                 myUi = new GameUi();
                 break;
             case EDITOR:
-                //TODO Set Editor UI
+                myUi = new UiEditeur((EditeurMapManager) manager);
                 break;
         }
         manager.setMyUi(myUi);

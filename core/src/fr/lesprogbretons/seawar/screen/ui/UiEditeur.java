@@ -1,25 +1,36 @@
 package fr.lesprogbretons.seawar.screen.ui;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import fr.lesprogbretons.seawar.assets.Assets;
-import fr.lesprogbretons.seawar.screen.SeaWarEditeurScreen;
+import fr.lesprogbretons.seawar.screen.MapOrthoCamController;
 import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
+import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
 
-import static fr.lesprogbretons.seawar.SeaWar.*;
+import static fr.lesprogbretons.seawar.SeaWar.editeurController;
+import static fr.lesprogbretons.seawar.SeaWar.game;
+import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
+
+import fr.lesprogbretons.seawar.utils.Utils;
 
 public class UiEditeur extends Ui {
 
     private Label playerLabel;
     private Label turnLabel;
 
-    public UiEditeur() {
+
+    private MapOrthoCamController cameraController;
+
+
+    private EditeurMapManager mapManager;
+
+    public UiEditeur(EditeurMapManager mapManager) {
         super();
+
+        this.mapManager = mapManager;
 
         TextButton optionsButton = new TextButton("Options", skin, "default");
         TextButton saveButton = new TextButton("Save", skin, "default");
@@ -67,16 +78,18 @@ public class UiEditeur extends Ui {
         caseEau.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO : ajouter une case eau
+//                Utils.getSelectedHexagon(cameraController.touchX, cameraController.touchY, selectedTile);
+//                editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
             }
         });
 
         show.add(optionsButton).width(100).padLeft(10).padTop(2).padBottom(3);
         show.add(saveButton).padLeft(10);
         show.add(menuButton).padLeft(10);
-        show.add(turnLabel).width(100).padLeft(100);
+        show.add(caseEau).padLeft(10);
         show.row();
         show.left().top();
 
     }
+
 }
