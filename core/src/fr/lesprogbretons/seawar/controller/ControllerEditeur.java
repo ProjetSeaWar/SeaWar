@@ -1,27 +1,13 @@
 package fr.lesprogbretons.seawar.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import fr.lesprogbretons.seawar.model.Editeur;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import fr.lesprogbretons.seawar.model.Partie;
-import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.model.map.DefaultMap;
-import fr.lesprogbretons.seawar.model.map.Grille;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.editeur;
-import static fr.lesprogbretons.seawar.SeaWar.logger;
-import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 public class ControllerEditeur {
 

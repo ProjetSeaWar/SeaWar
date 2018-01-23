@@ -83,6 +83,22 @@ public class SeaWarMapScreen extends ScreenAdapter {
         manager.setMyMapScreen(this);
     }
 
+    public MapOrthoCamController getCameraController() {
+        return cameraController;
+    }
+
+    public void setCameraController(MapOrthoCamController cameraController) {
+        this.cameraController = cameraController;
+    }
+
+    public static TiledCoordinates getSelectedTile() {
+        return selectedTile;
+    }
+
+    public static void setSelectedTile(TiledCoordinates selectedTile) {
+        SeaWarMapScreen.selectedTile = selectedTile;
+    }
+
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
@@ -138,12 +154,13 @@ public class SeaWarMapScreen extends ScreenAdapter {
                 myUi = new GameUi();
                 break;
             case EDITOR:
-                myUi = new UiEditeur((EditeurMapManager) manager);
+                myUi = new UiEditeur((EditeurMapManager) manager,this);
                 break;
         }
         manager.setMyUi(myUi);
 
         renderer = new HexagonalTiledMapRenderer(map);
+
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(myUi);
