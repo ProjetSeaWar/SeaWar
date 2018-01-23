@@ -1,10 +1,10 @@
 package fr.lesprogbretons.seawar.model;
 
-import fr.lesprogbretons.seawar.model.map.*;
+import fr.lesprogbretons.seawar.model.map.Grille;
 
 import java.io.Serializable;
 
-public class Editeur implements Serializable{
+public class Editeur implements Serializable {
     Grille map;
 
     public Grille getMap() {
@@ -15,13 +15,13 @@ public class Editeur implements Serializable{
         this.map = map;
     }
 
-    public Editeur(int x, int y){
-        if(x>1 && y>1){
-            map = new Grille(x,y);
+    public Editeur(int x, int y) {
+        if (x > 1 && y > 1) {
+            map = new Grille(x, y);
         }
     }
 
-    public Editeur(){
-        map = new Grille(11,13);
+    public Editeur() {
+        map = new Grille(11, 13);
     }
 }

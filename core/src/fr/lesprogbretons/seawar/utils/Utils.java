@@ -3,64 +3,12 @@ package fr.lesprogbretons.seawar.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import fr.lesprogbretons.seawar.model.boat.Amiral;
-import fr.lesprogbretons.seawar.model.boat.Boat;
-import fr.lesprogbretons.seawar.model.boat.Fregate;
-import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.model.cases.CaseEau;
-import fr.lesprogbretons.seawar.model.cases.CaseTerre;
-import fr.lesprogbretons.seawar.model.map.Grille;
-
-import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 public class Utils {
 
     public static void clearScreen() {
         Gdx.gl20.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-
-    public static void generateMap(TiledMapTileLayer layer, TiledMapTile[] tiles) {
-        for (int l = 0; l < 1; l++) {
-            Grille g = partie.getMap();
-            for (int y = 0; y < g.getHauteur(); y++) {
-                for (int x = 0; x < g.getLargeur(); x++) {
-                    Cell cell = new Cell();
-                    Case aCase = g.getCase(y, x);
-
-                    Boat boat = g.bateauSurCase(aCase);
-                    if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
-                        if (boat.getJoueur() == partie.getJoueur1()) {
-                            if (boat instanceof Amiral) {
-                                cell.setTile(tiles[3]);
-                            } else if (boat instanceof Fregate) {
-                                cell.setTile(tiles[4]);
-                            }
-                        } else {
-                            if (boat instanceof Amiral) {
-                                cell.setTile(tiles[5]);
-                            } else if (boat instanceof Fregate) {
-                                cell.setTile(tiles[6]);
-                            }
-                        }
-                    } else {
-                        if (aCase instanceof CaseEau) {
-                            if (aCase.isPhare()) {
-                                cell.setTile(tiles[2]);
-                            } else {
-                                cell.setTile(tiles[0]);
-                            }
-                        } else if (aCase instanceof CaseTerre) {
-                            cell.setTile(tiles[1]);
-                        }
-                    }
-                    layer.setCell(x, y, cell);
-                }
-            }
-        }
     }
 
     public static void getSelectedHexagon(float x, float y, TiledCoordinates selectedTile) {

@@ -30,7 +30,7 @@ public class GameMapManager implements MapManager {
     }
 
     @Override
-    public UiType getMyUi() {
+    public UiType getMyUiType() {
         return UiType.GAME;
     }
 
@@ -60,7 +60,6 @@ public class GameMapManager implements MapManager {
         //Retirer les sélections précédentes
         myMapScreen.removeLayerMark(SeaWarMapScreen.SELECT_LAYER_NAME);
         myMapScreen.removeLayerMark(SeaWarMapScreen.SHIP_LAYER_NAME);
-        myMapScreen.removeLayerMark(SeaWarMapScreen.ORIENTATION_LAYER_NAME);
 
         ArrayList<Boat> boats;
 
@@ -73,16 +72,6 @@ public class GameMapManager implements MapManager {
         for (Boat b : boats) {
             myMapScreen.markShipTile(b.getPosition().getY(), b.getPosition().getX());
         }
-
-        //region Orientatiom
-        for (Boat b : g.getBateaux1()) {
-            myMapScreen.markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
-        }
-
-        for (Boat b : g.getBateaux2()) {
-            myMapScreen.markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
-        }
-        //endregion
 
         //region Gestion case sélectionnée
         //Try catch car premier positionnement en -1,-1
@@ -138,7 +127,7 @@ public class GameMapManager implements MapManager {
     public boolean updateSelection(boolean clicked, boolean rightClicked, float touchX, float touchY) {
         if (clicked) {
             Utils.getSelectedHexagon(touchX, touchY, selectedTile);
-            logger.debug("col : " + selectedTile.column + " row : " + selectedTile.row);
+//            logger.debug("col : " + selectedTile.column + " row : " + selectedTile.row);
 
             if (selectedTile.row >= 0 && selectedTile.row < partie.getMap().getHauteur()
                     && selectedTile.column >= 0 && selectedTile.column < partie.getMap().getLargeur()) {

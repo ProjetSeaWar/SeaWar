@@ -14,7 +14,8 @@ public class Fregate extends Boat implements Serializable {
         super(c, p);
         move = 7;
         moveAvailable = move;
-        hp = 50;
+        maxHp = 50;
+        hp = maxHp;
         dmgMainCanon = 30;
         reloadMainCanon = 1;
         dmgSecCanon = 10;

@@ -1,28 +1,23 @@
 package fr.lesprogbretons.seawar.screen.manager;
 
-import fr.lesprogbretons.seawar.model.boat.Boat;
-import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.SeaWarMapScreen;
+import fr.lesprogbretons.seawar.screen.ui.EditeurUi;
 import fr.lesprogbretons.seawar.screen.ui.Ui;
-import fr.lesprogbretons.seawar.screen.ui.UiEditeur;
 import fr.lesprogbretons.seawar.screen.ui.UiType;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
-
-import java.util.ArrayList;
+import fr.lesprogbretons.seawar.utils.Utils;
 
 import static fr.lesprogbretons.seawar.SeaWar.partie;
+import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
 public class EditeurMapManager implements MapManager {
 
     //Ui
-    private UiEditeur myUi;
+    private EditeurUi myUi;
     //Vue
     private SeaWarMapScreen myMapScreen;
 
-    //Elements d'UI qui ont des actions sur la carte
-    //Sélection
-    private TiledCoordinates selectedTile;
     //Modèle
     private Grille g = partie.getMap();
 
@@ -39,11 +34,11 @@ public class EditeurMapManager implements MapManager {
 
     @Override
     public void setMyUi(Ui myUi) {
-        this.myUi = (UiEditeur) myUi;
+        this.myUi = (EditeurUi) myUi;
     }
 
     @Override
-    public UiType getMyUi() {
+    public UiType getMyUiType() {
         return UiType.EDITOR;
     }
 
@@ -59,10 +54,12 @@ public class EditeurMapManager implements MapManager {
 
     @Override
     public boolean updateSelection(boolean clicked, boolean rightClicked, float touchX, float touchY) {
+        if (clicked) {
+            Utils.getSelectedHexagon(touchX, touchY, selectedTile);
+            //Le click est consomé
+            return false;
+        }
+        //Sinon on change rien
         return false;
-    }
-
-    public TiledCoordinates getSelectedTile() {
-        return selectedTile;
     }
 }

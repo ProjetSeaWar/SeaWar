@@ -18,50 +18,50 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 public class ControllerEditeur {
 
-    public void creerCarte(int x, int y){
-        editeur = new Editeur(x,y);
+    public void creerCarte(int x, int y) {
+        editeur = new Editeur(x, y);
     }
 
-    public void creerCaseEau(int x, int y){
-        editeur.getMap().setCase(new CaseEau(x,y));
+    public void creerCaseEau(int x, int y) throws ArrayIndexOutOfBoundsException {
+        editeur.getMap().setCase(new CaseEau(x, y));
     }
 
-    public void creerCasePhare(int x, int y){
-        editeur.getMap().setCase(new CaseEau(x,y));
-        editeur.getMap().getCase(x,y).setPhare(true);
+    public void creerCasePhare(int x, int y) throws ArrayIndexOutOfBoundsException {
+        editeur.getMap().setCase(new CaseEau(x, y));
+        editeur.getMap().getCase(x, y).setPhare(true);
     }
 
-    public void creerCaseTerre(int x,int y){
-        editeur.getMap().setCase(new CaseTerre(x,y));
+    public void creerCaseTerre(int x, int y) throws ArrayIndexOutOfBoundsException {
+        editeur.getMap().setCase(new CaseTerre(x, y));
     }
 
-    public void ajouterAmiralJoueur1(int x, int y, Orientation orientation){
-        if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
-            Amiral boat = new Amiral(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur1());
+    public void ajouterAmiralJoueur1(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
+        if (!(editeur.getMap().getCase(x, y) instanceof CaseTerre)) {
+            Amiral boat = new Amiral(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1());
             boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur1(boat);
         }
     }
 
-    public void ajouterFregateJoueur1(int x, int y, Orientation orientation){
-        if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
-            Fregate boat = new Fregate(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur1());
+    public void ajouterFregateJoueur1(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
+        if (!(editeur.getMap().getCase(x, y) instanceof CaseTerre)) {
+            Fregate boat = new Fregate(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1());
             boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur1(boat);
         }
     }
 
-    public void ajouterAmiralJoueur2(int x, int y, Orientation orientation){
-        if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
-            Amiral boat = new Amiral(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur2());
+    public void ajouterAmiralJoueur2(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
+        if (!(editeur.getMap().getCase(x, y) instanceof CaseTerre)) {
+            Amiral boat = new Amiral(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2());
             boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur2(boat);
         }
     }
 
-    public void ajouterFregateJoueur2(int x, int y, Orientation orientation){
-        if(!(editeur.getMap().getCase(x,y) instanceof CaseTerre)){
-            Fregate boat = new Fregate(editeur.getMap().getCase(x,y),editeur.getMap().getJoueur2());
+    public void ajouterFregateJoueur2(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
+        if (!(editeur.getMap().getCase(x, y) instanceof CaseTerre)) {
+            Fregate boat = new Fregate(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2());
             boat.setOrientation(orientation);
             editeur.getMap().ajouterBateauJoueur2(boat);
         }

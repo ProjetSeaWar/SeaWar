@@ -25,6 +25,7 @@ public abstract class Boat implements Serializable {
 
     //Combat
     int hp;
+    int maxHp;
     int dmgMainCanon;
     int dmgSecCanon;
     private int shootTaken = 0;                       // Le nombre de tir qu'à déjà encaissé le bateau pendant le tour
@@ -77,6 +78,10 @@ public abstract class Boat implements Serializable {
 
     public int getReloadSecCanon() {
         return reloadSecCanon;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public int getMainCD() {

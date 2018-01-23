@@ -10,7 +10,7 @@ public interface MapManager {
 
     void setMyUi(Ui myUi);
 
-    UiType getMyUi();
+    UiType getMyUiType();
 
     void start();
 

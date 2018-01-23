@@ -7,6 +7,7 @@ package fr.lesprogbretons.seawar.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Partie;
+import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.map.Grille;
 
@@ -124,8 +125,13 @@ public class Controller {
         return isOver;
     }
 
-    public void changercanon() {
+    public void changerCanon() {
         partie.getBateauSelectionne().setCanonSelectionne(3 - partie.getBateauSelectionne().getCanonSelectionne());
+
+    }
+
+    public void changerCanon(Boat b) {
+        b.setCanonSelectionne(3 - b.getCanonSelectionne());
 
     }
 

@@ -10,8 +10,6 @@ import fr.lesprogbretons.seawar.controller.Controller;
 import fr.lesprogbretons.seawar.controller.ControllerEditeur;
 import fr.lesprogbretons.seawar.model.Editeur;
 import fr.lesprogbretons.seawar.model.Partie;
-import fr.lesprogbretons.seawar.model.map.DefaultMap;
-import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.SeaWarLoadingScreen;
 
 /**

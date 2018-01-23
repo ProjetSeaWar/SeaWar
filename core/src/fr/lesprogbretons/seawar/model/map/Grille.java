@@ -88,14 +88,6 @@ public class Grille implements Serializable {
         this.bateaux2 = bateaux2;
     }
 
-    private Case[][] getTableau() {
-        return tableau;
-    }
-
-    private void setTableau(Case[][] tableau) {
-        this.tableau = tableau;
-    }
-
     public int getHauteur() {
         return hauteur;
     }
@@ -113,12 +105,8 @@ public class Grille implements Serializable {
     }
 
     //modifier une case de la grille
-    public void setCase(Case c) {
-        Case[][] tab = getTableau();
-
-        tab[c.getX()][c.getY()] = c;
-
-        setTableau(tab);
+    public void setCase(Case c) throws ArrayIndexOutOfBoundsException {
+        tableau[c.getX()][c.getY()] = c;
     }
 
     //ajouter un bateau joueur 1
@@ -131,7 +119,7 @@ public class Grille implements Serializable {
     public void ajouterBateauJoueur2(Boat b) {
         ArrayList<Boat> tab = getBateaux2();
         tab.add(b);
-        setBateaux1(tab);
+        setBateaux2(tab);
     }
 
     /*******************************************************/

@@ -16,13 +16,17 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Orientation;
+import fr.lesprogbretons.seawar.model.boat.Amiral;
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.Case;
-import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
-import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
-import fr.lesprogbretons.seawar.screen.ui.GameUi;
+import fr.lesprogbretons.seawar.model.cases.CaseEau;
+import fr.lesprogbretons.seawar.model.cases.CaseTerre;
+import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.manager.MapManager;
+import fr.lesprogbretons.seawar.screen.ui.EditeurUi;
+import fr.lesprogbretons.seawar.screen.ui.GameUi;
 import fr.lesprogbretons.seawar.screen.ui.Ui;
-import fr.lesprogbretons.seawar.screen.ui.UiEditeur;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -52,6 +56,11 @@ public class SeaWarMapScreen extends ScreenAdapter {
     private TiledMap map;
     private MapLayers layers;
     private TiledMapTile[] tiles;
+
+    //Modèle
+    private Grille g;
+
+
     //Size
     private int widthMap;
     private int heightMap;
@@ -69,17 +78,21 @@ public class SeaWarMapScreen extends ScreenAdapter {
     //Sélection
     public static TiledCoordinates selectedTile;
 
-    public SeaWarMapScreen(GameMapManager manager) {
+    public SeaWarMapScreen(MapManager manager) {
         this.manager = manager;
-        widthMap = partie.getMap().getLargeur();
-        heightMap = partie.getMap().getHauteur();
-        manager.setMyMapScreen(this);
-    }
+        switch (manager.getMyUiType()) {
+            case GAME:
+                widthMap = partie.getMap().getLargeur();
+                heightMap = partie.getMap().getHauteur();
+                g = partie.getMap();
+                break;
+            case EDITOR:
+                widthMap = editeur.getMap().getLargeur();
+                heightMap = editeur.getMap().getHauteur();
+                g = editeur.getMap();
+                break;
+        }
 
-    public SeaWarMapScreen(EditeurMapManager manager){
-        this.manager = manager;
-        widthMap = editeur.getMap().getLargeur();
-        heightMap = editeur.getMap().getHauteur();
         manager.setMyMapScreen(this);
     }
 
@@ -148,12 +161,12 @@ public class SeaWarMapScreen extends ScreenAdapter {
         //endregion
 
         //Ui
-        switch (manager.getMyUi()) {
+        switch (manager.getMyUiType()) {
             case GAME:
                 myUi = new GameUi();
                 break;
             case EDITOR:
-                myUi = new UiEditeur((EditeurMapManager) manager,this);
+                myUi = new EditeurUi();
                 break;
         }
         manager.setMyUi(myUi);
@@ -175,6 +188,56 @@ public class SeaWarMapScreen extends ScreenAdapter {
         layers.add(layer);
     }
 
+    private void generateMap(TiledMapTileLayer layer, TiledMapTile[] tiles) {
+        for (int l = 0; l < 1; l++) {
+            for (int y = 0; y < g.getHauteur(); y++) {
+                for (int x = 0; x < g.getLargeur(); x++) {
+                    Cell cell = new Cell();
+                    Case aCase = g.getCase(y, x);
+
+                    Boat boat = g.bateauSurCase(aCase);
+                    if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
+                        if (boat.getJoueur() == partie.getJoueur1()) {
+                            if (boat instanceof Amiral) {
+                                cell.setTile(tiles[3]);
+                            } else if (boat instanceof Fregate) {
+                                cell.setTile(tiles[4]);
+                            }
+                        } else {
+                            if (boat instanceof Amiral) {
+                                cell.setTile(tiles[5]);
+                            } else if (boat instanceof Fregate) {
+                                cell.setTile(tiles[6]);
+                            }
+                        }
+                    } else {
+                        if (aCase instanceof CaseEau) {
+                            if (aCase.isPhare()) {
+                                cell.setTile(tiles[2]);
+                            } else {
+                                cell.setTile(tiles[0]);
+                            }
+                        } else if (aCase instanceof CaseTerre) {
+                            cell.setTile(tiles[1]);
+                        }
+                    }
+                    layer.setCell(x, y, cell);
+                }
+            }
+        }
+
+        //region Orientatiom
+        removeLayerMark(SeaWarMapScreen.ORIENTATION_LAYER_NAME);
+        for (Boat b : g.getBateaux1()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
+        }
+
+        for (Boat b : g.getBateaux2()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
+        }
+        //endregion
+    }
+
     @Override
     public void resize(int width, int height) {
         //A changer en fonction de comment est géré le stage
@@ -185,7 +248,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
     public void render(float delta) {
         Utils.clearScreen();
         //On regénère la map
-        Utils.generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME), tiles);
+        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME), tiles);
 
         //Act GameUi
         myUi.act(delta);

@@ -140,7 +140,7 @@ public class GameUi extends Ui {
         show.row();
         show.left().top();
 
-        hide.add(showButton).padLeft(10);
+        hide.add(showButton).padLeft(10).padTop(2).padBottom(3);
         hide.row();
         hide.left().top();
         //endregion
@@ -152,16 +152,55 @@ public class GameUi extends Ui {
         if (partie.getMap().casePossedeBateaux(aCase)) {
             Boat boat = partie.getMap().bateauSurCase(aCase);
 
+            Dialog d = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
+                    skin, "default");
+
             Table t = new Table();
             t.setFillParent(true);
 
             Label name = new Label(boat.infos(), skin, "default");
-            ProgressBar coolDownProgress = new ProgressBar(2, 0, 1, false, skin, "default");
-            coolDownProgress.setValue(boat.getSelectedCanonCoolDown());
+            ProgressBar coolDownProgress = new ProgressBar(0, boat.getSelectedCanonReload(),
+                    1, false, skin, "default-horizontal");
+            coolDownProgress.setValue(boat.getSelectedCanonReload() - boat.getSelectedCanonCoolDown());
+
+            Label hp = new Label("Hp", skin, "default");
+            //TODO Boat get Max HP
+            ProgressBar hpProgressBar = new ProgressBar(0, boat.getMaxHp(), 1,
+                    false, skin, "default-horizontal");
+            hpProgressBar.setValue(boat.getHp());
+
+            TextButton changeButton = new TextButton("Switch Weapon", skin, "default");
+            changeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    d.hide();
+                    seaWarController.changerCanon(boat);
+                    showInfoMessage();
+                }
+            });
 
 
-            openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
-                    skin, "default");
+            TextButton dismissButton = new TextButton("Dismiss", skin, "default");
+            dismissButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    d.hide();
+                }
+            });
+
+            t.add(name).width(300).padLeft(10).padTop(2).padBottom(3);
+            t.add(coolDownProgress).width(50).padLeft(10);
+            t.row();
+            t.add(hp).width(300).padLeft(10).padTop(2).padBottom(3);
+            t.add(hpProgressBar).width(50).padLeft(10);
+            t.row();
+            t.add(changeButton).width(250).padLeft(10).padTop(2).padBottom(3);
+            t.add(dismissButton).width(100).padLeft(10);
+            t.left().top();
+
+            d.getContentTable().add(t);
+            d.show(s);
+
         } else {
             //Récupérer phare
             String lighthouse;

@@ -14,7 +14,8 @@ public class Amiral extends Boat implements Serializable {
         super(c, p);
         move = 3;
         moveAvailable = move;
-        hp = 100;
+        maxHp = 100;
+        hp = maxHp;
         dmgMainCanon = 50;
         reloadMainCanon = 3;
         dmgSecCanon = 30;

@@ -2,42 +2,20 @@ package fr.lesprogbretons.seawar.screen.ui;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import fr.lesprogbretons.seawar.SeaWar;
-import fr.lesprogbretons.seawar.model.cases.CaseEau;
-import fr.lesprogbretons.seawar.model.cases.CaseTerre;
-import fr.lesprogbretons.seawar.screen.MapOrthoCamController;
-import fr.lesprogbretons.seawar.screen.SeaWarMapScreen;
 import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
-import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
 
-import static fr.lesprogbretons.seawar.SeaWar.editeur;
 import static fr.lesprogbretons.seawar.SeaWar.editeurController;
 import static fr.lesprogbretons.seawar.SeaWar.game;
 import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
-import fr.lesprogbretons.seawar.utils.TiledCoordinates;
-import fr.lesprogbretons.seawar.utils.Utils;
+public class EditeurUi extends Ui {
 
-public class UiEditeur extends Ui {
 
-    private Label playerLabel;
-    private Label turnLabel;
-
-    private SeaWarMapScreen swms;
-
-    private EditeurMapManager mapManager;
-
-    private TiledCoordinates selectedTile = new TiledCoordinates(-1,-1);
-
-    public UiEditeur(EditeurMapManager mapManager, SeaWarMapScreen swms) {
+    public EditeurUi() {
         super();
-
-        this.mapManager = mapManager;
-        this.swms = swms;
 
         TextButton optionsButton = new TextButton("Options", skin, "default");
         TextButton saveButton = new TextButton("Save", skin, "default");
@@ -85,11 +63,9 @@ public class UiEditeur extends Ui {
         caseEau.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Utils.getSelectedHexagon(swms.getCameraController().touchX,swms.getCameraController().touchY,selectedTile);
-                System.out.println(editeur.getMap().getCase(selectedTile.row,selectedTile.column) instanceof CaseEau);
-                System.out.println("x =" + selectedTile.row + " y =" + selectedTile.column);
-               // editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
-//                System.out.println(editeur.getMap().getCase(selectedTile.row,selectedTile.column) instanceof CaseEau);
+                try {
+                    editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
+                } catch (ArrayIndexOutOfBoundsException ignored){}
             }
         });
 
@@ -99,7 +75,5 @@ public class UiEditeur extends Ui {
         show.add(caseEau).padLeft(10);
         show.row();
         show.left().top();
-
     }
-
 }
