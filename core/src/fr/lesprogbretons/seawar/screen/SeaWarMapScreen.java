@@ -21,6 +21,7 @@ import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.screen.ui.GameUi;
 import fr.lesprogbretons.seawar.screen.manager.MapManager;
 import fr.lesprogbretons.seawar.screen.ui.Ui;
+import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.util.ArrayList;
@@ -52,14 +53,18 @@ public class SeaWarMapScreen extends ScreenAdapter {
     private int widthMap;
     private int heightMap;
 
+    //Camera et rendu
     private OrthographicCamera camera;
     private MapOrthoCamController cameraController;
     private HexagonalTiledMapRenderer renderer;
     private TextureAtlas hexture;
 
-    //GameUi
+    //Ui
     private Ui myUi;
     private MapManager manager;
+
+    //Sélection
+    public static TiledCoordinates selectedTile;
 
     public SeaWarMapScreen(GameMapManager manager) {
         this.manager = manager;

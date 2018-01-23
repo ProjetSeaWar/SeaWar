@@ -10,6 +10,7 @@ import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
+import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
 public class GameUi extends Ui {
 
@@ -96,6 +97,7 @@ public class GameUi extends Ui {
                         openedDialog = d;
                     }
                 } else {
+                    selectedTile.setCoords(-1, -1);
                     startTurnMessage();
                 }
             }
@@ -143,6 +145,10 @@ public class GameUi extends Ui {
         hide.row();
         hide.left().top();
         //endregion
+    }
+
+    public void showInfoMessage() {
+
     }
 
     public void startTurnMessage() {

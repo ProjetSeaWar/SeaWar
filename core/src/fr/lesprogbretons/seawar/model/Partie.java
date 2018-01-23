@@ -1,7 +1,8 @@
 package fr.lesprogbretons.seawar.model;
 
-import fr.lesprogbretons.seawar.model.map.*;
-import fr.lesprogbretons.seawar.model.boat.*;
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
+import fr.lesprogbretons.seawar.model.map.Grille;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class Partie implements Serializable {
 
     public Partie(Grille map) {
         this.map = map;
+        joueur1 = map.getJoueur1();
+        joueur2 = map.getJoueur2();
+        currentPlayer = joueur1;
     }
 
     /*---------------------------------------------------------------------------------------*/

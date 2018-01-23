@@ -13,6 +13,7 @@ import fr.lesprogbretons.seawar.utils.Utils;
 import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.*;
+import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
 public class GameMapManager implements MapManager {
 
@@ -22,10 +23,6 @@ public class GameMapManager implements MapManager {
     private SeaWarMapScreen myMapScreen;
     //Modèle
     private Grille g = partie.getMap();
-
-    //Elements d'UI qui ont des actions sur la carte
-    //Sélection
-    private TiledCoordinates selectedTile;
 
     public GameMapManager() {
         //Pas de sélection pour le début
@@ -65,15 +62,15 @@ public class GameMapManager implements MapManager {
         myMapScreen.removeLayerMark(SeaWarMapScreen.SHIP_LAYER_NAME);
         myMapScreen.removeLayerMark(SeaWarMapScreen.ORIENTATION_LAYER_NAME);
 
-        ArrayList<Boat> bateaux;
+        ArrayList<Boat> boats;
 
         if (partie.getCurrentPlayer().getNumber() == 1) {
-            bateaux = g.getBateaux1();
+            boats = g.getBateaux1();
         } else {
-            bateaux = g.getBateaux2();
+            boats = g.getBateaux2();
         }
 
-        for (Boat b : bateaux) {
+        for (Boat b : boats) {
             myMapScreen.markShipTile(b.getPosition().getY(), b.getPosition().getX());
         }
 

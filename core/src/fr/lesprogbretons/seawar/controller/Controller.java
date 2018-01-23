@@ -23,6 +23,10 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  */
 public class Controller {
 
+    public void nouvellePartie(){
+        partie = new Partie();
+    }
+
     public void nouvellePartie(Grille g){
         partie = new Partie(g);
     }
