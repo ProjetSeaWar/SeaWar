@@ -140,7 +140,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
         tiles[14] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsoutheast")));
         tiles[15] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsouthwest")));
 
-
         //region Génération map
         addNewLayer(MAP_LAYER_NAME);
         addNewLayer(SELECT_LAYER_NAME);

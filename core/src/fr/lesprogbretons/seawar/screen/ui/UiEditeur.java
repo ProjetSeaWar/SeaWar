@@ -52,7 +52,7 @@ public class UiEditeur extends Ui {
                 TextButton annulerButton = new TextButton("Annuler", skin, "default");
                 validerButton.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        editeurController.save(nomCarte.getText());
+                        editeurController.savegrille(nomCarte.getText());
                         d.hide();
                     }
                 });
