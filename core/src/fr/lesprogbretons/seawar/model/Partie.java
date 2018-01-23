@@ -1,5 +1,6 @@
 package fr.lesprogbretons.seawar.model;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.map.DefaultMap;
 import fr.lesprogbretons.seawar.model.map.Grille;
@@ -236,6 +237,39 @@ public class Partie implements Serializable {
             if (getCurrentPlayer().equals(joueur1)) {
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).endTurn();
+                    if(map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(),1).size()==0) {
+                        if (!map.getBateaux1().get(i).isEstBloque()){
+                            map.getBateaux1().get(i).setEstBloque(true);
+                        }
+
+                        else {
+                            switch(map.getBateaux1().get(i).getOrientation()){
+                                case SUDOUEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORDEST);
+                                    break;
+
+                                case SUD:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORD);
+                                    break;
+
+                                case SUDEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORDOUEST);
+                                    break;
+
+                                case NORDEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUDOUEST);
+                                    break;
+
+                                case NORD:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUD);
+                                    break;
+
+                                case NORDOUEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUDEST);
+                                    break;
+                            }
+                        }
+                    }
 
                 }
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
@@ -245,6 +279,39 @@ public class Partie implements Serializable {
             } else {
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
                     map.getBateaux2().get(i).endTurn();
+                    if(map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(),1).size()==0) {
+                        if (!map.getBateaux2().get(i).isEstBloque()){
+                            map.getBateaux2().get(i).setEstBloque(true);
+                        }
+
+                        else {
+                            switch(map.getBateaux2().get(i).getOrientation()){
+                                case SUDOUEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORDEST);
+                                    break;
+
+                                case SUD:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORD);
+                                    break;
+
+                                case SUDEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORDOUEST);
+                                    break;
+
+                                case NORDEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUDOUEST);
+                                    break;
+
+                                case NORD:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUD);
+                                    break;
+
+                                case NORDOUEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUDEST);
+                                    break;
+                            }
+                        }
+                    }
                 }
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).setShootTaken(0);

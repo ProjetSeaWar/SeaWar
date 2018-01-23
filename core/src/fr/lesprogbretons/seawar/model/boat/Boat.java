@@ -36,7 +36,17 @@ public abstract class Boat implements Serializable {
     private int secCD = 0;
 
     //Joueur possédant ce bateau
-    private Player joueur;
+    Player joueur;
+
+    public boolean isEstBloque() {
+        return estBloque;
+    }
+
+    public void setEstBloque(boolean estBloque) {
+        this.estBloque = estBloque;
+    }
+
+    boolean estBloque = false;
 
 
     /**
