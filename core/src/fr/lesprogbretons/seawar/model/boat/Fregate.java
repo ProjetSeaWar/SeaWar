@@ -17,9 +17,9 @@ public class Fregate extends Boat implements Serializable {
         maxHp = 50;
         hp = maxHp;
         dmgMainCanon = 30;
-        reloadMainCanon = 1;
+        reloadMainCanon = 2;
         dmgSecCanon = 10;
-        reloadSecCanon = 0;
+        reloadSecCanon = 1;
     }
 
     @Override

@@ -133,6 +133,7 @@ public abstract class Boat implements Serializable {
     }
 
     public void setCanonSelectionne(int canonSelectionne) {
+
         this.canonSelectionne = canonSelectionne;
     }
 
@@ -185,14 +186,14 @@ public abstract class Boat implements Serializable {
         String info = toString() + ": " + hp + " hp\n";
         if (canonSelectionne == 1) {
             info += "Main gun ";
-            if (mainCD > 0) {
+            if (mainCD == 0) {
                 info += "loaded";
             } else {
                 info += "recharging " + mainCD + " turns left";
             }
         } else {
             info += "Secondary gun ";
-            if (mainCD > 0) {
+            if (mainCD == 0) {
                 info += "loaded";
             } else {
                 info += "recharging " + secCD + " turns left";

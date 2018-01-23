@@ -1,6 +1,7 @@
 package fr.lesprogbretons.seawar.screen.ui;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -152,7 +153,7 @@ public class GameUi extends Ui {
         if (partie.getMap().casePossedeBateaux(aCase)) {
             Boat boat = partie.getMap().bateauSurCase(aCase);
 
-            Dialog d = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
+            openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
                     skin, "default");
 
             Table t = new Table();
@@ -162,18 +163,20 @@ public class GameUi extends Ui {
             ProgressBar coolDownProgress = new ProgressBar(0, boat.getSelectedCanonReload(),
                     1, false, skin, "default-horizontal");
             coolDownProgress.setValue(boat.getSelectedCanonReload() - boat.getSelectedCanonCoolDown());
+            coolDownProgress.setColor(new Color(0x33CCFFFF));
 
             Label hp = new Label("Hp", skin, "default");
-            //TODO Boat get Max HP
+
             ProgressBar hpProgressBar = new ProgressBar(0, boat.getMaxHp(), 1,
                     false, skin, "default-horizontal");
             hpProgressBar.setValue(boat.getHp());
+            hpProgressBar.setColor(new Color(0x00FF00FF));
 
             TextButton changeButton = new TextButton("Switch Weapon", skin, "default");
             changeButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    d.hide();
+                    openedDialog.hide();
                     seaWarController.changerCanon(boat);
                     showInfoMessage();
                 }
@@ -184,41 +187,54 @@ public class GameUi extends Ui {
             dismissButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    d.hide();
+                    openedDialog.hide();
                 }
             });
 
-            t.add(name).width(300).padLeft(10).padTop(2).padBottom(3);
-            t.add(coolDownProgress).width(50).padLeft(10);
+            if (!boat.getJoueur().equals(partie.getCurrentPlayer())) {
+                changeButton.setVisible(false);
+            }
+
+            t.add(name).width(275).padTop(2).padBottom(3);
+            t.add(coolDownProgress).width(150).padLeft(10);
             t.row();
-            t.add(hp).width(300).padLeft(10).padTop(2).padBottom(3);
-            t.add(hpProgressBar).width(50).padLeft(10);
+            t.add(hp).width(275).padTop(2).padBottom(3);
+            t.add(hpProgressBar).width(150).padLeft(10);
             t.row();
-            t.add(changeButton).width(250).padLeft(10).padTop(2).padBottom(3);
+            t.add(changeButton).width(200).padLeft(10).padTop(2).padBottom(3);
             t.add(dismissButton).width(100).padLeft(10);
             t.left().top();
 
-            d.getContentTable().add(t);
-            d.show(s);
+            openedDialog.getContentTable().add(t);
+            openedDialog.show(s);
 
         } else {
             //Récupérer phare
-            String lighthouse;
+            String lighthouse = "";
             if (aCase.isPhare() && aCase.getPossedePhare() != null) {
                 lighthouse = "Lighthouse owned by " + aCase.getPossedePhare().toString();
+                if (aCase.isBateauDetruit()) {
+                    lighthouse += "\nHere sank a boat";
+                }
             } else if (aCase.isPhare() && aCase.getPossedePhare() == null) {
                 lighthouse = "Free lighthouse";
+                if (aCase.isBateauDetruit()) {
+                    lighthouse += "\nHere sank a boat";
+                }
             } else {
-                lighthouse = "Nothing to see here";
+                if (aCase.isBateauDetruit()) {
+                    lighthouse += "Here sank a boat";
+                } else {
+                    lighthouse = "Nothing to see here";
+                }
             }
+
             openedDialog = new Dialog(aCase.toString(), skin, "default")
                     .text(lighthouse)
                     .button("Dismiss", true)
                     .key(Input.Keys.ENTER, true)
                     .show(s);
         }
-
-
     }
 
     public void startTurnMessage() {

@@ -197,7 +197,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
                     Boat boat = g.bateauSurCase(aCase);
                     if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
-                        if (boat.getJoueur() == partie.getJoueur1()) {
+                        if (boat.getJoueur().getNumber() == 1) {
                             if (boat instanceof Amiral) {
                                 cell.setTile(tiles[3]);
                             } else if (boat instanceof Fregate) {

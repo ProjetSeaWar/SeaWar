@@ -17,9 +17,9 @@ public class Amiral extends Boat implements Serializable {
         maxHp = 100;
         hp = maxHp;
         dmgMainCanon = 50;
-        reloadMainCanon = 3;
+        reloadMainCanon = 4;
         dmgSecCanon = 30;
-        reloadSecCanon = 1;
+        reloadSecCanon = 2;
     }
 
     @Override

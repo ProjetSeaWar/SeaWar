@@ -49,7 +49,6 @@ public class EditeurMapManager implements MapManager {
 
     @Override
     public void update() {
-
         myMapScreen.removeLayerMark(SeaWarMapScreen.SELECT_LAYER_NAME);
         myMapScreen.markSelectedTile(selectedTile.column, selectedTile.row);
     }
