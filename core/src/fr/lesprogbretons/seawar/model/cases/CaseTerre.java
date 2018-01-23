@@ -14,7 +14,12 @@ public class CaseTerre extends Case implements Serializable{
     }
 
     @Override
-    public String toString() {
+    public String infoCase() {
         return "    Land";
+    }
+
+    @Override
+    public String toString() {
+        return "Land";
     }
 }

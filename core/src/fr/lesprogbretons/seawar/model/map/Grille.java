@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Classe Grille
  */
-public class Grille implements Serializable{
+public class Grille implements Serializable {
 
     //Joueurs
     private Player joueur1 = new Player(1);
@@ -68,7 +68,7 @@ public class Grille implements Serializable{
         this.joueur2 = joueur2;
     }
 
-    public Case getCase(int hauteur, int largeur) throws ArrayIndexOutOfBoundsException{
+    public Case getCase(int hauteur, int largeur) throws ArrayIndexOutOfBoundsException {
         return tableau[hauteur][largeur];
     }
 
@@ -596,17 +596,4 @@ public class Grille implements Serializable{
             joueur.setPharesPossedes(joueur.getPharesPossedes() + 1);
         }
     }
-
-    public static void main(String[] args){
-        Grille g = new Grille(12,12);;
-
-        g.ajouterBateauJoueur1(new Amiral(g.getCase(1,1),g.joueur1));
-
-        System.out.println(g.getBateaux1().get(0));
-
-        g.getBateaux1().remove(0);
-
-        System.out.println(g.getBateaux1().size());
-    }
-
 }

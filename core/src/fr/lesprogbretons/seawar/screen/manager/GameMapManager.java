@@ -98,7 +98,7 @@ public class GameMapManager implements MapManager {
                     Boat boat = g.bateauSurCase(aCase);
                     //Si il appartient au joueur qui joue
                     if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
-                        //Mettre infos bateau sélectionné
+                        //Mettre turnInfos bateau sélectionné
                         myUi.setInfoSelected(boat.infosCurrentPlayer());
                         //Mettre cases dispo déplacements
                         if (boat.getMoveAvailable() > 0)
@@ -118,7 +118,7 @@ public class GameMapManager implements MapManager {
                 if (!g.casePossedeBateaux(aCase)) {
                     //Si une case de base sélectionnée
                     myMapScreen.markSelectedTile(selectedTile.column, selectedTile.row);
-                    myUi.setInfoSelected(aCase.toString());
+                    myUi.setInfoSelected(aCase.infoCase());
                 } else {
                     //Si c'est un bateau de l'adversaire (impossible à sélectionner)
                     if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
@@ -149,7 +149,7 @@ public class GameMapManager implements MapManager {
                     seaWarController.selection(selectedTile.row, selectedTile.column);
                 } else {
                     //Clic droit
-                    //TODO Affichage des infos
+                    myUi.showInfoMessage();
                 }
             }
             //Le click est consomé

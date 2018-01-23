@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class GameUi extends Ui {
                         .text("Choose your option")
                         .button(saveButton)
                         .button(menuButton)
-                        .button("Quit", false)
+                        .button("Dismiss", false)
                         .show(s);
             }
         });
@@ -67,10 +68,8 @@ public class GameUi extends Ui {
                 d.getContentTable().row();
                 d.getContentTable().add(nompartie);
                 d.button(validerButton, true);
-                d.button("Annuler", false);
+                d.button("Dismiss", false);
                 d.show(s);
-                openedDialog = d;
-
             }
 
         });
@@ -148,19 +147,51 @@ public class GameUi extends Ui {
     }
 
     public void showInfoMessage() {
+        //Récupérer les turnInfos
+        Case aCase = partie.getMap().getCase(selectedTile.row, selectedTile.column);
+        if (partie.getMap().casePossedeBateaux(aCase)) {
+            Boat boat = partie.getMap().bateauSurCase(aCase);
+
+            Table t = new Table();
+            t.setFillParent(true);
+
+            Label name = new Label(boat.infos(), skin, "default");
+            ProgressBar coolDownProgress = new ProgressBar(2, 0, 1, false, skin, "default");
+            coolDownProgress.setValue(boat.getSelectedCanonCoolDown());
+
+
+            openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
+                    skin, "default");
+        } else {
+            //Récupérer phare
+            String lighthouse;
+            if (aCase.isPhare() && aCase.getPossedePhare() != null) {
+                lighthouse = "Lighthouse owned by " + aCase.getPossedePhare().toString();
+            } else if (aCase.isPhare() && aCase.getPossedePhare() == null) {
+                lighthouse = "Free lighthouse";
+            } else {
+                lighthouse = "Nothing to see here";
+            }
+            openedDialog = new Dialog(aCase.toString(), skin, "default")
+                    .text(lighthouse)
+                    .button("Dismiss", true)
+                    .key(Input.Keys.ENTER, true)
+                    .show(s);
+        }
+
 
     }
 
     public void startTurnMessage() {
-        //Construire la string qui contient les infos de tour
+        //Construire la string qui contient les turnInfos de tour
         ArrayList<String> boatHps = new ArrayList<>();
         if (partie.getCurrentPlayer().getNumber() == 1) {
             for (Boat b : partie.getMap().getBateaux1()) {
-                boatHps.add(b.infos());
+                boatHps.add(b.turnInfos());
             }
         } else {
             for (Boat b : partie.getMap().getBateaux2()) {
-                boatHps.add(b.infos());
+                boatHps.add(b.turnInfos());
             }
         }
 

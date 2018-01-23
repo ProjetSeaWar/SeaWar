@@ -234,7 +234,7 @@ public class SeaWarEditeurScreen extends ScreenAdapter {
                     previousSelectedTile.setCoords(selectedTile);
                 } else {
                     //Clic droit
-                    //TODO Affichage des infos
+                    //TODO Affichage des turnInfos
                 }
             }
             //Le click est consomé

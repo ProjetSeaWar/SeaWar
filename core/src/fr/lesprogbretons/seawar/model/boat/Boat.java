@@ -87,6 +87,24 @@ public abstract class Boat implements Serializable {
         return secCD;
     }
 
+    public int getSelectedCanonDmg() {
+        if (canonSelectionne == 1) return getDmgMainCanon();
+        else if (canonSelectionne == 2) return getDmgSecCanon();
+        return -1;
+    }
+
+    public int getSelectedCanonReload() {
+        if (canonSelectionne == 1) return getReloadMainCanon();
+        else if (canonSelectionne == 2) return getReloadSecCanon();
+        return -1;
+    }
+
+    public int getSelectedCanonCoolDown() {
+        if (canonSelectionne == 1) return mainCD;
+        else if (canonSelectionne == 2) return secCD;
+        return -1;
+    }
+
     public Player getJoueur() {
         return joueur;
     }
@@ -148,10 +166,30 @@ public abstract class Boat implements Serializable {
         return toString() + ": " + hp + " hp";
     }
 
-    public String infos() {
+    public String turnInfos() {
         String info = toString() + ": " + hp + " hp\n";
-        if (canonSelectionne == 1) info += "Main gun | Cooldown : " + mainCD;
-        else info += "Secondary gun  | Cooldown : " + secCD;
+        if (canonSelectionne == 1) {
+            info += "Main gun ";
+            if (mainCD > 0) {
+                info += "loaded";
+            } else {
+                info += "recharging " + mainCD + " turns left";
+            }
+        } else {
+            info += "Secondary gun ";
+            if (mainCD > 0) {
+                info += "loaded";
+            } else {
+                info += "recharging " + secCD + " turns left";
+            }
+        }
+        return info;
+    }
+
+    public String infos() {
+        String info = toString() + " ";
+        if (canonSelectionne == 1) info += "main gun";
+        else info += "secondary gun";
         return info;
     }
 

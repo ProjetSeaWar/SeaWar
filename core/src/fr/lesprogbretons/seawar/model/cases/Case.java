@@ -81,12 +81,8 @@ public abstract class Case implements Serializable{
                 phare == aCase.phare;
     }
 
-    /**
-     * infosCurrentPlayer
-     * @return
-     */
-    @Override
-    public String toString() {
+
+    public String infoCase() {
         if (isPhare()) {
             if (possedePhare == null) {
                 return " Phare: free";

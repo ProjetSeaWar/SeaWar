@@ -43,7 +43,9 @@ public abstract class Ui extends Stage {
         super.touchDown(screenX, screenY, pointer, button);
         logger.debug("screenY = " + screenY);
         //Only keep these clicks for the table, send the other to the board
-        if (openedDialog != null) openedDialog.hide();
+        if (openedDialog != null) {
+            openedDialog.hide();
+        }
         return screenY < 25 && show.isVisible();
     }
 }

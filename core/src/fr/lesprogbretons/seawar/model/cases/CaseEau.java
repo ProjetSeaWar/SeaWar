@@ -27,11 +27,16 @@ public class CaseEau extends Case implements Serializable{
     }
 
     @Override
-    public String toString() {
+    public String infoCase() {
         if (isPhare()) {
-            return super.toString();
+            return super.infoCase();
         } else {
             return "    Water";
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Water";
     }
 }

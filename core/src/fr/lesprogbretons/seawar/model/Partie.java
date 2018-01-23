@@ -127,8 +127,8 @@ public class Partie implements Serializable {
         this.winner = winner;
     }
 
-    private void setFin(boolean fin) {
-        this.fin = fin;
+    private void setFin() {
+        this.fin = true;
     }
 
     public VictoryType getVictoryType() {
@@ -163,11 +163,11 @@ public class Partie implements Serializable {
 
         //Si le joueur a 3 phares, il gagne
         if (getJoueur1().getPharesPossedes() == 3) {
-            setFin(true);
+            setFin();
             setWinner(getJoueur1());
             setVictoryType(VictoryType.TAKE);
         } else if (getJoueur2().getPharesPossedes() == 3) {
-            setFin(true);
+            setFin();
             setWinner(getJoueur2());
             setVictoryType(VictoryType.TAKE);
         }
@@ -183,7 +183,7 @@ public class Partie implements Serializable {
             }
 
             if (fin) {
-                setFin(true);
+                setFin();
                 setWinner(joueur1);
                 setVictoryType(VictoryType.DESTROY);
             }
@@ -200,7 +200,7 @@ public class Partie implements Serializable {
             }
 
             if (fin) {
-                setFin(true);
+                setFin();
                 setWinner(joueur2);
                 setVictoryType(VictoryType.DESTROY);
             }
