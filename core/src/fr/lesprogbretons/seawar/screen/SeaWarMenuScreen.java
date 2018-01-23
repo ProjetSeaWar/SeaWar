@@ -73,8 +73,8 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         mapSauvegardes.setItems(cartes);
 
         Table tableMapSave = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
+
+
         tableMapSave.add(mapSauvegardes);
         tableMapSave.row();
 
@@ -83,13 +83,20 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         utiliserButton.setHeight(50);
         utiliserButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+
                 FileHandle fichierMap = Gdx.files.local("saves/cartes/" + mapSauvegardes.getSelected() + ".ser");
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichierMap)))) {
-                    seaWarController.nouvellePartie((Grille) ois.readObject());
-                    ois.close();
+                if (!(mapSauvegardes.getSelected() == "Default Map")) {
+                    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichierMap)))) {
+
+                        seaWarController.nouvellePartie((Grille) ois.readObject());
+                        ois.close();
+                        game.setScreen(new SeaWarMapScreen(new GameMapManager()));
+                    } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    seaWarController.nouvellePartie();
                     game.setScreen(new SeaWarMapScreen(new GameMapManager()));
-                } catch (ClassNotFoundException | IOException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -134,14 +141,44 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
         /* Fin code "JouerScreen" */
 
+        TextField hauteur = new TextField("", skin);
+        TextField largeur = new TextField("", skin);
+        hauteur.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
+        largeur.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
+        largeur.setMaxLength(3);
+        hauteur.setMaxLength(3);
 
+        TextButton openEditeur = new TextButton("Ok",skin,"default");
+        openEditeur.setWidth(150);
+        openEditeur.setHeight(50);
+        openEditeur.addListener(new ClickListener() {
+
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                 if(!hauteur.getText().trim().isEmpty() && !largeur.getText().trim().isEmpty()) {
+                     editeurController.creerCarte(Integer.parseInt(hauteur.getText()), Integer.parseInt(largeur.getText()));
+                     game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
+                 }
+            }
+        });
         TextButton editeurButton = new TextButton("Editor", skin, "default");
         editeurButton.setWidth(150);
         editeurButton.setHeight(50);
         editeurButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
+
+                Dialog d = new Dialog("Choose the dimensions", skin, "dialog")
+                        .text("Choose width and height");
+
+                d.add(largeur);
+                d.add(hauteur);
+                d.getContentTable().row();
+                d.add(annulerButton);
+                d.add(openEditeur);
+
+                d.show(stage);
             }
         });
 
@@ -214,6 +251,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 Dialog d = new Dialog("Load game", skin, "dialog")
                         .text("Choose a saved game");
                 d.add(tablesave);

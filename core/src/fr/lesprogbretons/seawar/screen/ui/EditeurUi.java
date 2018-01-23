@@ -5,8 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import fr.lesprogbretons.seawar.model.cases.CaseEau;
+import fr.lesprogbretons.seawar.screen.SeaWarMapScreen;
 import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 
+import static fr.lesprogbretons.seawar.SeaWar.editeur;
 import static fr.lesprogbretons.seawar.SeaWar.editeurController;
 import static fr.lesprogbretons.seawar.SeaWar.game;
 import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
@@ -30,8 +33,27 @@ public class EditeurUi extends Ui {
                 TextButton annulerButton = new TextButton("Annuler", skin, "default");
                 validerButton.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        editeurController.savegrille(nomCarte.getText());
-                        d.hide();
+                        if(!editeur.getMap().getBateaux1().isEmpty()) {
+                            if (!editeur.getMap().getBateaux2().isEmpty()) {
+                                editeurController.saveGrille(nomCarte.getText());
+                                d.hide();
+                            }
+                            else{
+                                Dialog d = new Dialog("Error", skin, "dialog")
+                                        .text("Player 2 has no boat !")
+                                        .button("Ok");
+                                d.show(s);
+
+                            }
+
+                        }
+                        else{
+                            Dialog d = new Dialog("Error", skin, "dialog")
+                                    .text("Player 1 has no boat !")
+                                    .button("Ok");
+                            d.show(s);
+
+                        }
                     }
                 });
                 annulerButton.addListener(new ClickListener() {

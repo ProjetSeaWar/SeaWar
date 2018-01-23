@@ -67,7 +67,7 @@ public class ControllerEditeur {
         }
     }
 
-    public void savegrille(String nom) {
+    public void saveGrille(String nom) {
         FileHandle dossier = Gdx.files.local("saves/cartes");
         if (!dossier.exists()) {
             dossier.mkdirs();
@@ -75,7 +75,7 @@ public class ControllerEditeur {
         FileHandle fichier = Gdx.files.internal("saves/cartes/" + nom + ".ser");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
-            oos.writeObject(partie.getMap());
+            oos.writeObject(editeur.getMap());
             oos.close();
 
         } catch (IOException e) {
