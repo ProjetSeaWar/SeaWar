@@ -1,5 +1,7 @@
 package fr.lesprogbretons.seawar.controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.model.Editeur;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
@@ -7,7 +9,12 @@ import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseEau;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import static fr.lesprogbretons.seawar.SeaWar.editeur;
+import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 public class ControllerEditeur {
 
