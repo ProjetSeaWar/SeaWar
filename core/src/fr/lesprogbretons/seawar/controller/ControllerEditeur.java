@@ -23,33 +23,37 @@ public class ControllerEditeur {
     }
 
     public void creerCaseEau(int x, int y) throws ArrayIndexOutOfBoundsException {
-        editeur.getMap().setCase(new CaseEau(x, y));
         if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1())) {
             editeur.getMap().getBateaux1().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
         } else if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2())) {
             editeur.getMap().getBateaux2().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
         }
+        editeur.getMap().setCase(new CaseEau(x, y));
+
+
     }
 
     public void creerCasePhare(int x, int y) throws ArrayIndexOutOfBoundsException {
+        if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1())) {
+            editeur.getMap().getBateaux1().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
+        } else if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2())) {
+            editeur.getMap().getBateaux2().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
+        }
         editeur.getMap().setCase(new CaseEau(x, y));
         editeur.getMap().getCase(x, y).setPhare(true);
 
-        if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1())) {
-            editeur.getMap().getBateaux1().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
-        } else if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2())) {
-            editeur.getMap().getBateaux2().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
-        }
+
     }
 
     public void creerCaseTerre(int x, int y) throws ArrayIndexOutOfBoundsException {
-        editeur.getMap().setCase(new CaseTerre(x, y));
-
         if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur1())) {
             editeur.getMap().getBateaux1().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
         } else if (editeur.getMap().casePossedeBateau(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2())) {
             editeur.getMap().getBateaux2().remove(editeur.getMap().bateauSurCase(editeur.getMap().getCase(x, y)));
         }
+        editeur.getMap().setCase(new CaseTerre(x, y));
+
+
     }
 
     public void ajouterAmiralJoueur1(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
@@ -89,7 +93,7 @@ public class ControllerEditeur {
     }
 
     public void ajouterFregateJoueur2(int x, int y, Orientation orientation) throws ArrayIndexOutOfBoundsException {
-        creerCaseEau(x,y);
+        creerCaseEau(x, y);
         Fregate boat = new Fregate(editeur.getMap().getCase(x, y), editeur.getMap().getJoueur2());
         boat.setOrientation(orientation);
         if (editeur.getMap().casePossedeBateaux(editeur.getMap().getCase(x, y))) {
