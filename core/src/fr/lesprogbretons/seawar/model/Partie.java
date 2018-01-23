@@ -235,6 +235,12 @@ public class Partie implements Serializable {
         //On remet les caractéristiques des bateaux pour le prochain tour
         if (bateauxDeplaces) {
             if (getCurrentPlayer().equals(joueur1)) {
+                //test si ses bateaux sont sur un phare
+                for(int k=0;k<map.getBateaux1().size();k++){
+                    if(map.getBateaux1().get(k).getPosition().isPhare()){
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur1);
+                    }
+                }
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).endTurn();
                     if(map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(),1).size()==0) {
@@ -277,6 +283,11 @@ public class Partie implements Serializable {
                 }
 
             } else {
+                for(int k=0;k<map.getBateaux2().size();k++){
+                    if(map.getBateaux2().get(k).getPosition().isPhare()){
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur2);
+                    }
+                }
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
                     map.getBateaux2().get(i).endTurn();
                     if(map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(),1).size()==0) {

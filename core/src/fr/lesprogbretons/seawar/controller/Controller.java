@@ -79,22 +79,22 @@ public class Controller {
                 if (partie.getBateauxDejaDeplaces().size() == 0 && casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0) {
                     partie.getBateauSelectionne().moveBoat(c);
                     partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
-                    if (c.isPhare()) {
+                   /* if (c.isPhare()) {
                         partie.getMap().prendPhare(c, partie.getCurrentPlayer());
-                    }
+                    }*/
                 } else if (casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0 && partie.getBateauxDejaDeplaces().get(partie.getBateauxDejaDeplaces().size() - 1).equals(partie.getBateauSelectionne())) {
                     partie.getBateauSelectionne().moveBoat(c);
                     partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
-                    if (c.isPhare()) {
+                   /* if (c.isPhare()) {
                         partie.getMap().prendPhare(c, partie.getCurrentPlayer());
-                    }
+                    }*/
                 } else if (casesDispo.contains(c) && partie.getBateauSelectionne().getMoveAvailable() > 0 && !(partie.getBateauxDejaDeplaces().contains(partie.getBateauSelectionne()))) {
                     partie.getBateauxDejaDeplaces().get(partie.getBateauxDejaDeplaces().size() - 1).setMoveAvailable(0);
                     partie.getBateauSelectionne().moveBoat(c);
                     partie.ajouterBateauxDejaDeplaces(partie.getBateauSelectionne());
-                    if (c.isPhare()) {
+                   /* if (c.isPhare()) {
                         partie.getMap().prendPhare(c, partie.getCurrentPlayer());
-                    }
+                    }*/
                 } else {
                     partie.setAnyBateauSelectionne(false);
                 }
