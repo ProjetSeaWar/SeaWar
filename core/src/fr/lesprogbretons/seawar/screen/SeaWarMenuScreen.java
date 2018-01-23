@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
+import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -39,7 +41,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.graphics.setWindowedMode(800,480);
+        Gdx.graphics.setWindowedMode(800, 480);
 
         Skin skin = (Skin) assets.get(Assets.skin);
 
@@ -56,20 +58,84 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         stage.addActor(table);
 
+        /*Debut code pour la fenêtre "jouer/selectionner une carte" */
 
-        TextButton playButton = new TextButton("Jouer", skin, "default");
+        List mapSauvegardes = new List(skin);
+        stage.addActor(mapSauvegardes);
+        FileHandle[] mapSaves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves/cartes"))).list();
+        String[] cartes = new String[mapSaves.length+1];
+        cartes[0]="Default Map";
+        int i = 1;
+        for (FileHandle file : mapSaves) {
+            cartes[i] = file.nameWithoutExtension();
+            i = i + 1;
+        }
+        mapSauvegardes.setItems(cartes);
+
+        Table tableMapSave = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        tableMapSave.add(mapSauvegardes);
+        tableMapSave.row();
+
+        TextButton utiliserButton = new TextButton("Use this map", skin, "default");
+        utiliserButton.setWidth(150);
+        utiliserButton.setHeight(50);
+        utiliserButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                FileHandle fichierMap = Gdx.files.local("saves/cartes/" + mapSauvegardes.getSelected() + ".ser");
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(String.valueOf(fichierMap)))) {
+                    seaWarController.nouvellePartie((Grille) ois.readObject());
+                    ois.close();
+                    game.setScreen(new SeaWarMapScreen(new GameMapManager()));
+                } catch (ClassNotFoundException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        /* Bouton "annuler" du JouerScreen */
+        TextButton annulerButton = new TextButton("Cancel", skin, "default");
+        annulerButton.setWidth(150);
+        annulerButton.setHeight(50);
+        annulerButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SeaWarMenuScreen());
+                Gdx.graphics.setWindowedMode(800, 480);
+            }
+        });
+
+        tableMapSave.add(utiliserButton);
+        tableMapSave.add(annulerButton);
+
+        /*Bouton "Jouer" du Playscreen */
+        TextButton playButton = new TextButton("Play", skin, "default");
         playButton.setWidth(150);
         playButton.setHeight(50);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                seaWarController.nouvellePartie();
-                game.setScreen(new SeaWarMapScreen(new GameMapManager()));
+                /////////////////       /////////////////       /////////////////
+                if(cartes.length==1){
+                    seaWarController.nouvellePartie();
+                    game.setScreen(new SeaWarMapScreen(new GameMapManager()));
+                }
+                else{
+                    Dialog d = new Dialog("Choose a map to play", skin, "dialog")
+                            .text("");
+                    d.add(tableMapSave);
+                    d.show(stage);
+                }
+
             }
+
+
         });
 
+        /* Fin code "JouerScreen" */
 
-        TextButton editeurButton = new TextButton("Editeur", skin, "default");
+
+        TextButton editeurButton = new TextButton("Editor", skin, "default");
         editeurButton.setWidth(150);
         editeurButton.setHeight(50);
         editeurButton.addListener(new ClickListener() {
@@ -80,7 +146,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         });
 
 
-        TextButton quitButton = new TextButton("Quitter", skin, "default");
+        TextButton quitButton = new TextButton("Quit", skin, "default");
         quitButton.setWidth(150);
         quitButton.setHeight(50);
         quitButton.addListener(new ClickListener() {
@@ -90,11 +156,14 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 Gdx.app.exit();
             }
         });
+
+        /*Début code pour la fenêtre "charger une partie*/
+
         List sauvegardes = new List(skin);
         stage.addActor(sauvegardes);
         FileHandle[] saves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves/parties"))).list();
         String[] parties = new String[saves.length];
-        int i = 0;
+        i = 0;
         for (FileHandle file : saves) {
             parties[i] = file.nameWithoutExtension();
             i = i + 1;
@@ -107,7 +176,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         tablesave.add(sauvegardes);
         tablesave.row();
 
-        TextButton chargerButton = new TextButton("Charger", skin, "default");
+        TextButton chargerButton = new TextButton("Load", skin, "default");
         chargerButton.setWidth(150);
         chargerButton.setHeight(50);
         chargerButton.addListener(new ClickListener() {
@@ -123,10 +192,10 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
-        TextButton annulerButton = new TextButton("Annuler", skin, "default");
-        annulerButton.setWidth(150);
-        annulerButton.setHeight(50);
-        annulerButton.addListener(new ClickListener() {
+        TextButton annulerButton2 = new TextButton("Cancel", skin, "default");
+        annulerButton2.setWidth(150);
+        annulerButton2.setHeight(50);
+        annulerButton2.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SeaWarMenuScreen());
                 Gdx.graphics.setWindowedMode(800, 480);
@@ -134,16 +203,19 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         });
 
         tablesave.add(chargerButton);
-        tablesave.add(annulerButton);
+        tablesave.add(annulerButton2);
 
-        TextButton loadButton = new TextButton("Charger", skin, "default");
+        /*Fin code pour la fenêtre "charger une partie*/
+
+        /*Bouton "charger" sur le menu sreen*/
+        TextButton loadButton = new TextButton("Load", skin, "default");
         loadButton.setWidth(150);
         loadButton.setHeight(50);
         loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Dialog d = new Dialog("Charger une partie", skin, "dialog")
-                        .text("Choisissez une partie !");
+                Dialog d = new Dialog("Load game", skin, "dialog")
+                        .text("Choose a saved game");
                 d.add(tablesave);
                 d.show(stage);
 
