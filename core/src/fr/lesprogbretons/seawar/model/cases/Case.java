@@ -17,6 +17,16 @@ public abstract class Case implements Serializable{
     protected boolean phare = false;
     protected Player possedePhare = null;         //1 pour joueur1 et 2 pour joueur2
 
+    protected boolean bateauDetruit = false;
+
+    public boolean isBateauDetruit() {
+        return bateauDetruit;
+    }
+
+    public void setBateauDetruit(boolean bateauDetruit) {
+        this.bateauDetruit = bateauDetruit;
+    }
+
     /**
      * Constructeur
      * @param xe : colonne

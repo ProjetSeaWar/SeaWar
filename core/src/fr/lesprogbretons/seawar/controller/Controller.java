@@ -60,6 +60,7 @@ public class Controller {
                 if (partie.getMap().casePossedeBateau(c, partie.getOtherPlayer())) {
                     partie.getBateauSelectionne().shoot(partie.getMap().bateauSurCase(c));
                     if (!partie.getMap().bateauSurCase(c).isAlive()) {
+                        c.setBateauDetruit(true);
                         if (partie.getCurrentPlayer().getNumber() == 1) {
                             partie.getMap().getBateaux2().remove(partie.getMap().bateauSurCase(c));
                         } else {
