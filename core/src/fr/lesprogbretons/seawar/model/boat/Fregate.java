@@ -12,7 +12,7 @@ public class Fregate extends Boat implements Serializable {
 
     public Fregate(Case c, Player p) {
         super(c, p);
-        move = 7;
+        move = 5;
         moveAvailable = move;
         hp = 50;
         dmgMainCanon = 30;
