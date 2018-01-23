@@ -86,12 +86,11 @@ public class UiEditeur extends Ui {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Utils.getSelectedHexagon(swms.getCameraController().touchX,swms.getCameraController().touchY,selectedTile);
-                System.out.println(editeur.getMap().getCase(selectedTile.row,selectedTile.column) instanceof CaseEau);
-                System.out.println("x =" + selectedTile.row + " y =" + selectedTile.column);
-               // editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
-//                System.out.println(editeur.getMap().getCase(selectedTile.row,selectedTile.column) instanceof CaseEau);
+                editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
             }
         });
+
+        TextButton caseTerre = new TextButton("Case Terre",skin,"default");
 
         show.add(optionsButton).width(100).padLeft(10).padTop(2).padBottom(3);
         show.add(saveButton).padLeft(10);
