@@ -139,6 +139,10 @@ public class Partie implements Serializable {
         this.victoryType = victoryType;
     }
 
+    public boolean isPlayer2() {
+        return isPlayer2;
+    }
+
     /*----------------------------------------------------------------------------------------------------------*/
 
 

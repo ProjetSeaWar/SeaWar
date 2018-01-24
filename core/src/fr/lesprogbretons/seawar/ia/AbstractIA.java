@@ -1,10 +1,29 @@
 package fr.lesprogbretons.seawar.ia;
 
-import fr.lesprogbretons.seawar.model.Partie;
+import static fr.lesprogbretons.seawar.SeaWar.partie;
 
-public class AbstractIA {
+public class AbstractIA extends Thread {
 
-    public void getCoup(){
+    public AbstractIA(String ia) {
+        super(ia);
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (partie.isPlayer2()) {
+                getCoup();
+            }
+        }
+    }
+
+    public void getCoup() {
 
     }
 }

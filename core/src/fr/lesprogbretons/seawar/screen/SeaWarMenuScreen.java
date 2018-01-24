@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
+import fr.lesprogbretons.seawar.ia.IAAleatoire;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
@@ -124,6 +125,24 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         tableMapSave.add(annulerButton);
 
         /*Bouton "Jouer" du Playscreen */
+        TextButton oneButton = new TextButton("One player", skin, "default");
+        oneButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                IAAleatoire ia = new IAAleatoire();
+                ia.start();
+                newGame(cartes, skin, tableMapSave);
+            }
+        });
+
+        TextButton twoButton = new TextButton("Two players", skin, "default");
+        twoButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                newGame(cartes, skin, tableMapSave);
+            }
+        });
+
         TextButton playButton = new TextButton("Play", skin, "default");
         playButton.setWidth(150);
         playButton.setHeight(50);
@@ -131,19 +150,12 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 /////////////////       /////////////////       /////////////////
-                if (cartes.length == 1) {
-                    seaWarController.nouvellePartie();
-                    game.setScreen(new SeaWarMapScreen(new GameMapManager()));
-                } else {
-                    Dialog d = new Dialog("Choose a map to play", skin, "dialog")
-                            .text("");
-                    d.add(tableMapSave);
-                    d.show(stage);
-                }
-
+                Dialog d = new Dialog("Choose number of players", skin, "dialog")
+                        .text("One or two players?")
+                        .button(oneButton, true)
+                        .button(twoButton, false)
+                        .show(stage);
             }
-
-
         });
 
         /* Fin code "JouerScreen" */
@@ -280,6 +292,18 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         table.row();
         table.left();
 
+    }
+
+    private void newGame(String[] cartes, Skin skin, Table tableMapSave) {
+        if (cartes.length == 1) {
+            seaWarController.nouvellePartie();
+            game.setScreen(new SeaWarMapScreen(new GameMapManager()));
+        } else {
+            Dialog d = new Dialog("Choose a map to play", skin, "dialog")
+                    .text("");
+            d.add(tableMapSave);
+            d.show(stage);
+        }
     }
 
     @Override
