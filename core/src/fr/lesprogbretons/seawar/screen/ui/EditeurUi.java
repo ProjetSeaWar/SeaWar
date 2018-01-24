@@ -304,7 +304,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton suda2 = new TextButton("Nord",skin,"default");
+        TextButton suda2 = new TextButton("Sud",skin,"default");
         suda2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -316,7 +316,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton sudOuesta2 = new TextButton("Nord",skin,"default");
+        TextButton sudOuesta2 = new TextButton("Sud Ouest",skin,"default");
         sudOuesta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -328,7 +328,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton nordOuesta2 = new TextButton("Nord",skin,"default");
+        TextButton nordOuesta2 = new TextButton("Nord Ouest",skin,"default");
         nordOuesta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
