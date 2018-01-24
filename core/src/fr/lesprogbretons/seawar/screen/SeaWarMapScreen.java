@@ -353,11 +353,18 @@ public class SeaWarMapScreen extends ScreenAdapter {
     }
     //endregion
 
+
+    @Override
+    public void hide() {
+        manager.end();
+    }
+
     @Override
     public void dispose() {
         renderer.dispose();
         hexture.dispose();
         map.dispose();
         myUi.dispose();
+        manager.dispose();
     }
 }

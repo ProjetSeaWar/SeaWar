@@ -1,5 +1,7 @@
 package fr.lesprogbretons.seawar.screen.manager;
 
+import com.badlogic.gdx.audio.Music;
+import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.map.Grille;
@@ -19,6 +21,8 @@ public class GameMapManager implements MapManager {
 
     //Ui
     private GameUi myUi;
+    //Music
+    private Music music;
     //Vue
     private SeaWarMapScreen myMapScreen;
     //Modèle
@@ -27,6 +31,10 @@ public class GameMapManager implements MapManager {
     public GameMapManager() {
         //Pas de sélection pour le début
         selectedTile = new TiledCoordinates(-1, -1);
+        //Load music
+        music = (Music) assets.get(Assets.gameMusic);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -48,6 +56,7 @@ public class GameMapManager implements MapManager {
     public void start() {
         //Montrer le message de début de tour
         myUi.startTurnMessage();
+        music.play();
     }
 
     @Override
@@ -146,5 +155,15 @@ public class GameMapManager implements MapManager {
         }
         //Sinon on change rien
         return false;
+    }
+
+    @Override
+    public void end() {
+        music.stop();
+    }
+
+    @Override
+    public void dispose() {
+        music.dispose();
     }
 }

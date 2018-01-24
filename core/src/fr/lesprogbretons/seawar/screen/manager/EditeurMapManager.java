@@ -63,4 +63,14 @@ public class EditeurMapManager implements MapManager {
         //Sinon on change rien
         return false;
     }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 }

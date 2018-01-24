@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.lesprogbretons.seawar" >
 
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="26" />
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="26" />
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
 
     <application

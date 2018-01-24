@@ -17,4 +17,8 @@ public interface MapManager {
     void update();
 
     boolean updateSelection(boolean clicked, boolean rightClicked, float touchX, float touchY);
+
+    void end();
+
+    void dispose();
 }

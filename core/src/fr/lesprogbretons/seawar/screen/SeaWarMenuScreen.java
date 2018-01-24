@@ -2,6 +2,7 @@ package fr.lesprogbretons.seawar.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,9 +15,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Partie;
-import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
-import fr.lesprogbretons.seawar.model.map.DefaultMap;
 import fr.lesprogbretons.seawar.model.map.Grille;
+import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
 import fr.lesprogbretons.seawar.screen.manager.GameMapManager;
 import fr.lesprogbretons.seawar.utils.Utils;
 
@@ -38,12 +38,20 @@ public class SeaWarMenuScreen extends ScreenAdapter {
     private Viewport viewport;
 
     private Sprite menu;
+    private Music music;
+
+    public SeaWarMenuScreen() {
+        music = (Music) assets.get(Assets.menuMusic);
+        music.setLooping(true);
+    }
 
     @Override
     public void show() {
         Gdx.graphics.setWindowedMode(800, 480);
 
         Skin skin = (Skin) assets.get(Assets.skin);
+
+        music.play();
 
         menu = new Sprite((Texture) assets.get(Assets.menu));
         menu.setPosition(-menu.getWidth() / 2, -menu.getHeight() / 2);
@@ -63,8 +71,8 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         List mapSauvegardes = new List(skin);
         stage.addActor(mapSauvegardes);
         FileHandle[] mapSaves = Gdx.files.local(String.valueOf(Gdx.files.internal("saves/cartes"))).list();
-        String[] cartes = new String[mapSaves.length+1];
-        cartes[0]="Default Map";
+        String[] cartes = new String[mapSaves.length + 1];
+        cartes[0] = "Default Map";
         int i = 1;
         for (FileHandle file : mapSaves) {
             cartes[i] = file.nameWithoutExtension();
@@ -94,7 +102,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                     } catch (ClassNotFoundException | IOException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     seaWarController.nouvellePartie();
                     game.setScreen(new SeaWarMapScreen(new GameMapManager()));
                 }
@@ -123,11 +131,10 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 /////////////////       /////////////////       /////////////////
-                if(cartes.length==1){
+                if (cartes.length == 1) {
                     seaWarController.nouvellePartie();
                     game.setScreen(new SeaWarMapScreen(new GameMapManager()));
-                }
-                else{
+                } else {
                     Dialog d = new Dialog("Choose a map to play", skin, "dialog")
                             .text("");
                     d.add(tableMapSave);
@@ -148,7 +155,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         largeur.setMaxLength(3);
         hauteur.setMaxLength(3);
 
-        TextButton openEditeur = new TextButton("Ok",skin,"default");
+        TextButton openEditeur = new TextButton("Ok", skin, "default");
         openEditeur.setWidth(150);
         openEditeur.setHeight(50);
         openEditeur.addListener(new ClickListener() {
@@ -156,10 +163,10 @@ public class SeaWarMenuScreen extends ScreenAdapter {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                 if(!hauteur.getText().trim().isEmpty() && !largeur.getText().trim().isEmpty()) {
-                     editeurController.creerCarte(Integer.parseInt(hauteur.getText()), Integer.parseInt(largeur.getText()));
-                     game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
-                 }
+                if (!hauteur.getText().trim().isEmpty() && !largeur.getText().trim().isEmpty()) {
+                    editeurController.creerCarte(Integer.parseInt(hauteur.getText()), Integer.parseInt(largeur.getText()));
+                    game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
+                }
             }
         });
         TextButton editeurButton = new TextButton("Editor", skin, "default");
@@ -276,6 +283,11 @@ public class SeaWarMenuScreen extends ScreenAdapter {
     }
 
     @Override
+    public void hide() {
+        music.pause();
+    }
+
+    @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width, height);
@@ -297,5 +309,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
+        music.stop();
+        music.dispose();
     }
 }

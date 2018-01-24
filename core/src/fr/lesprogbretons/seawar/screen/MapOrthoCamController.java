@@ -32,7 +32,6 @@ public class MapOrthoCamController extends InputAdapter {
     private float upBoundX;
     private float upBoundY;
 
-    private boolean dragged;
     public boolean clicked;
     public boolean rightClicked;
     public float touchX;
@@ -75,15 +74,13 @@ public class MapOrthoCamController extends InputAdapter {
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
         //On ne veut pas cliquer lors du déplacement de la map
-        dragged = true;
         if (camera.zoom != minZoom && !zooming && !displacement) {
             camera.unproject(curr.set(x, y, 0));
             if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
                 camera.unproject(delta.set(last.x, last.y, 0));
                 delta.sub(curr);
                 camera.position.add(delta.x, delta.y, 0);
-            } else {
-                dragged = false;
+                clicked = false;
             }
             last.set(x, y, 0);
         }
@@ -175,14 +172,14 @@ public class MapOrthoCamController extends InputAdapter {
         touchY = position.y;
 
         rightClicked = button != Input.Buttons.LEFT;
+        clicked = true;
         return false;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
         last.set(-1, -1, -1);
-        if (!dragged) clicked = true;
-        dragged = false;
+//        clicked = true;
         return false;
     }
 }
