@@ -1,6 +1,5 @@
 package fr.lesprogbretons.seawar.model;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.map.DefaultMap;
 import fr.lesprogbretons.seawar.model.map.Grille;

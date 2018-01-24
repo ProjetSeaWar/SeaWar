@@ -344,7 +344,7 @@ public abstract class Boat implements Serializable {
             orientation = Orientation.NORDEST;
         }
 
-        if (destination.getX() == position.getX() - 1 && destination.getY() == destination.getY() - 1) {
+        if (destination.getX() == position.getX() - 1 && destination.getY() == position.getY() - 1) {
             orientation = Orientation.SUDOUEST;
         }
 
