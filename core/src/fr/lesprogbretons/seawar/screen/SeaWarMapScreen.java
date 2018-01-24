@@ -96,22 +96,6 @@ public class SeaWarMapScreen extends ScreenAdapter {
         manager.setMyMapScreen(this);
     }
 
-    public MapOrthoCamController getCameraController() {
-        return cameraController;
-    }
-
-    public void setCameraController(MapOrthoCamController cameraController) {
-        this.cameraController = cameraController;
-    }
-
-    public static TiledCoordinates getSelectedTile() {
-        return selectedTile;
-    }
-
-    public static void setSelectedTile(TiledCoordinates selectedTile) {
-        SeaWarMapScreen.selectedTile = selectedTile;
-    }
-
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
