@@ -154,8 +154,8 @@ public class Controller {
 
     }
 
-    public void load(Partie restoredpartie) {
-        partie = restoredpartie;
+    public void load(Partie restoredPartie) {
+        partie = restoredPartie;
         logger.debug("Restored save");
     }
 }
