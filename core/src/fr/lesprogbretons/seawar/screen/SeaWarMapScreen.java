@@ -15,15 +15,24 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.assets.Assets;
-import fr.lesprogbretons.seawar.model.*;
+import fr.lesprogbretons.seawar.model.Orientation;
+import fr.lesprogbretons.seawar.model.boat.Amiral;
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.boat.Fregate;
+import fr.lesprogbretons.seawar.model.cases.Case;
+import fr.lesprogbretons.seawar.model.cases.CaseEau;
+import fr.lesprogbretons.seawar.model.cases.CaseTerre;
+import fr.lesprogbretons.seawar.model.map.Grille;
+import fr.lesprogbretons.seawar.screen.manager.MapManager;
+import fr.lesprogbretons.seawar.screen.ui.EditeurUi;
+import fr.lesprogbretons.seawar.screen.ui.GameUi;
+import fr.lesprogbretons.seawar.screen.ui.Ui;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import static fr.lesprogbretons.seawar.SeaWar.logger;
+import static fr.lesprogbretons.seawar.SeaWar.editeur;
 import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 
@@ -33,17 +42,30 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  * Inspiré par PixelScientist et Libgdx
  * </p>
  */
-public class SeaWarMapScreen extends ScreenAdapter implements Observer{
+public class SeaWarMapScreen extends ScreenAdapter {
 
-    private static final int WIDTH_MAP = 13;
-    private static final int HEIGHT_MAP = 11;
     private static final int WIDTH_HEXA = 112;
     private static final int HEIGHT_HEXA = 97;
 
+    public static final String MAP_LAYER_NAME = "map";
+    public static final String SELECT_LAYER_NAME = "select";
+    public static final String SHIP_LAYER_NAME = "ship";
+    public static final String ORIENTATION_LAYER_NAME = "orientation";
+
     //Map
     private TiledMap map;
+    private MapLayers layers;
     private TiledMapTile[] tiles;
 
+    //Modèle
+    private Grille g;
+
+
+    //Size
+    private int widthMap;
+    private int heightMap;
+
+    //Camera et rendu
     private OrthographicCamera camera;
     private MapOrthoCamController cameraController;
     private HexagonalTiledMapRenderer renderer;
@@ -51,19 +73,32 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
 
     //Ui
     private Ui myUi;
+    private MapManager manager;
 
     //Sélection
-    private TiledCoordinates selectedTile = new TiledCoordinates(0, 0);
-    private TiledCoordinates previousSelectedTile = new TiledCoordinates(0, 0);
+    public static TiledCoordinates selectedTile;
 
-    //Modèle
-    private Grille g = partie.getMap();
+    public SeaWarMapScreen(MapManager manager) {
+        this.manager = manager;
+        switch (manager.getMyUiType()) {
+            case GAME:
+                widthMap = partie.getMap().getLargeur();
+                heightMap = partie.getMap().getHauteur();
+                g = partie.getMap();
+                break;
+            case EDITOR:
+                widthMap = editeur.getMap().getLargeur();
+                heightMap = editeur.getMap().getHauteur();
+                g = editeur.getMap();
+                break;
+        }
 
+        manager.setMyMapScreen(this);
+    }
 
     @Override
     public void show() {
         //Redimentionner l'écran pour faire rentrer la map
-        //Prendre en compte la taille de l'UI
         int width = 800;
         int height = 800;
         Gdx.graphics.setWindowedMode(width, height);
@@ -74,17 +109,17 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         camera = new OrthographicCamera();
         camera.setToOrtho(false, (w / h) * width, height);
 
-        cameraController = new MapOrthoCamController(camera, WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA, width, height);
+        cameraController = new MapOrthoCamController(camera, widthMap, heightMap, WIDTH_HEXA, HEIGHT_HEXA, width, height);
         camera.update();
 
         hexture = (TextureAtlas) SeaWar.assets.get(Assets.hexes);
 
         map = new TiledMap();
         map.getProperties().put("staggerindex", "even");
-        MapLayers layers = map.getLayers();
+        layers = map.getLayers();
 
         //Construction de la carte
-        tiles = new TiledMapTile[8];
+        tiles = new TiledMapTile[16];
         tiles[0] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexblue")));
         tiles[1] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexgreen")));
         tiles[2] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("hexphare")));
@@ -93,20 +128,60 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         tiles[5] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship3")));
         tiles[6] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("ship4")));
         tiles[7] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("select")));
-
+        tiles[8] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("myship")));
+        tiles[9] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("attack")));
+        tiles[10] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownorth")));
+        tiles[11] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownortheast")));
+        tiles[12] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrownorthwest")));
+        tiles[13] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsouth")));
+        tiles[14] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsoutheast")));
+        tiles[15] = new StaticTiledMapTile(new TextureRegion(hexture.findRegion("arrowsouthwest")));
 
         //region Génération map
+        addNewLayer(MAP_LAYER_NAME);
+        addNewLayer(SELECT_LAYER_NAME);
+        addNewLayer(SHIP_LAYER_NAME);
+        addNewLayer(ORIENTATION_LAYER_NAME);
+        //endregion
+
+        //Ui
+        switch (manager.getMyUiType()) {
+            case GAME:
+                myUi = new GameUi();
+                break;
+            case EDITOR:
+                myUi = new EditeurUi();
+                break;
+        }
+        manager.setMyUi(myUi);
+
+        renderer = new HexagonalTiledMapRenderer(map);
+
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(myUi);
+        multiplexer.addProcessor(cameraController);
+        Gdx.input.setInputProcessor(multiplexer);
+
+        manager.start();
+    }
+
+    private void addNewLayer(String layerName) {
+        TiledMapTileLayer layer = new TiledMapTileLayer(widthMap, heightMap, WIDTH_HEXA, HEIGHT_HEXA);
+        layer.setName(layerName);
+        layers.add(layer);
+    }
+
+    private void generateMap(TiledMapTileLayer layer, TiledMapTile[] tiles) {
         for (int l = 0; l < 1; l++) {
-            TiledMapTileLayer layer = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-            layer.setName("map");
-            for (int y = 0; y < HEIGHT_MAP; y++) {
-                for (int x = 0; x < WIDTH_MAP; x++) {
+            for (int y = 0; y < g.getHauteur(); y++) {
+                for (int x = 0; x < g.getLargeur(); x++) {
                     Cell cell = new Cell();
                     Case aCase = g.getCase(y, x);
 
-                    if (g.casePossedeBateaux(aCase)) {
-                        Boat boat = g.bateauSurCase(aCase);
-                        if (boat.getJoueur() == partie.getJoueur1()) {
+                    Boat boat = g.bateauSurCase(aCase);
+                    if (g.casePossedeBateaux(aCase) && boat.isAlive()) {
+                        if (boat.getJoueur().getNumber() == 1) {
                             if (boat instanceof Amiral) {
                                 cell.setTile(tiles[3]);
                             } else if (boat instanceof Fregate) {
@@ -133,27 +208,18 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
                     layer.setCell(x, y, cell);
                 }
             }
-            layers.add(layer);
+        }
+
+        //region Orientatiom
+        removeLayerMark(SeaWarMapScreen.ORIENTATION_LAYER_NAME);
+        for (Boat b : g.getBateaux1()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
+        }
+
+        for (Boat b : g.getBateaux2()) {
+            markOrientationTile(b.getPosition().getY(), b.getPosition().getX(), b.getOrientation());
         }
         //endregion
-
-        TiledMapTileLayer layerSelect = new TiledMapTileLayer(WIDTH_MAP, HEIGHT_MAP, WIDTH_HEXA, HEIGHT_HEXA);
-        layerSelect.setName("select");
-        layers.add(layerSelect);
-
-        //region Ui
-
-        myUi = new Ui();
-
-        //endregion
-
-        renderer = new HexagonalTiledMapRenderer(map);
-
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(myUi);
-        multiplexer.addProcessor(cameraController);
-        Gdx.input.setInputProcessor(multiplexer);
-
     }
 
     @Override
@@ -165,72 +231,116 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
     @Override
     public void render(float delta) {
         Utils.clearScreen();
+        //On regénère la map
+        generateMap((TiledMapTileLayer) layers.get(MAP_LAYER_NAME), tiles);
+
+        //Act GameUi
         myUi.act(delta);
+
         //Update view if needed
         cameraController.changeView(delta);
         camera.update();
         renderer.setView(camera);
         renderer.render();
+
+        //Draw GameUi
         myUi.draw();
-//        logger.debug("Rect | " + renderer.getViewBounds().toString() + " Pos : " + camera.position.toString());
+        //Update Manager
+        manager.update();
 
-        if (cameraController.clicked) {
-            getSelectedHexagon(cameraController.touchX, cameraController.touchY);
-
-            if (selectedTile.row >= 0 && selectedTile.row < HEIGHT_MAP
-                    && selectedTile.column >= 0 && selectedTile.column < WIDTH_MAP) {
-
-                myUi.setJoueur("Joueur 1");
-                if (!cameraController.rightClicked) {
-                    //Si clic gauche
-                    //Retirer les sélections précédentes
-                    removeSelectionMark();
-
-                    Case aCase = g.getCase(selectedTile.row, selectedTile.column);
-                    if (g.casePossedeBateaux(aCase)) {
-                        Boat boat = g.bateauSurCase(aCase);
-
-
-                        batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
-                    } else {
-                        markSelectedTile(selectedTile.column, selectedTile.row);
-                    }
-
-                    previousSelectedTile.setCoords(selectedTile);
-                } else {
-                    //Clic droit
-                    //TODO Tir du bateau
-                }
-            }
-            //Le click est consomé
-            cameraController.clicked = false;
-        }
+        //Mise à jour de la sélection
+        cameraController.clicked = manager.updateSelection(cameraController.clicked,
+                cameraController.rightClicked, cameraController.touchX, cameraController.touchY);
     }
 
+    //region Layer Edit
     public void batchSelectionMark(ArrayList<Case> cases) {
         for (Case c : cases) {
             markSelectedTile(c.getY(), c.getX());
         }
     }
 
-    public void removeSelectionMark() {
-        //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
-        for (int y = 0; y < HEIGHT_MAP; y++) {
-            for (int x = 0; x < WIDTH_MAP; x++) {
-                layer.setCell(x, y, null);
-            }
+    public void batchAttackMark(ArrayList<Case> cases) {
+        for (Case c : cases) {
+            markAttackTile(c.getY(), c.getX());
         }
     }
 
     public void markSelectedTile(int x, int y) {
         //Selectionner le bon layer
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("select");
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
 
         //Mettre la tile de selection
         Cell selected = new Cell();
         selected.setTile(tiles[7]);
         layer.setCell(x, y, selected);
+    }
+
+    private void markAttackTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SELECT_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[9]);
+        layer.setCell(x, y, selected);
+    }
+
+    public void markShipTile(int x, int y) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(SHIP_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+        selected.setTile(tiles[8]);
+        layer.setCell(x, y, selected);
+    }
+
+    public void markOrientationTile(int x, int y, Orientation o) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(ORIENTATION_LAYER_NAME);
+
+        //Mettre la tile de selection
+        Cell selected = new Cell();
+
+        switch (o) {
+            case NORD:
+                selected.setTile(tiles[10]);
+                break;
+            case SUD:
+                selected.setTile(tiles[13]);
+                break;
+            case NORDEST:
+                selected.setTile(tiles[11]);
+                break;
+            case NORDOUEST:
+                selected.setTile(tiles[12]);
+                break;
+            case SUDEST:
+                selected.setTile(tiles[14]);
+                break;
+            case SUDOUEST:
+                selected.setTile(tiles[15]);
+                break;
+        }
+        layer.setCell(x, y, selected);
+    }
+
+    public void removeLayerMark(String layerName) {
+        //Selectionner le bon layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        for (int y = 0; y < heightMap; y++) {
+            for (int x = 0; x < widthMap; x++) {
+                layer.setCell(x, y, null);
+            }
+        }
+    }
+    //endregion
+
+
+    @Override
+    public void hide() {
+        manager.end();
     }
 
     @Override
@@ -239,59 +349,6 @@ public class SeaWarMapScreen extends ScreenAdapter implements Observer{
         hexture.dispose();
         map.dispose();
         myUi.dispose();
-    }
-
-    private void getSelectedHexagon(float x, float y) {
-
-        float hexWidth = 112f;
-        float hexQuarterWidth = hexWidth / 4f;
-        float hexHeight = 97f;
-        float hexHalfHeight = hexHeight / 2f;
-        float hexThreeQuartersWidth = hexWidth * 0.75f;
-
-
-        float m = hexQuarterWidth / hexHalfHeight;
-        // Find the row and column of the box that the point falls in.
-        int column = (int) (x / hexThreeQuartersWidth);
-        int row;
-
-        boolean columnIsOdd = column % 2 == 0;
-
-        // Is the column an odd number?
-        if (!columnIsOdd)// no: Offset x to match the indent of the row
-            row = (int) ((y - hexHalfHeight) / hexHeight);
-        else// Yes: Calculate normally
-            row = (int) (y / hexHeight);
-        // Work out the position of the point relative to the box it is in
-        double relX = x - (column * hexThreeQuartersWidth);
-        double relY;
-
-        if (!columnIsOdd)
-            relY = (y - (row * hexHeight)) - hexHalfHeight;
-        else
-            relY = y - (row * hexHeight);
-
-        // Work out if the point is above either of the hexagon's top edges
-        if (relX < (-m * relY) + hexQuarterWidth) // LEFT edge
-        {
-            column--;
-            if (columnIsOdd)
-                row--;
-        } else if (relX < (m * relY) - hexQuarterWidth) // RIGHT edge
-        {
-            column--;
-            if (!columnIsOdd)
-                row++;
-        }
-
-        logger.debug("col : " + column + " row : " + row);
-        selectedTile.column = column;
-        selectedTile.row = row;
-    }
-
-    //TODO
-    @Override
-    public void update(Observable o, Object arg) {
-        //Mettre à jour carte et position joueurs
+        manager.dispose();
     }
 }

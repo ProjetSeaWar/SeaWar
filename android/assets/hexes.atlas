@@ -1,0 +1,118 @@
+
+hexes.png
+size: 2048,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+arrownorth
+  rotate: false
+  xy: 577, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+arrownortheast
+  rotate: false
+  xy: 462, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+arrownorthwest
+  rotate: false
+  xy: 117, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+arrowsouth
+  rotate: false
+  xy: 2, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+arrowsoutheast
+  rotate: false
+  xy: 347, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+arrowsouthwest
+  rotate: false
+  xy: 232, 2
+  size: 113, 99
+  orig: 113, 99
+  offset: 0, 0
+  index: -1
+attack
+  rotate: false
+  xy: 920, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+hexblue
+  rotate: false
+  xy: 1148, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+hexgreen
+  rotate: false
+  xy: 1262, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+hexphare
+  rotate: false
+  xy: 1376, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+myship
+  rotate: false
+  xy: 806, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+select
+  rotate: false
+  xy: 1034, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+ship1
+  rotate: false
+  xy: 1490, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+ship2
+  rotate: false
+  xy: 1604, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+ship3
+  rotate: false
+  xy: 1718, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1
+ship4
+  rotate: false
+  xy: 692, 4
+  size: 112, 97
+  orig: 112, 97
+  offset: 0, 0
+  index: -1

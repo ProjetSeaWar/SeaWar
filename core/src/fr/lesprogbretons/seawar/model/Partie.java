@@ -1,35 +1,63 @@
 package fr.lesprogbretons.seawar.model;
 
-public class Partie {
+import fr.lesprogbretons.seawar.model.boat.Boat;
+import fr.lesprogbretons.seawar.model.map.DefaultMap;
+import fr.lesprogbretons.seawar.model.map.Grille;
 
-    private Grille map = new DefaultMap();
+import java.io.Serializable;
+import java.util.ArrayList;
 
-    private Player joueur1 = map.getJoueur1();
-    private Player joueur2 = map.getJoueur2();
 
-    private Player currentPlayer = joueur1;
+public class Partie implements Serializable {
 
+    //Carte
+    private Grille map;
+
+    //Joueurs
+    private Player joueur1;
+
+    private Player joueur2;
+
+    //Joueur dont c'est le tour
+    private Player currentPlayer;
+
+    //Bateau sélectionné par le joueur
     private Boat bateauSelectionne;
     private boolean isAnyBateauSelectionne = false;
 
+    //Pour savoir si la partie est finie
     private boolean fin = false;
 
+    //Vainqueur
     private Player winner;
 
-    ////////////////////////////////////////////////////////////////////////////:
-    public Partie(){
+    //Type de victoire
+    private VictoryType victoryType;
 
+    //tours
+    private int turnCounter = 1;
+    private boolean isPlayer2 = false;
+
+    //Liste de bateaux qui a deja joué pendant le tour
+    private ArrayList<Boat> bateauxDejaDeplaces = new ArrayList<>();
+
+    //Constructeurs
+    public Partie() {
+        map = new DefaultMap();
+        joueur1 = map.getJoueur1();
+        joueur2 = map.getJoueur2();
+        currentPlayer = joueur1;
     }
 
-    private void start() {
-        while(!fin){
-
-        }
+    public Partie(Grille map) {
+        this.map = map;
+        joueur1 = map.getJoueur1();
+        joueur2 = map.getJoueur2();
+        currentPlayer = joueur1;
     }
 
-
-
-    /////////////////////////////GETTER ET SETTER//////////////////////////////////////////
+    /*---------------------------------------------------------------------------------------*/
+    //Getters & Setters
     public Grille getMap() {
         return map;
     }
@@ -42,16 +70,24 @@ public class Partie {
         return joueur1;
     }
 
-    public void setJoueur1(Player joueur1) {
-        this.joueur1 = joueur1;
+    public ArrayList<Boat> getBateauxDejaDeplaces() {
+        return bateauxDejaDeplaces;
+    }
+
+    public void setBateauxDejaDeplaces(ArrayList<Boat> bateauxDejaDeplaces) {
+        this.bateauxDejaDeplaces = bateauxDejaDeplaces;
+    }
+
+    public void ajouterBateauxDejaDeplaces(Boat b) {
+        bateauxDejaDeplaces.add(b);
     }
 
     public Player getJoueur2() {
         return joueur2;
     }
 
-    public void setJoueur2(Player joueur2) {
-        this.joueur2 = joueur2;
+    public int getTurnCounter() {
+        return turnCounter;
     }
 
     public Player getCurrentPlayer() {
@@ -68,6 +104,7 @@ public class Partie {
 
     public void setBateauSelectionne(Boat bateauSelectionne) {
         this.bateauSelectionne = bateauSelectionne;
+        isAnyBateauSelectionne = true;
     }
 
     public boolean isAnyBateauSelectionne() {
@@ -82,103 +119,235 @@ public class Partie {
         return fin;
     }
 
-
     public Player getWinner() {
         return winner;
     }
 
-    public void setWinner(Player winner) {
+    private void setWinner(Player winner) {
         this.winner = winner;
     }
 
-    public void setFin(boolean fin) {
-        this.fin = fin;
+    private void setFin() {
+        this.fin = true;
     }
 
-    /////////////////////////////////////////////////////////////////////////////:
-    public Player getOtherPlayer(){
-        if(getCurrentPlayer().getNumber()==1){
-            return joueur2;
-        }
+    public VictoryType getVictoryType() {
+        return victoryType;
+    }
 
-        else{
+    private void setVictoryType(VictoryType victoryType) {
+        this.victoryType = victoryType;
+    }
+
+    public boolean isPlayer2() {
+        return isPlayer2;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------*/
+
+
+    /**
+     * Fonction renvoyant le joueur dont ce n'est pas le tour
+     *
+     * @return Player dont ce n'est pas le tour
+     */
+    public Player getOtherPlayer() {
+        if (getCurrentPlayer().getNumber() == 1) {
+            return joueur2;
+        } else {
             return joueur1;
         }
     }
 
+
+    /**
+     * Procédure qui vérifie si la partie est terminée ou non
+     */
     public void finPartie() {
+
+        //Si le joueur a 3 phares, il gagne
         if (getJoueur1().getPharesPossedes() == 3) {
-            setFin(true);
+            setFin();
             setWinner(getJoueur1());
+            setVictoryType(VictoryType.TAKE);
         } else if (getJoueur2().getPharesPossedes() == 3) {
-            setFin(true);
+            setFin();
             setWinner(getJoueur2());
+            setVictoryType(VictoryType.TAKE);
         }
 
-        else if(getCurrentPlayer().equals(getJoueur1())){
+        //Si tous les bateaux du joueur 2 sont détruits, c'est que le joueur 1 gagne
+        else if (getCurrentPlayer().equals(getJoueur1())) {
             boolean fin = true;
 
-            for(int i=0; i<map.bateaux1.size();i++){
-                if(map.bateaux1.get(i).isAlive()){
+            for (Boat b : map.getBateaux2()) {
+                if (b.isAlive()) {
                     fin = false;
                 }
             }
 
-            if(fin){
-                setFin(true);
+            if (fin) {
+                setFin();
                 setWinner(joueur1);
+                setVictoryType(VictoryType.DESTROY);
             }
         }
 
-        else if(getCurrentPlayer().equals(getJoueur2())){
+        //Si tous les bateaux du joueur 1 sont détruits, c'est que le joueur 2 gagne
+        else if (getCurrentPlayer().equals(getJoueur2())) {
             boolean fin = true;
 
-            for(int i=0; i<map.bateaux2.size();i++){
-                if(map.bateaux2.get(i).isAlive()){
+            for (Boat b : map.getBateaux1()) {
+                if (b.isAlive()) {
                     fin = false;
                 }
             }
 
-            if(fin){
-                setFin(true);
+            if (fin) {
+                setFin();
                 setWinner(joueur2);
+                setVictoryType(VictoryType.DESTROY);
             }
         }
     }
 
-    public void endTurn(){
+
+    /**
+     * Fonction qui gere la fin d'un tour d'un joueur
+     *
+     * @return : false si le joueur n'a pas déplacé tous ses bateaux, true si le tour a changé
+     */
+    public boolean endTurn() {
         boolean bateauxDeplaces = true;
 
-        if(getCurrentPlayer().equals(joueur1)){
-            for(int i = 0 ; i < map.bateaux1.size() ; i++ ){
-                if(map.bateaux1.get(i).getMoveAvailable() == map.bateaux1.get(i).getMove()){
+        //On vérifie que le joueur courrant a déplacé tous ses bateaux ou que ses bateaux ne sont pas bloques ou detruits
+        if (getCurrentPlayer().equals(joueur1)) {
+            for (int i = 0; i < map.getBateaux1().size(); i++) {
+                if (map.getBateaux1().get(i).getMoveAvailable() == map.getBateaux1().get(i).getMove() && map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(), 1).size() != 0) {
+                    bateauxDeplaces = false;
+                }
+            }
+        } else {
+            for (int i = 0; i < map.getBateaux2().size(); i++) {
+                if (map.getBateaux2().get(i).getMoveAvailable() == map.getBateaux2().get(i).getMove() && map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(), 1).size() != 0) {
                     bateauxDeplaces = false;
                 }
             }
         }
 
-        else {
-            for(int i = 0 ; i < map.bateaux2.size() ; i++ ){
-                if(map.bateaux2.get(i).getMoveAvailable() == map.bateaux2.get(i).getMove()){
-                    bateauxDeplaces = false;
-                }
-            }
-        }
-
-        if(bateauxDeplaces) {
+        //On remet les caractéristiques des bateaux pour le prochain tour
+        if (bateauxDeplaces) {
             if (getCurrentPlayer().equals(joueur1)) {
-                for (int i = 0; i < map.bateaux1.size(); i++) {
-                    map.bateaux1.get(i).endTurn();
-                    map.bateaux2.get(i).setShootTaken(0);
+                //test si ses bateaux sont sur un phare
+                for(int k=0;k<map.getBateaux1().size();k++){
+                    if(map.getBateaux1().get(k).getPosition().isPhare()){
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur1);
+                    }
                 }
+                for (int i = 0; i < map.getBateaux1().size(); i++) {
+                    map.getBateaux1().get(i).endTurn();
+                    if(map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(),1).size()==0) {
+                        if (!map.getBateaux1().get(i).isEstBloque()){
+                            map.getBateaux1().get(i).setEstBloque(true);
+                        }
+
+                        else {
+                            switch(map.getBateaux1().get(i).getOrientation()){
+                                case SUDOUEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORDEST);
+                                    break;
+
+                                case SUD:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORD);
+                                    break;
+
+                                case SUDEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.NORDOUEST);
+                                    break;
+
+                                case NORDEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUDOUEST);
+                                    break;
+
+                                case NORD:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUD);
+                                    break;
+
+                                case NORDOUEST:
+                                    map.getBateaux1().get(i).setOrientation(Orientation.SUDEST);
+                                    break;
+                            }
+                        }
+                    }
+
+                }
+                for (int i = 0; i < map.getBateaux2().size(); i++) {
+                    map.getBateaux2().get(i).setShootTaken(0);
+                }
+
             } else {
-                for (int i = 0; i < map.bateaux2.size(); i++) {
-                    map.bateaux2.get(i).endTurn();
-                    map.bateaux1.get(i).setShootTaken(0);
+                for(int k=0;k<map.getBateaux2().size();k++){
+                    if(map.getBateaux2().get(k).getPosition().isPhare()){
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur2);
+                    }
+                }
+                for (int i = 0; i < map.getBateaux2().size(); i++) {
+                    map.getBateaux2().get(i).endTurn();
+                    if(map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(),1).size()==0) {
+                        if (!map.getBateaux2().get(i).isEstBloque()){
+                            map.getBateaux2().get(i).setEstBloque(true);
+                        }
+
+                        else {
+                            switch(map.getBateaux2().get(i).getOrientation()){
+                                case SUDOUEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORDEST);
+                                    break;
+
+                                case SUD:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORD);
+                                    break;
+
+                                case SUDEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.NORDOUEST);
+                                    break;
+
+                                case NORDEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUDOUEST);
+                                    break;
+
+                                case NORD:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUD);
+                                    break;
+
+                                case NORDOUEST:
+                                    map.getBateaux2().get(i).setOrientation(Orientation.SUDEST);
+                                    break;
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < map.getBateaux1().size(); i++) {
+                    map.getBateaux1().get(i).setShootTaken(0);
                 }
             }
+
+            bateauxDejaDeplaces = new ArrayList<>();
 
             setCurrentPlayer(getOtherPlayer());
+            if (isPlayer2) {
+                turnCounter++;
+                isPlayer2 = false;
+            } else {
+                isPlayer2 = true;
+            }
+
+            return true;
+        }
+
+        //Si le joueur n'a pas déplacé tous ses bateaux
+        else {
+            return false;
         }
     }
 }
