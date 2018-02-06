@@ -543,7 +543,7 @@ public class EditeurUi extends Ui {
         bateau.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                show.setVisible(false);
+//                show.setVisible(false);
                 choixJoueur.setVisible(true);
             }
         });

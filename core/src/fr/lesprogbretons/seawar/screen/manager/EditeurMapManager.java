@@ -1,26 +1,17 @@
 package fr.lesprogbretons.seawar.screen.manager;
 
-import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.SeaWarMapScreen;
-import fr.lesprogbretons.seawar.screen.ui.EditeurUi;
 import fr.lesprogbretons.seawar.screen.ui.Ui;
 import fr.lesprogbretons.seawar.screen.ui.UiType;
 import fr.lesprogbretons.seawar.utils.TiledCoordinates;
 import fr.lesprogbretons.seawar.utils.Utils;
 
-import static fr.lesprogbretons.seawar.SeaWar.partie;
 import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
 public class EditeurMapManager implements MapManager {
 
-    //Ui
-    private EditeurUi myUi;
     //Vue
     private SeaWarMapScreen myMapScreen;
-
-    //Modèle
-    private Grille g = partie.getMap();
-
 
     public EditeurMapManager() {
         //Pas de sélection pour le début
@@ -34,7 +25,6 @@ public class EditeurMapManager implements MapManager {
 
     @Override
     public void setMyUi(Ui myUi) {
-        this.myUi = (EditeurUi) myUi;
     }
 
     @Override
