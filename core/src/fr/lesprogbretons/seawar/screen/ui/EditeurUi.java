@@ -1,21 +1,17 @@
 package fr.lesprogbretons.seawar.screen.ui;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import fr.lesprogbretons.seawar.model.cases.CaseEau;
-import fr.lesprogbretons.seawar.screen.SeaWarMapScreen;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.screen.SeaWarMenuScreen;
 
-import static fr.lesprogbretons.seawar.SeaWar.assets;
-import static fr.lesprogbretons.seawar.SeaWar.editeur;
-import static fr.lesprogbretons.seawar.SeaWar.editeurController;
-import static fr.lesprogbretons.seawar.SeaWar.game;
+import static fr.lesprogbretons.seawar.SeaWar.*;
 import static fr.lesprogbretons.seawar.screen.SeaWarMapScreen.selectedTile;
 
 public class EditeurUi extends Ui {
@@ -37,8 +33,8 @@ public class EditeurUi extends Ui {
 
         choixJoueur = new Table();
         choixJoueur.setFillParent(false);
-        choixJoueur.setPosition(0,770);
-        choixJoueur.setSize(20,800);
+        choixJoueur.setPosition(0, 770);
+        choixJoueur.setSize(20, 800);
         choixJoueur.setWidth(800);
         addActor(choixJoueur);
         choixJoueur.setVisible(false);
@@ -47,8 +43,8 @@ public class EditeurUi extends Ui {
 
         choixBateauJoueur1 = new Table();
         choixBateauJoueur1.setFillParent(false);
-        choixBateauJoueur1.setPosition(0,770);
-        choixBateauJoueur1.setSize(20,800);
+        choixBateauJoueur1.setPosition(0, 770);
+        choixBateauJoueur1.setSize(20, 800);
         choixBateauJoueur1.setWidth(800);
         addActor(choixBateauJoueur1);
         choixBateauJoueur1.setVisible(false);
@@ -57,8 +53,8 @@ public class EditeurUi extends Ui {
 
         choixBateauJoueur2 = new Table();
         choixBateauJoueur2.setFillParent(false);
-        choixBateauJoueur2.setPosition(0,770);
-        choixBateauJoueur2.setSize(20,800);
+        choixBateauJoueur2.setPosition(0, 770);
+        choixBateauJoueur2.setSize(20, 800);
         choixBateauJoueur2.setWidth(800);
         addActor(choixBateauJoueur2);
         choixBateauJoueur2.setVisible(false);
@@ -67,8 +63,8 @@ public class EditeurUi extends Ui {
 
         choixOrientationa1 = new Table();
         choixOrientationa1.setFillParent(false);
-        choixOrientationa1.setPosition(0,770);
-        choixOrientationa1.setSize(20,800);
+        choixOrientationa1.setPosition(0, 770);
+        choixOrientationa1.setSize(20, 800);
         choixOrientationa1.setWidth(800);
         addActor(choixOrientationa1);
         choixOrientationa1.setVisible(false);
@@ -77,8 +73,8 @@ public class EditeurUi extends Ui {
 
         choixOrientationa2 = new Table();
         choixOrientationa2.setFillParent(false);
-        choixOrientationa2.setPosition(0,770);
-        choixOrientationa2.setSize(20,800);
+        choixOrientationa2.setPosition(0, 770);
+        choixOrientationa2.setSize(20, 800);
         choixOrientationa2.setWidth(800);
         addActor(choixOrientationa2);
         choixOrientationa2.setVisible(false);
@@ -87,8 +83,8 @@ public class EditeurUi extends Ui {
 
         choixOrientationf1 = new Table();
         choixOrientationf1.setFillParent(false);
-        choixOrientationf1.setPosition(0,770);
-        choixOrientationf1.setSize(20,800);
+        choixOrientationf1.setPosition(0, 770);
+        choixOrientationf1.setSize(20, 800);
         choixOrientationf1.setWidth(800);
         addActor(choixOrientationf1);
         choixOrientationf1.setVisible(false);
@@ -97,8 +93,8 @@ public class EditeurUi extends Ui {
 
         choixOrientationf2 = new Table();
         choixOrientationf2.setFillParent(false);
-        choixOrientationf2.setPosition(0,770);
-        choixOrientationf2.setSize(20,800);
+        choixOrientationf2.setPosition(0, 770);
+        choixOrientationf2.setSize(20, 800);
         choixOrientationf2.setWidth(800);
         addActor(choixOrientationf2);
         choixOrientationf2.setVisible(false);
@@ -118,12 +114,11 @@ public class EditeurUi extends Ui {
                 TextButton annulerButton = new TextButton("Annuler", skin, "default");
                 validerButton.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        if(!editeur.getMap().getBateaux1().isEmpty()) {
+                        if (!editeur.getMap().getBateaux1().isEmpty()) {
                             if (!editeur.getMap().getBateaux2().isEmpty()) {
                                 editeurController.saveGrille(nomCarte.getText());
                                 d.hide();
-                            }
-                            else{
+                            } else {
                                 Dialog d = new Dialog("Error", skin, "dialog")
                                         .text("Player 2 has no boat !")
                                         .button("Ok");
@@ -131,8 +126,7 @@ public class EditeurUi extends Ui {
 
                             }
 
-                        }
-                        else{
+                        } else {
                             Dialog d = new Dialog("Error", skin, "dialog")
                                     .text("Player 1 has no boat !")
                                     .button("Ok");
@@ -171,320 +165,372 @@ public class EditeurUi extends Ui {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.creerCaseEau(selectedTile.row,selectedTile.column);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+                    editeurController.creerCaseEau(selectedTile.row, selectedTile.column);
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton caseTerre = new TextButton("Case Terre",skin,"default");
+        TextButton caseTerre = new TextButton("Case Terre", skin, "default");
         caseTerre.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.creerCaseTerre(selectedTile.row,selectedTile.column);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+                    editeurController.creerCaseTerre(selectedTile.row, selectedTile.column);
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton casePhare = new TextButton("Case Phare",skin,"default");
+        TextButton casePhare = new TextButton("Case Phare", skin, "default");
         casePhare.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.creerCasePhare(selectedTile.row,selectedTile.column);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+                    editeurController.creerCasePhare(selectedTile.row, selectedTile.column);
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton norda1 = new TextButton("Nord",skin,"default");
+        TextButton norda1 = new TextButton("Nord", skin, "default");
         norda1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.NORD);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.NORD);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordEsta1 = new TextButton("Nord Est",skin,"default");
+        TextButton nordEsta1 = new TextButton("Nord Est", skin, "default");
         nordEsta1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.NORDEST);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.NORDEST);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudEsta1 = new TextButton("Sud Est",skin,"default");
+        TextButton sudEsta1 = new TextButton("Sud Est", skin, "default");
         sudEsta1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.SUDEST);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.SUDEST);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton suda1 = new TextButton("Sud",skin,"default");
+        TextButton suda1 = new TextButton("Sud", skin, "default");
         suda1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.SUD);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.SUD);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudOuesta1 = new TextButton("Sud Ouest",skin,"default");
+        TextButton sudOuesta1 = new TextButton("Sud Ouest", skin, "default");
         sudOuesta1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.SUDOUEST);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.SUDOUEST);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordOuesta1 = new TextButton("Nord Ouest",skin,"default");
+        TextButton nordOuesta1 = new TextButton("Nord Ouest", skin, "default");
         nordOuesta1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur1(selectedTile.row,selectedTile.column, Orientation.NORDOUEST);
+                    editeurController.ajouterAmiralJoueur1(selectedTile.row, selectedTile.column, Orientation.NORDOUEST);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton norda2 = new TextButton("Nord",skin,"default");
+        TextButton norda2 = new TextButton("Nord", skin, "default");
         norda2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.NORD);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.NORD);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordEsta2 = new TextButton("Nord Est",skin,"default");
+        TextButton nordEsta2 = new TextButton("Nord Est", skin, "default");
         nordEsta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.NORDEST);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.NORDEST);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudEsta2 = new TextButton("Sud Est",skin,"default");
+        TextButton sudEsta2 = new TextButton("Sud Est", skin, "default");
         sudEsta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.SUDEST);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.SUDEST);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton suda2 = new TextButton("Sud",skin,"default");
+        TextButton suda2 = new TextButton("Sud", skin, "default");
         suda2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.SUD);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.SUD);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudOuesta2 = new TextButton("Sud Ouest",skin,"default");
+        TextButton sudOuesta2 = new TextButton("Sud Ouest", skin, "default");
         sudOuesta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.SUDOUEST);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.SUDOUEST);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordOuesta2 = new TextButton("Nord Ouest",skin,"default");
+        TextButton nordOuesta2 = new TextButton("Nord Ouest", skin, "default");
         nordOuesta2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterAmiralJoueur2(selectedTile.row,selectedTile.column, Orientation.NORDOUEST);
+                    editeurController.ajouterAmiralJoueur2(selectedTile.row, selectedTile.column, Orientation.NORDOUEST);
                     choixOrientationa2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordOuestf1 = new TextButton("Nord Ouest",skin,"default");
+        TextButton nordOuestf1 = new TextButton("Nord Ouest", skin, "default");
         nordOuestf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.NORDOUEST);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.NORDOUEST);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordf1 = new TextButton("Nord",skin,"default");
+        TextButton nordf1 = new TextButton("Nord", skin, "default");
         nordf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.NORD);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.NORD);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordEstf1 = new TextButton("Nord Est",skin,"default");
+        TextButton nordEstf1 = new TextButton("Nord Est", skin, "default");
         nordEstf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.NORDEST);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.NORDEST);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudEstf1 = new TextButton("Sud Est",skin,"default");
+        TextButton sudEstf1 = new TextButton("Sud Est", skin, "default");
         sudEstf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.SUDEST);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.SUDEST);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudf1 = new TextButton("Sud",skin,"default");
+        TextButton sudf1 = new TextButton("Sud", skin, "default");
         sudf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.SUD);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.SUD);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudOuestf1 = new TextButton("Sud Ouest",skin,"default");
+        TextButton sudOuestf1 = new TextButton("Sud Ouest", skin, "default");
         sudOuestf1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur1(selectedTile.row,selectedTile.column, Orientation.SUDOUEST);
+                    editeurController.ajouterFregateJoueur1(selectedTile.row, selectedTile.column, Orientation.SUDOUEST);
                     choixOrientationf1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordOuestf2 = new TextButton("Nord Ouest",skin,"default");
+        TextButton nordOuestf2 = new TextButton("Nord Ouest", skin, "default");
         nordOuestf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.NORDOUEST);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.NORDOUEST);
                     choixOrientationf2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordf2 = new TextButton("Nord",skin,"default");
+        TextButton nordf2 = new TextButton("Nord", skin, "default");
         nordf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.NORD);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.NORD);
                     choixOrientationf2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton nordEstf2 = new TextButton("Nord Est",skin,"default");
+        TextButton nordEstf2 = new TextButton("Nord Est", skin, "default");
         nordEstf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.NORDEST);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.NORDEST);
                     choixOrientationf2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudEstf2 = new TextButton("Sud Est",skin,"default");
+        TextButton sudEstf2 = new TextButton("Sud Est", skin, "default");
         sudEstf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.SUDEST);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.SUDEST);
                     choixOrientationf2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudf2 = new TextButton("Sud",skin,"default");
+        TextButton sudf2 = new TextButton("Sud", skin, "default");
         sudf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.SUD);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.SUD);
                     choixOrientationf2.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton sudOuestf2 = new TextButton("Sud Ouest",skin,"default");
+        TextButton sudOuestf2 = new TextButton("Sud Ouest", skin, "default");
         sudOuestf2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    editeurController.ajouterFregateJoueur2(selectedTile.row,selectedTile.column, Orientation.SUDOUEST);
+                    editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.SUDOUEST);
                     choixOrientationa1.setVisible(false);
-                    show.setVisible(true);
-                } catch (ArrayIndexOutOfBoundsException ignored){}
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                    selectionDialog();
+                }
             }
         });
 
-        TextButton amiralJoueur1 = new TextButton("Amiral",skin,"default");
+        TextButton amiralJoueur1 = new TextButton("Amiral", skin, "default");
         amiralJoueur1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -493,7 +539,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton fregateJoueur1 = new TextButton("Fregate",skin,"default");
+        TextButton fregateJoueur1 = new TextButton("Fregate", skin, "default");
         fregateJoueur1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -502,7 +548,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton amiralJoueur2 = new TextButton("Amiral",skin,"default");
+        TextButton amiralJoueur2 = new TextButton("Amiral", skin, "default");
         amiralJoueur2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -511,7 +557,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton fregateJoueur2 = new TextButton("Fregate",skin,"default");
+        TextButton fregateJoueur2 = new TextButton("Fregate", skin, "default");
         fregateJoueur2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -521,7 +567,7 @@ public class EditeurUi extends Ui {
         });
 
 
-        TextButton joueur1 = new TextButton("Bateau Joueur 1",skin,"default");
+        TextButton joueur1 = new TextButton("Bateau Joueur 1", skin, "default");
         joueur1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -530,7 +576,7 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton joueur2 = new TextButton("Bateau Joueur 2",skin,"default");
+        TextButton joueur2 = new TextButton("Bateau Joueur 2", skin, "default");
         joueur2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -539,11 +585,10 @@ public class EditeurUi extends Ui {
             }
         });
 
-        TextButton bateau = new TextButton("Bateau",skin,"default");
+        TextButton bateau = new TextButton("Bateau", skin, "default");
         bateau.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                show.setVisible(false);
                 choixJoueur.setVisible(true);
             }
         });
@@ -616,5 +661,13 @@ public class EditeurUi extends Ui {
 
         choixOrientationf2.row();
         choixOrientationf2.left().top();
+    }
+
+    private void selectionDialog() {
+        openedDialog = new Dialog("Select a case", skin, "dialog")
+                .text("You must select a case!")
+                .button("Okay", true)
+                .key(Input.Keys.ENTER, true)
+                .show(s);
     }
 }
