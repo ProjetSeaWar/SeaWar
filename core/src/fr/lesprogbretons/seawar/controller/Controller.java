@@ -6,6 +6,8 @@ package fr.lesprogbretons.seawar.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import fr.lesprogbretons.seawar.ia.AbstractIA;
+import fr.lesprogbretons.seawar.ia.IAAleatoire;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
@@ -24,12 +26,27 @@ import static fr.lesprogbretons.seawar.SeaWar.partie;
  */
 public class Controller {
 
-    public void nouvellePartie(){
+    //Stocker une référence à l'IA afin de pouvoir l'arrêter
+    private AbstractIA ia;
+
+    public void nouvellePartie() {
         partie = new Partie();
     }
 
-    public void nouvellePartie(Grille g){
+    public void nouvellePartie(Grille g) {
         partie = new Partie(g);
+    }
+
+    public void startIA() {
+        ia = new IAAleatoire();
+        ia.start();
+    }
+
+    public void stopIA() {
+        if (ia != null) {
+            ia.interrupt();
+            ia = null;
+        }
     }
 
     /**
@@ -158,4 +175,5 @@ public class Controller {
         partie = restoredPartie;
         logger.debug("Restored save");
     }
+
 }

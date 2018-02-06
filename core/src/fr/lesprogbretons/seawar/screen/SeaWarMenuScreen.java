@@ -129,8 +129,7 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         oneButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                IAAleatoire ia = new IAAleatoire();
-                ia.start();
+                seaWarController.startIA();
                 newGame(cartes, skin, tableMapSave);
             }
         });

@@ -2,7 +2,7 @@ package fr.lesprogbretons.seawar.ia;
 
 import static fr.lesprogbretons.seawar.SeaWar.partie;
 
-public class AbstractIA extends Thread {
+public abstract class AbstractIA extends Thread {
 
     public AbstractIA(String ia) {
         super(ia);
@@ -14,7 +14,9 @@ public class AbstractIA extends Thread {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // On réinterromp pour bien pouvoir sortir de la boucle
+                Thread.currentThread().interrupt();
+                break;
             }
 
             if (partie.isPlayer2()) {
@@ -23,7 +25,5 @@ public class AbstractIA extends Thread {
         }
     }
 
-    public void getCoup() {
-
-    }
+    public abstract void getCoup();
 }

@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import static fr.lesprogbretons.seawar.SeaWar.editeur;
 import static fr.lesprogbretons.seawar.SeaWar.partie;
+import static fr.lesprogbretons.seawar.SeaWar.seaWarController;
 
 
 /**
@@ -340,6 +341,8 @@ public class SeaWarMapScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
+        //Stop IA
+        seaWarController.stopIA();
         manager.end();
     }
 
