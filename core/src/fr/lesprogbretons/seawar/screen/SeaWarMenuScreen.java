@@ -1,6 +1,7 @@
 package fr.lesprogbretons.seawar.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.assets.Assets;
-import fr.lesprogbretons.seawar.ia.IAAleatoire;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.map.Grille;
 import fr.lesprogbretons.seawar.screen.manager.EditeurMapManager;
@@ -111,22 +111,12 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         });
 
         /* Bouton "annuler" du JouerScreen */
-        TextButton annulerButton = new TextButton("Cancel", skin, "default");
-        annulerButton.setWidth(150);
-        annulerButton.setHeight(50);
-        annulerButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarMenuScreen());
-                Gdx.graphics.setWindowedMode(800, 480);
-            }
-        });
-
         tableMapSave.add(utiliserButton);
-        tableMapSave.add(annulerButton);
 
         /*Bouton "Jouer" du Playscreen */
         TextButton oneButton = new TextButton("One player", skin, "default");
-        oneButton.addListener(new ClickListener(){
+        oneButton.setHeight(100);
+        oneButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 seaWarController.startIA();
@@ -134,8 +124,9 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
-        TextButton twoButton = new TextButton("Two players", skin, "default");
-        twoButton.addListener(new ClickListener(){
+        TextButton twoButton = new TextButton("Two player", skin, "default");
+        twoButton.setHeight(100);
+        twoButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 newGame(cartes, skin, tableMapSave);
@@ -148,12 +139,14 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                /////////////////       /////////////////       /////////////////
                 Dialog d = new Dialog("Choose number of players", skin, "dialog")
-                        .text("One or two players?")
-                        .button(oneButton, true)
-                        .button(twoButton, false)
-                        .show(stage);
+                        .button("Cancel", false);
+                d.getContentTable().add(new Label("One or two players?", skin, "default"));
+                d.getContentTable().row();
+                d.getContentTable().add(oneButton);
+                d.getContentTable().add(twoButton);
+                d.getContentTable().row();
+                d.show(stage);
             }
         });
 
@@ -166,17 +159,24 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         largeur.setMaxLength(3);
         hauteur.setMaxLength(3);
 
+
         TextButton openEditeur = new TextButton("Ok", skin, "default");
         openEditeur.setWidth(150);
         openEditeur.setHeight(50);
         openEditeur.addListener(new ClickListener() {
-
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!hauteur.getText().trim().isEmpty() && !largeur.getText().trim().isEmpty()) {
                     editeurController.creerCarte(Integer.parseInt(hauteur.getText()), Integer.parseInt(largeur.getText()));
-                    game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
+                    if (editeur.getMap() == null) {
+                        Dialog d = new Dialog("Map too small", skin, "dialog")
+                                .text("Choose higher numbers!")
+                                .button("Okay", true)
+                                .key(Input.Keys.ENTER, true)
+                                .show(stage);
+                    } else {
+                        game.setScreen(new SeaWarMapScreen(new EditeurMapManager()));
+                    }
                 }
             }
         });
@@ -190,12 +190,13 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 Dialog d = new Dialog("Choose the dimensions", skin, "dialog")
                         .text("Choose width and height");
 
-                d.add(largeur);
-                d.add(hauteur);
                 d.getContentTable().row();
-                d.add(annulerButton);
-                d.add(openEditeur);
-
+                d.getContentTable().add(largeur);
+                d.getContentTable().add(hauteur);
+                d.getContentTable().row();
+                d.button(openEditeur, true);
+                d.button("Cancel", false);
+                d.key(Input.Keys.ESCAPE, false);
                 d.show(stage);
             }
         });
@@ -247,19 +248,6 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
-        TextButton annulerButton2 = new TextButton("Cancel", skin, "default");
-        annulerButton2.setWidth(150);
-        annulerButton2.setHeight(50);
-        annulerButton2.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SeaWarMenuScreen());
-                Gdx.graphics.setWindowedMode(800, 480);
-            }
-        });
-
-        tablesave.add(chargerButton);
-        tablesave.add(annulerButton2);
-
         /*Fin code pour la fenêtre "charger une partie*/
 
         /*Bouton "charger" sur le menu sreen*/
@@ -273,6 +261,9 @@ public class SeaWarMenuScreen extends ScreenAdapter {
                 Dialog d = new Dialog("Load game", skin, "dialog")
                         .text("Choose a saved game");
                 d.add(tablesave);
+                d.button(chargerButton, true);
+                d.button("Cancel", false);
+                d.key(Input.Keys.ESCAPE, false);
                 d.show(stage);
 
             }
@@ -305,9 +296,10 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         }
     }
 
+
     @Override
     public void hide() {
-        music.pause();
+        music.stop();
     }
 
     @Override
