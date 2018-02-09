@@ -18,6 +18,7 @@ public abstract class Ui extends Stage {
     protected Table show;
     protected Skin skin;
     protected Dialog openedDialog;
+    protected Dialog hideDialog;
 
 
     public Ui() {
@@ -43,10 +44,13 @@ public abstract class Ui extends Stage {
         logger.debug("screenY = " + screenY);
         //Only keep these clicks for the table, send the other to the board
         if (openedDialog != null) {
-            openedDialog.hide();
-            //On retire la référence pour s'assurer du bon fonctionnement
-            openedDialog = null;
-            //On ne veut pas cliquer quand on ferme une boite de dialogue
+            if (hideDialog != null) {
+                hideDialog.hide();
+                //On retire la référence pour s'assurer du bon fonctionnement
+                hideDialog = null;
+                openedDialog = null;
+            }
+            //On ne veut pas cliquer quand on utilise une boite de dialogue
             return true;
         }
         return screenY < 25 && show.isVisible();

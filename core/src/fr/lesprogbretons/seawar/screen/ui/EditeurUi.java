@@ -523,7 +523,7 @@ public class EditeurUi extends Ui {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     editeurController.ajouterFregateJoueur2(selectedTile.row, selectedTile.column, Orientation.SUDOUEST);
-                    choixOrientationa1.setVisible(false);
+                    choixOrientationf2.setVisible(false);
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                     selectionDialog();
                 }

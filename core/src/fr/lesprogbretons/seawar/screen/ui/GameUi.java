@@ -40,7 +40,7 @@ public class GameUi extends Ui {
         slider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                musicLevel = slider.getValue()/100;
+                musicLevel = slider.getValue() / 100;
             }
         });
 
@@ -51,6 +51,7 @@ public class GameUi extends Ui {
         TextButton hideButton = new TextButton("Hide", skin, "default");
         TextButton showButton = new TextButton("Show", skin, "default");
         TextButton menuButton = new TextButton("Menu", skin, "default");
+        TextButton dismissButton = new TextButton("Dismiss", skin, "default");
 
         optionsButton.addListener(new ClickListener() {
             @Override
@@ -62,8 +63,10 @@ public class GameUi extends Ui {
                 d.getContentTable().add(slider).row();
                 d.button(saveButton)
                         .button(menuButton)
-                        .button("Dismiss", false)
+                        .button(dismissButton, false)
                         .show(s);
+                openedDialog = d;
+                hideDialog = null;
             }
         });
 
@@ -86,8 +89,10 @@ public class GameUi extends Ui {
                 d.getContentTable().row();
                 d.getContentTable().add(nompartie);
                 d.button(validerButton, true);
-                d.button("Dismiss", false);
+                d.button(dismissButton, false);
                 d.show(s);
+                openedDialog = d;
+                hideDialog = null;
             }
 
         });
@@ -104,14 +109,15 @@ public class GameUi extends Ui {
                                 .button(menuButton, true)
                                 .show(s);
                         openedDialog = d;
+                        hideDialog = d;
 
                     } else {
                         d = new Dialog("Turn isn't over", skin, "dialog")
                                 .text("One of your ship haven't moved")
-                                .button("Okay", true)
-                                .key(Input.Keys.ENTER, true)
+                                .button(dismissButton, true)
                                 .show(s);
                         openedDialog = d;
+                        hideDialog = d;
                     }
                 } else {
                     selectedTile.setCoords(-1, -1);
@@ -140,6 +146,15 @@ public class GameUi extends Ui {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SeaWarMenuScreen());
+            }
+        });
+
+        dismissButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openedDialog.hide();
+                openedDialog = null;
+                hideDialog = null;
             }
         });
         //endregion
@@ -172,6 +187,7 @@ public class GameUi extends Ui {
 
             openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
                     skin, "default");
+            hideDialog = openedDialog;
 
             Table t = new Table();
             t.setFillParent(true);
@@ -205,6 +221,8 @@ public class GameUi extends Ui {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     openedDialog.hide();
+                    openedDialog = null;
+                    hideDialog = null;
                 }
             });
 
@@ -246,11 +264,21 @@ public class GameUi extends Ui {
                 }
             }
 
+            TextButton dismissButton = new TextButton("Dismiss", skin, "default");
+            dismissButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    openedDialog.hide();
+                    hideDialog = null;
+                    openedDialog = null;
+                }
+            });
+
             openedDialog = new Dialog(aCase.toString(), skin, "default")
                     .text(lighthouse)
-                    .button("Dismiss", true)
-                    .key(Input.Keys.ENTER, true)
+                    .button(dismissButton, true)
                     .show(s);
+            hideDialog = openedDialog;
         }
     }
 
@@ -271,11 +299,20 @@ public class GameUi extends Ui {
         for (String s : boatHps) {
             tour.append(s).append("\n");
         }
+        TextButton okayButton = new TextButton("Okay", skin, "default");
+        okayButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openedDialog.hide();
+                openedDialog = null;
+                hideDialog = null;
+            }
+        });
         openedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
                 .text(tour.toString())
-                .button("Okay", true)
-                .key(Input.Keys.ENTER, true)
+                .button(okayButton, true)
                 .show(s);
+        hideDialog = openedDialog;
     }
 
     public void setPlayer(String j) {
