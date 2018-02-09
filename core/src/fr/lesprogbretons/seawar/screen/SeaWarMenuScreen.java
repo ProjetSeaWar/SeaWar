@@ -5,12 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -53,6 +56,18 @@ public class SeaWarMenuScreen extends ScreenAdapter {
         Skin skin = (Skin) assets.get(Assets.skin);
 
         music.play();
+        music.setVolume(.5f);
+
+        //Declare a new slider for volume
+        Slider s = new Slider(0, 100, 1, false, skin);
+        s.setColor(Color.BLUE);
+        s.setValue(music.getVolume()*100);
+        s.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                music.setVolume(s.getValue()/100);
+            }
+        });
 
         menu = new Sprite((Texture) assets.get(Assets.menu));
         menu.setPosition(-menu.getWidth() / 2, -menu.getHeight() / 2);
@@ -269,6 +284,9 @@ public class SeaWarMenuScreen extends ScreenAdapter {
             }
         });
 
+        table.add(new Label("Volume:", skin, "default")).padLeft(10);
+        table.add(s).top();
+        table.row();
         table.add(playButton).width(playButton.getWidth())
                 .height(playButton.getHeight()).padTop(375).padBottom(10).padLeft(10);
         table.add(editeurButton).width(playButton.getWidth())

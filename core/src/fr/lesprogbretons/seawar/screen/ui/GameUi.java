@@ -2,8 +2,10 @@ package fr.lesprogbretons.seawar.screen.ui;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
@@ -21,6 +23,7 @@ public class GameUi extends Ui {
     private Label playerLabel;
     private Label turnLabel;
     private Label infoSelected;
+    private float musicLevel = 0.5f;
 
     public GameUi() {
         super();
@@ -29,6 +32,17 @@ public class GameUi extends Ui {
         hide.setFillParent(true);
         addActor(hide);
         hide.setVisible(false);
+
+        //Slider
+        Slider slider = new Slider(0, 100, 1, false, skin);
+        slider.setColor(Color.BLUE);
+        slider.setValue(musicLevel * 100);
+        slider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                musicLevel = slider.getValue()/100;
+            }
+        });
 
         //region Buttons
         TextButton optionsButton = new TextButton("Options", skin, "default");
@@ -41,9 +55,12 @@ public class GameUi extends Ui {
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                openedDialog = new Dialog("Options", skin, "dialog")
-                        .text("Choose your option")
-                        .button(saveButton)
+                Dialog d = new Dialog("Options", skin, "dialog")
+                        .text("Choose your option");
+                d.getContentTable().row();
+                d.getContentTable().add(new Label("Volume: ", skin, "default"));
+                d.getContentTable().add(slider).row();
+                d.button(saveButton)
                         .button(menuButton)
                         .button("Dismiss", false)
                         .show(s);
@@ -271,5 +288,9 @@ public class GameUi extends Ui {
 
     public void setInfoSelected(String message) {
         infoSelected.setText(message);
+    }
+
+    public float getMusicLevel() {
+        return musicLevel;
     }
 }

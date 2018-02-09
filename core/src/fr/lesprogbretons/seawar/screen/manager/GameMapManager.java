@@ -130,6 +130,9 @@ public class GameMapManager implements MapManager {
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         //endregion
+
+        //Update volume
+        music.setVolume(myUi.getMusicLevel());
     }
 
     @Override
