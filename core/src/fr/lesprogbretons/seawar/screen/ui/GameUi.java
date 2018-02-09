@@ -187,7 +187,6 @@ public class GameUi extends Ui {
 
             openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
                     skin, "default");
-            hideDialog = openedDialog;
 
             Table t = new Table();
             t.setFillParent(true);

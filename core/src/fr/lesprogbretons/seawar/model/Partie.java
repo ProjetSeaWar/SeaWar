@@ -107,6 +107,11 @@ public class Partie implements Serializable {
         isAnyBateauSelectionne = true;
     }
 
+    public void unselectBateau() {
+        bateauSelectionne = null;
+        isAnyBateauSelectionne = false;
+    }
+
     public boolean isAnyBateauSelectionne() {
         return isAnyBateauSelectionne;
     }
@@ -239,20 +244,18 @@ public class Partie implements Serializable {
         if (bateauxDeplaces) {
             if (getCurrentPlayer().equals(joueur1)) {
                 //test si ses bateaux sont sur un phare
-                for(int k=0;k<map.getBateaux1().size();k++){
-                    if(map.getBateaux1().get(k).getPosition().isPhare()){
-                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur1);
+                for (int k = 0; k < map.getBateaux1().size(); k++) {
+                    if (map.getBateaux1().get(k).getPosition().isPhare()) {
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(), joueur1);
                     }
                 }
                 for (int i = 0; i < map.getBateaux1().size(); i++) {
                     map.getBateaux1().get(i).endTurn();
-                    if(map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(),1).size()==0) {
-                        if (!map.getBateaux1().get(i).isEstBloque()){
+                    if (map.getCasesDisponibles(map.getBateaux1().get(i).getPosition(), 1).size() == 0) {
+                        if (!map.getBateaux1().get(i).isEstBloque()) {
                             map.getBateaux1().get(i).setEstBloque(true);
-                        }
-
-                        else {
-                            switch(map.getBateaux1().get(i).getOrientation()){
+                        } else {
+                            switch (map.getBateaux1().get(i).getOrientation()) {
                                 case SUDOUEST:
                                     map.getBateaux1().get(i).setOrientation(Orientation.NORDEST);
                                     break;
@@ -286,20 +289,18 @@ public class Partie implements Serializable {
                 }
 
             } else {
-                for(int k=0;k<map.getBateaux2().size();k++){
-                    if(map.getBateaux2().get(k).getPosition().isPhare()){
-                        map.prendPhare(map.getBateaux1().get(k).getPosition(),joueur2);
+                for (int k = 0; k < map.getBateaux2().size(); k++) {
+                    if (map.getBateaux2().get(k).getPosition().isPhare()) {
+                        map.prendPhare(map.getBateaux1().get(k).getPosition(), joueur2);
                     }
                 }
                 for (int i = 0; i < map.getBateaux2().size(); i++) {
                     map.getBateaux2().get(i).endTurn();
-                    if(map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(),1).size()==0) {
-                        if (!map.getBateaux2().get(i).isEstBloque()){
+                    if (map.getCasesDisponibles(map.getBateaux2().get(i).getPosition(), 1).size() == 0) {
+                        if (!map.getBateaux2().get(i).isEstBloque()) {
                             map.getBateaux2().get(i).setEstBloque(true);
-                        }
-
-                        else {
-                            switch(map.getBateaux2().get(i).getOrientation()){
+                        } else {
+                            switch (map.getBateaux2().get(i).getOrientation()) {
                                 case SUDOUEST:
                                     map.getBateaux2().get(i).setOrientation(Orientation.NORDEST);
                                     break;
