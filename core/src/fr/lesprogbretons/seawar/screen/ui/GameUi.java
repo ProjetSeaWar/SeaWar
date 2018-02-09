@@ -114,7 +114,7 @@ public class GameUi extends Ui {
                     } else {
                         d = new Dialog("Turn isn't over", skin, "dialog")
                                 .text("One of your ship haven't moved")
-                                .button(dismissButton, true)
+                                .button("Okay", true)
                                 .show(s);
                         openedDialog = d;
                         hideDialog = d;
@@ -264,19 +264,9 @@ public class GameUi extends Ui {
                 }
             }
 
-            TextButton dismissButton = new TextButton("Dismiss", skin, "default");
-            dismissButton.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    openedDialog.hide();
-                    hideDialog = null;
-                    openedDialog = null;
-                }
-            });
-
             openedDialog = new Dialog(aCase.toString(), skin, "default")
                     .text(lighthouse)
-                    .button(dismissButton, true)
+                    .button("Dismiss", true)
                     .show(s);
             hideDialog = openedDialog;
         }
@@ -299,18 +289,9 @@ public class GameUi extends Ui {
         for (String s : boatHps) {
             tour.append(s).append("\n");
         }
-        TextButton okayButton = new TextButton("Okay", skin, "default");
-        okayButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                openedDialog.hide();
-                openedDialog = null;
-                hideDialog = null;
-            }
-        });
         openedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
                 .text(tour.toString())
-                .button(okayButton, true)
+                .button("Okay", true)
                 .show(s);
         hideDialog = openedDialog;
     }
